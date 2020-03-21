@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
-<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Decorator" version="4">
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DivinityFactory" version="4">
   <OBJECT>
-    <ID name="Decorator" mc="Standard.Class" uid="847cb757-c8b7-491c-8cda-48caef5471f8"/>
-    <PID name="Entity" mc="Standard.Package" uid="c4869787-800f-421b-8d4d-a53cf86f5e2a"/>
+    <ID name="DivinityFactory" mc="Standard.Class" uid="19a9bc97-7a7a-47b0-9bab-c85b44014976"/>
+    <PID name="Mechanical" mc="Standard.Package" uid="8eb2ecc9-8864-4e31-8171-2b98f9777e86"/>
     <ATTRIBUTES>
       <ATT name="IsActive">false</ATT>
       <ATT name="IsMain">false</ATT>
@@ -11,45 +11,44 @@
       <ATT name="IsLeaf">false</ATT>
       <ATT name="IsRoot">false</ATT>
       <ATT name="Visibility">Public</ATT>
-      <ATT name="Name"><![CDATA[Decorator]]></ATT>
+      <ATT name="Name"><![CDATA[DivinityFactory]]></ATT>
       <ATT name="status">1970354901745664</ATT>
     </ATTRIBUTES>
     <DEPENDENCIES>
-      <COMP relation="OwnedAttribute">
+      <COMP relation="OwnedOperation">
         <OBJECT>
-          <ID name="tower" mc="Standard.Attribute" uid="1ea46849-012d-4889-963c-a94718e1f083"/>
+          <ID name="createDivinity" mc="Standard.Operation" uid="b96e5035-d95a-443d-9d84-6c8f4330b98d"/>
           <ATTRIBUTES>
-            <ATT name="TypeConstraint"></ATT>
-            <ATT name="Value"></ATT>
-            <ATT name="TargetIsClass">false</ATT>
-            <ATT name="Changeable">ReadWrite</ATT>
-            <ATT name="IsDerived">false</ATT>
-            <ATT name="IsOrdered">false</ATT>
-            <ATT name="IsUnique">false</ATT>
-            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
-            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
-            <ATT name="Visibility">Protected</ATT>
+            <ATT name="Concurrency">false</ATT>
+            <ATT name="Final">false</ATT>
+            <ATT name="Passing">MethodOut</ATT>
+            <ATT name="Visibility">Public</ATT>
             <ATT name="IsClass">false</ATT>
             <ATT name="IsAbstract">false</ATT>
-            <ATT name="Name"><![CDATA[tower]]></ATT>
+            <ATT name="Name"><![CDATA[createDivinity]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
           <DEPENDENCIES>
-            <LINK relation="Type">
-              <ID name="Level" mc="Standard.Interface" uid="435cb8d8-32c0-4a4b-bedd-5d2476da1189"/>
-            </LINK>
-            <COMP relation="Descriptor">
+            <COMP relation="Return">
               <OBJECT>
-                <ID name="" mc="Infrastructure.Note" uid="903a0167-5405-44bf-87fe-46b89bda8661"/>
+                <ID name="p1" mc="Standard.Parameter" uid="1025ca45-50ff-428a-b732-3e1a30a95022"/>
                 <ATTRIBUTES>
-                  <ATT name="Content"><![CDATA[<Enter note text here>]]></ATT>
-                  <ATT name="MimeType"><![CDATA[text/plain]]></ATT>
-                  <ATT name="Name"></ATT>
+                  <ATT name="ParameterPassing">In</ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                  <ATT name="TypeConstraint"></ATT>
+                  <ATT name="DefaultValue"></ATT>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="IsException">false</ATT>
+                  <ATT name="IsStream">false</ATT>
+                  <ATT name="Effect">ReadEffect</ATT>
+                  <ATT name="Name"><![CDATA[p1]]></ATT>
                   <ATT name="status">1970354901745664</ATT>
                 </ATTRIBUTES>
                 <DEPENDENCIES>
-                  <LINK relation="Model">
-                    <FOREIGNID name="description" mc="Infrastructure.NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+                  <LINK relation="Type">
+                    <ID name="Divinity" mc="Standard.Class" uid="2d08e278-9798-4a49-adcf-1dfd6467b06d"/>
                   </LINK>
                 </DEPENDENCIES>
               </OBJECT>
@@ -59,9 +58,9 @@
       </COMP>
       <COMP relation="OwnedEnd">
         <OBJECT>
-          <ID name="ornament" mc="Standard.AssociationEnd" uid="133084c6-9344-4c87-bf1b-4039f8f15964"/>
+          <ID name="divinity" mc="Standard.AssociationEnd" uid="6b314aaa-b3fc-4489-9353-170178ab8afe"/>
           <ATTRIBUTES>
-            <ATT name="Aggregation">KindIsComposition</ATT>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
             <ATT name="IsChangeable">true</ATT>
             <ATT name="Changeable">ReadWrite</ATT>
             <ATT name="IsDerived">false</ATT>
@@ -72,16 +71,16 @@
             <ATT name="Visibility">Public</ATT>
             <ATT name="IsClass">false</ATT>
             <ATT name="IsAbstract">false</ATT>
-            <ATT name="Name"><![CDATA[ornament]]></ATT>
+            <ATT name="Name"><![CDATA[divinity]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
           <DEPENDENCIES>
             <LINK relation="Target">
-              <ID name="Level" mc="Standard.Interface" uid="435cb8d8-32c0-4a4b-bedd-5d2476da1189"/>
+              <ID name="Divinity" mc="Standard.Class" uid="2d08e278-9798-4a49-adcf-1dfd6467b06d"/>
             </LINK>
             <COMP relation="Opposite">
               <OBJECT>
-                <ID name="" mc="Standard.AssociationEnd" uid="3dd5bb69-865a-4710-a7b3-adf4d8840758"/>
+                <ID name="" mc="Standard.AssociationEnd" uid="1b620ef4-700d-46b1-a428-2b7b09cd15d7"/>
                 <ATTRIBUTES>
                   <ATT name="Aggregation">KindIsAssociation</ATT>
                   <ATT name="IsChangeable">true</ATT>
@@ -89,7 +88,7 @@
                   <ATT name="IsDerived">false</ATT>
                   <ATT name="IsOrdered">false</ATT>
                   <ATT name="IsUnique">false</ATT>
-                  <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
                   <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
                   <ATT name="Visibility">Public</ATT>
                   <ATT name="IsClass">false</ATT>
@@ -99,11 +98,11 @@
                 </ATTRIBUTES>
                 <DEPENDENCIES>
                   <COMP relation="Opposite">
-                    <COMPID name="ornament" mc="Standard.AssociationEnd" uid="133084c6-9344-4c87-bf1b-4039f8f15964"/>
+                    <COMPID name="divinity" mc="Standard.AssociationEnd" uid="6b314aaa-b3fc-4489-9353-170178ab8afe"/>
                   </COMP>
                   <COMP relation="Association">
                     <OBJECT>
-                      <ID name="" mc="Standard.Association" uid="6566c8f2-eb2d-4567-963a-9cb20237a1de"/>
+                      <ID name="" mc="Standard.Association" uid="b940c0d6-0a9c-4f39-8fd1-980cb984ec2b"/>
                       <ATTRIBUTES>
                         <ATT name="Name"></ATT>
                         <ATT name="status">1970354901745664</ATT>
@@ -115,22 +114,8 @@
               </OBJECT>
             </COMP>
             <COMP relation="Association">
-              <COMPID name="" mc="Standard.Association" uid="6566c8f2-eb2d-4567-963a-9cb20237a1de"/>
+              <COMPID name="" mc="Standard.Association" uid="b940c0d6-0a9c-4f39-8fd1-980cb984ec2b"/>
             </COMP>
-          </DEPENDENCIES>
-        </OBJECT>
-      </COMP>
-      <COMP relation="Realized">
-        <OBJECT>
-          <ID name="InterfaceRealization" mc="Standard.InterfaceRealization" uid="e66cbd1b-87af-442c-acc9-a491bed7e687"/>
-          <ATTRIBUTES>
-            <ATT name="Name"><![CDATA[InterfaceRealization]]></ATT>
-            <ATT name="status">1970354901745664</ATT>
-          </ATTRIBUTES>
-          <DEPENDENCIES>
-            <LINK relation="Implemented">
-              <ID name="Level" mc="Standard.Interface" uid="435cb8d8-32c0-4a4b-bedd-5d2476da1189"/>
-            </LINK>
           </DEPENDENCIES>
         </OBJECT>
       </COMP>

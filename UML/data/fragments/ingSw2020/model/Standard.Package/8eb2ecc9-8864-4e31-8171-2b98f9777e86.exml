@@ -15,11 +15,12 @@
     <DEPENDENCIES>
       <COMP relation="OwnedElement">
         <COMPID name="Divinity" mc="Standard.Class" uid="2d08e278-9798-4a49-adcf-1dfd6467b06d"/>
-        <COMPID name="Class" mc="Standard.Class" uid="242ad333-a93b-4d78-887e-7faf7e9144ea"/>
+        <COMPID name="Atlas" mc="Standard.Class" uid="242ad333-a93b-4d78-887e-7faf7e9144ea"/>
         <COMPID name="Class1" mc="Standard.Class" uid="2558f7eb-1894-4bc0-aa90-3307afd0afba"/>
         <COMPID name="Class2" mc="Standard.Class" uid="06b64ffe-db1a-40b1-8ac2-4dd6fdef37cf"/>
         <COMPID name="Class3" mc="Standard.Class" uid="03ed8aa8-84ab-48a0-85e1-9d4a7d684e51"/>
         <COMPID name="Class4" mc="Standard.Class" uid="a5ecdf27-3b44-4909-9fca-35c72e89c548"/>
+        <COMPID name="DivinityFactory" mc="Standard.Class" uid="19a9bc97-7a7a-47b0-9bab-c85b44014976"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>
