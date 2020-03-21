@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="ingSw2020" version="4">
+  <OBJECT>
+    <ID name="ingSw2020" mc="Standard.Project" uid="5c839739-abde-4b2f-a2cc-39c702724392"/>
+    <ATTRIBUTES>
+      <ATT name="ProjectContext"></ATT>
+      <ATT name="ProjectDescr"></ATT>
+      <ATT name="Name"><![CDATA[ingSw2020]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Model">
+        <COMPID name="ingsw2020" mc="Standard.Package" uid="0d014892-7ae2-4ea3-ba9a-9f939539e74a"/>
+      </COMP>
+      <COMP relation="DiagramRoot">
+        <COMPID name="ingSw2020" mc="Infrastructure.DiagramSet" uid="1c085602-1b04-4d5e-80de-97da6220745a"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

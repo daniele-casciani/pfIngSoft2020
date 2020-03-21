@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="ingsw2020" version="4">
+  <OBJECT>
+    <ID name="ingsw2020" mc="Standard.Package" uid="0d014892-7ae2-4ea3-ba9a-9f939539e74a"/>
+    <PID name="ingSw2020" mc="Standard.Project" uid="5c839739-abde-4b2f-a2cc-39c702724392"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[ingsw2020]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Entity" mc="Standard.Package" uid="c4869787-800f-421b-8d4d-a53cf86f5e2a"/>
+        <COMPID name="State" mc="Standard.Package" uid="b75bc323-1450-41d1-a2d4-7112e3be55f9"/>
+        <COMPID name="Mechanical" mc="Standard.Package" uid="8eb2ecc9-8864-4e31-8171-2b98f9777e86"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="ingsw2020 Class diagram" mc="Standard.ClassDiagram" uid="93018d40-152f-484e-b142-db4959f9a073"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

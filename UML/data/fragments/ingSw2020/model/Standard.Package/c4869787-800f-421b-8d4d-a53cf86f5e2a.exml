@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Entity" version="4">
+  <OBJECT>
+    <ID name="Entity" mc="Standard.Package" uid="c4869787-800f-421b-8d4d-a53cf86f5e2a"/>
+    <PID name="ingsw2020" mc="Standard.Package" uid="0d014892-7ae2-4ea3-ba9a-9f939539e74a"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Entity]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Cell" mc="Standard.Class" uid="ece93d70-bcf6-46b2-8e94-0e3efbb00677"/>
+        <COMPID name="Ornament" mc="Standard.Interface" uid="435cb8d8-32c0-4a4b-bedd-5d2476da1189"/>
+        <COMPID name="Decorator" mc="Standard.Class" uid="847cb757-c8b7-491c-8cda-48caef5471f8"/>
+        <COMPID name="TowerL0" mc="Standard.Class" uid="9ddbae2b-782d-4dfc-a3cc-7c514c07c221"/>
+        <COMPID name="TowerL1" mc="Standard.Class" uid="987bb4f9-970c-496c-b305-bef6af0e8895"/>
+        <COMPID name="TowerL2" mc="Standard.Class" uid="62ffba9f-98a1-4b50-b09a-644b0fd33274"/>
+        <COMPID name="Dome" mc="Standard.Class" uid="cbf2da50-99e2-4113-8c04-1946b829d787"/>
+        <COMPID name="Builder" mc="Standard.Class" uid="9a1273f4-9bd0-4a46-8016-c3e736b668c4"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
