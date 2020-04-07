@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020;
+package it.polimi.ingsw.pfIngSoft2020.Tower;
 
 final class TowerL0 extends Floor {
 	private  Cell cell;
