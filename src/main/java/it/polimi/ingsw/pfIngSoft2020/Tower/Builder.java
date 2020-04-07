@@ -13,6 +13,7 @@ final class Builder extends Floor {
 	public String getColor() {
 		return color;
 	}
+	//prende la nuova casella e restituisce la vecchia
 	protected Level move(Level level) {
 		Level oldlevel=this.level;
 		this.level=level;
