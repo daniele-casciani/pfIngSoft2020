@@ -1,11 +1,11 @@
 package it.polimi.ingsw.pfIngSoft2020.Tower;
 
 final class TowerL2 extends Floor {
-	private  TowerL1 tower;
-	protected TowerL2(TowerL1 tower) {
-		this.tower=tower;
+	private  Level level;
+	 TowerL2(Level level) {
+		this.level=level;
 	}
-	protected TowerL1 getTower() {
-		return tower;
+	 Level getLevel() {
+		return level;
 	}
 }
