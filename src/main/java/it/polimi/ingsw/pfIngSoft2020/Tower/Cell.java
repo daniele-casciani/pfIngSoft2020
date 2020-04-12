@@ -1,6 +1,6 @@
 package it.polimi.ingsw.pfIngSoft2020.Tower;
 
-class Cell implements Level{
+public class Cell implements Level{
 	Level getLevel() {
 		return this;
 	}
