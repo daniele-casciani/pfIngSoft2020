@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020.Divinity;
+package divinity;
 
 class Divinity {
 	final private boolean threeplayer=true;

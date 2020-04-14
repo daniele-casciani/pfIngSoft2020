@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020.Tower;
+package tower;
 
 public class Cell implements Level{
 	Level getLevel() {

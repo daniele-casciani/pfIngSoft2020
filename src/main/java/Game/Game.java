@@ -9,7 +9,7 @@ public class Game {
 		this.participants = participants;
 		
 		for (int i = 0; i<participants; i++) {
-			playerList[i] = new Player();
+			playerList[i] = new Player(null, null);
 			// come inserire i nomi?
 		}
 		

@@ -1,12 +1,23 @@
 package Game;
-import it.polimi.ingsw.pfIngSoft2020.Tower.*;
+import tower.*;
 
 public class Map {
-	private Cell[] matrixCell = new Cell[25];
-	
+	private Cell[][] matrixCell = new Cell[5][5];
+
+	public Cell[][] getMatrixCell() {
+		return matrixCell;
+	}
+
+	public void setMatrixCell(Cell[][] matrixCell) {
+		this.matrixCell = matrixCell;
+	}
 	public Map() {
-		for (int i=0; i<25; i++) {
-			matrixCell[i] = new Cell();
+		for (int j=0; j<5; j++) {
+			for (int i=0; i<5; i++) {
+				matrixCell[i][j] = new Cell();
+			}
 		}
 	}
+	
+	
 }

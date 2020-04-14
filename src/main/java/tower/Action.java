@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020.Tower;
+package tower;
 
 public interface Action {
 	void movement(Level start,Level end);

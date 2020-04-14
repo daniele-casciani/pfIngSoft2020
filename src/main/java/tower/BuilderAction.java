@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020.Tower;
+package tower;
 
 class BuilderAction implements Action {
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020;
+package main;
 
 /**
  * Hello world!

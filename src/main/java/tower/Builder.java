@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020.Tower;
+package tower;
 
 final class Builder extends Floor {
 	final private String color;
@@ -6,9 +6,6 @@ final class Builder extends Floor {
 	 Builder(Level level, String color) {
 		this.level=level;
 		this.color=color;
-	}
-	 Level getLevel() {
-		return level;
 	}
 	public String getColor() {
 		return color;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.pfIngSoft2020.Tower;
+package tower;
 
 final class TowerL1 extends Floor {
 	private  Level level;

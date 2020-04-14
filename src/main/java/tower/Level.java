@@ -1,0 +1,4 @@
+package tower;
+
+interface Level {
+}
