@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="aaa" version="4">
+  <OBJECT>
+    <ID name="aaa" mc="Standard.Project" uid="12de32e3-3dfc-4530-92fe-5a0dd57c90fc"/>
+    <ATTRIBUTES>
+      <ATT name="ProjectContext"></ATT>
+      <ATT name="ProjectDescr"></ATT>
+      <ATT name="Name"><![CDATA[aaa]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Model">
+        <COMPID name="aaa" mc="Standard.Package" uid="c8494178-f73a-42f0-b372-13a8782bac17"/>
+        <COMPID name="ingsw2020" mc="Standard.Package" uid="51b9d386-d964-4251-b1d6-d77942a00ae2"/>
+      </COMP>
+      <COMP relation="DiagramRoot">
+        <COMPID name="aaa" mc="Infrastructure.DiagramSet" uid="9df85951-cceb-45d8-85cd-f5b08943136b"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

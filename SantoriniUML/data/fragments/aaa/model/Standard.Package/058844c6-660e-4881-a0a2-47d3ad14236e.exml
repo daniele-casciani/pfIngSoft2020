@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Mechanical" version="4">
+  <OBJECT>
+    <ID name="Mechanical" mc="Standard.Package" uid="058844c6-660e-4881-a0a2-47d3ad14236e"/>
+    <PID name="ingsw2020" mc="Standard.Package" uid="51b9d386-d964-4251-b1d6-d77942a00ae2"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Mechanical]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Divinity" mc="Standard.Class" uid="8c8eb4d5-74e4-4d1d-a850-0ed8ebd8b8e2"/>
+        <COMPID name="Atlas" mc="Standard.Class" uid="99809e67-fd5c-4a98-aee3-266c22a9bb8b"/>
+        <COMPID name="Apollo" mc="Standard.Class" uid="31e74ac5-fa7a-4ec3-b15a-90cd4d9512af"/>
+        <COMPID name="DivinityFactory" mc="Standard.Class" uid="3c04e9b2-5091-4c70-975a-096d46f2df1f"/>
+        <COMPID name="Athera" mc="Standard.Class" uid="1b0b4787-016a-463c-bfaa-51ba132fcd09"/>
+        <COMPID name="Demeter" mc="Standard.Class" uid="7994b6f0-da9e-4663-b674-c7cd678af60e"/>
+        <COMPID name="Hephaestus" mc="Standard.Class" uid="41eef58a-1a47-462c-bc50-7c36b6eb406d"/>
+        <COMPID name="Minotaur" mc="Standard.Class" uid="ae589958-2813-4c26-894d-77ffc0bdeeb3"/>
+        <COMPID name="Pan" mc="Standard.Class" uid="ea2f2d86-6cb2-4b9f-bdb0-f6e4071f5164"/>
+        <COMPID name="Prometeus" mc="Standard.Class" uid="d6bb4660-9666-495c-ab9d-5f0b88bbe516"/>
+        <COMPID name="Artemis" mc="Standard.Class" uid="3cdef913-3398-4e8a-9548-29fe2b6e44f9"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

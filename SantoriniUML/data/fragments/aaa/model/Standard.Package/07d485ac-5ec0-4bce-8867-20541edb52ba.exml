@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="State" version="4">
+  <OBJECT>
+    <ID name="State" mc="Standard.Package" uid="07d485ac-5ec0-4bce-8867-20541edb52ba"/>
+    <PID name="ingsw2020" mc="Standard.Package" uid="51b9d386-d964-4251-b1d6-d77942a00ae2"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[State]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Player" mc="Standard.Class" uid="8cccfbce-b896-4dd6-9552-d93c1abf46e6"/>
+        <COMPID name="Map" mc="Standard.Class" uid="9963b104-8bad-40c9-bcaa-bff6d51aa870"/>
+        <COMPID name="Game" mc="Standard.Class" uid="110ffbd5-5617-4a7b-84ff-8d6c1d4ccf6d"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
