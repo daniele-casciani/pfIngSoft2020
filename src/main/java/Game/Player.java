@@ -1,11 +1,11 @@
 package Game;
-
+import divinity.Divinity;
 
 public class Player {
 	private String nickname;
-	private String god;
+	private Divinity god;
 	
-	public Player(String nickname, String god) {
+	public Player(String nickname, Divinity god) {
 		this.nickname = nickname;
 		this.god = god;
 	}
@@ -14,7 +14,7 @@ public class Player {
 		return nickname;
 	}
 	
-	public String getDivinity() {
+	public Divinity getDivinity() {
 		return god;
 	}
 }

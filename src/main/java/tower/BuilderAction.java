@@ -1,15 +1,25 @@
 package tower;
+import Game.Map;
 
 class BuilderAction implements Action {
 
 	@Override
 	public void movement(Level start, Level end) {
-		Level NewStart=((Builder)((Floor) start)).move(end);
-//dobbiamo rimettere a posto i due elementi
+		Level newStart=((Builder)((Floor) start)).move(end);
+		setCell(newStart);
+		setCell(end);
+		
 	}
-
+	
 	@Override
-	public void buildcell(Level level) {
+	public void buildDome(Level level) {
+		Dome newTower= new Dome(level);
+		setCell(newTower);
+
+	}
+	
+	@Override
+	public void buildTower(Level level) {
 		// TODO Auto-generated method stub
 
 	}
@@ -17,13 +27,13 @@ class BuilderAction implements Action {
 	@Override
 	public void newBuilder(Level level,String color) {
 		Builder builder=new Builder(level, color);
-		//inserimento in mappa	
+		setCell(builder);
 	}
 
 	@Override
 	public  void killBuilder(Level dead) {
 		Level cleanfloor=((Builder)((Floor) dead)).kill();
-		//inserimento in mappa
+		setCell(cleanfloor);
 	}
 	
 
