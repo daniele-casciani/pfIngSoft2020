@@ -1,4 +1,4 @@
 package tower;
 
-interface Level {
+public interface Level {
 }
