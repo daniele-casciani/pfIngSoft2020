@@ -19,7 +19,5 @@ public class Map {
 		}
 	}
 	
-	public Cell getCell(int i, int j) {
-		return matrixCell[i][j];
-	}
+	
 }
