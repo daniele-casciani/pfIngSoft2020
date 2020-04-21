@@ -4,8 +4,8 @@ import Game.*;
 import tower.*;
 
 public class Divinity {
-	final private boolean threeplayer=true;
-	final private boolean fourplayer=true;
+	final private boolean threeplayer = true;
+	final private boolean fourplayer = true;
 	private Game game;
 	
 	public boolean isFourplayer() {
@@ -15,7 +15,6 @@ public class Divinity {
 		return threeplayer;
 	}
 
-	
 	public Divinity(Game game) {
 		this.game = game;
 	}
@@ -27,7 +26,7 @@ public class Divinity {
 	public void build() {
 		
 	}
-	
+	// da rivedere in seguito alle modifiche di game e divinity
 	public void move(Cell start, Cell end) {
 		Divinity god = new Divinity(gameMap);
 		
@@ -135,7 +134,7 @@ public class Divinity {
 		
 		else {
 			if(start instanceof TowerL2 && end instanceof TowerL1) return true;
-			if(start instanceof TowerL1&& end instanceof TowerL0) return true;
+			if(start instanceof TowerL1 && end instanceof TowerL0) return true;
 			if(start instanceof TowerL0 && end instanceof Cell) return true;
 		}
 		
