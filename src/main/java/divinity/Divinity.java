@@ -1,6 +1,6 @@
 package divinity;
 
-import Game.*;
+import Game.Game;
 import tower.*;
 
 public class Divinity {
@@ -28,7 +28,8 @@ public class Divinity {
 	}
 	// da rivedere in seguito alle modifiche di game e divinity
 	public void move(Cell start, Cell end) {
-		Divinity god = new Divinity(gameMap);
+		
+		Divinity god = new Divinity(game);
 		
 		if(god.isNear(start, end)) { // controllo prima la vicinanza 
 			
@@ -68,23 +69,13 @@ public class Divinity {
 		int ys=-1;
 		
 		//salvo le coordinate delle celle 
-		for(int i = 0; i < 5; i++) {
-			for(int j = 0; j < 5; j++) {
-				
-				if(start.equals(game.getMap().getCell(i,j))){
-
-					xs = i;
-					ys = j;
-				}
-				if(end.equals(game.getMap().getCell(i,j))) {
-					xe = i;
-					ye = j;
-				}
-			}
-		}
+		xs = start.getPosition()[0];
+		ys = start.getPosition()[1];
+		
+		xs = end.getPosition()[0];
+		ys = end.getPosition()[1];		
 		 
 		//segue un controllo sulla vicinanza degli indici
-		
 		if(xs>=0 && xe>=0 && ys>=0 && ye>=0) {
 			if(xe == xs) {
 				if(ye == ys + 1) return true;
