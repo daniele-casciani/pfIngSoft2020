@@ -26,7 +26,7 @@ public class Divinity {
 	public void build() {
 		
 	}
-	// da rivedere in seguito alle modifiche di game e divinity
+	
 	public void move(Cell start, Cell end) {
 		
 		Divinity god = new Divinity(game);
@@ -61,8 +61,8 @@ public class Divinity {
 	public void setup() {
 		
 	}
-//da rivedere dopo creazione coordinate in cell	
-	private boolean isNear(Cell start, Cell end) {
+
+	public boolean isNear(Cell start, Cell end) {
 		int xs=-1;
 		int xe=-1;
 		int ye=-1;
