@@ -3,11 +3,7 @@ package divinity;
 import Game.*;
 import tower.*;
 
-<<<<<<< HEAD
 public class Divinity {
-=======
-class Divinity {
->>>>>>> 0ff997eb564303cea540472870501f21957aa93c
 	final private boolean threeplayer=true;
 	final private boolean fourplayer=true;
 	private Game game;
@@ -35,10 +31,6 @@ class Divinity {
 	public void move(Cell start, Cell end) {
 		Divinity god = new Divinity(gameMap);
 		
-<<<<<<< HEAD
-		if((this.isNear(start, end))==true); //controllo vicinanza della cella 
-		//controllo sui livelli 
-=======
 		if(god.isNear(start, end)) { // controllo prima la vicinanza 
 			
 			// controllo movimento di livello 
@@ -48,7 +40,6 @@ class Divinity {
 			//mossa non valida 
 		}
 		//mossa non valida
->>>>>>> 0ff997eb564303cea540472870501f21957aa93c
 	}
 	
 	public void win() {
@@ -70,7 +61,7 @@ class Divinity {
 	public void setup() {
 		
 	}
-// TODO da rivedere dopo creazione coordinate in cell	
+//da rivedere dopo creazione coordinate in cell	
 	private boolean isNear(Cell start, Cell end) {
 		int xs=-1;
 		int xe=-1;
@@ -80,11 +71,9 @@ class Divinity {
 		//salvo le coordinate delle celle 
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 5; j++) {
-<<<<<<< HEAD
+				
 				if(start.equals(game.getMap().getCell(i,j))){
-=======
-				if(start.equals(gameMap.getCell(i,j))){ // getCell in map da implementare
->>>>>>> 0ff997eb564303cea540472870501f21957aa93c
+
 					xs = i;
 					ys = j;
 				}
@@ -124,6 +113,7 @@ class Divinity {
 	
 	public boolean isSameLevel(Level start, Level end) {
 		if(start.getClass() == end.getClass()) return true;
+		else return false;
 	}
 	
 	public boolean isNextLevel(Level start, Level end) { //controllo sul movimento verso l'alto
