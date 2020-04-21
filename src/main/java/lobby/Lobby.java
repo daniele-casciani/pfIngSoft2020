@@ -10,6 +10,7 @@ class Lobby {
 		return game;
 	 }
 	 ArrayList<Divinity> createDeck(){
-		 
+		 // TODO
+		 return null ;
 	 }
 }

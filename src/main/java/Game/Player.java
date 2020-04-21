@@ -1,5 +1,5 @@
 package Game;
-import divinity.Divinity;
+import divinity.*;
 
 public class Player {
 	private String nickname;

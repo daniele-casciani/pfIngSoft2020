@@ -1,7 +1,13 @@
 package tower;
 
 public class Cell implements Level{
-	Level getLevel() {
-		return this;
+	int[] position ;
+	
+	public Cell(int x,int y) {
+		this.position= new int[]{x,y};
+	}
+	
+	public int[] getPosition() {
+		return position;
 	}
 }

@@ -1,10 +1,11 @@
 package divinity;
 import Game.*;
 import tower.*;
-class Divinity {
+
+public class Divinity {
 	final private boolean threeplayer=true;
 	final private boolean fourplayer=true;
-	private Map gameMap = new Map();
+	private Game game;
 	
 	public boolean isFourplayer() {
 		return fourplayer;
@@ -14,8 +15,8 @@ class Divinity {
 	}
 
 	
-	public Divinity(Map map) {
-		this.gameMap = map;
+	public Divinity(Game game) {
+		this.game = game;
 	}
 	
 	public void round() {
@@ -28,7 +29,7 @@ class Divinity {
 	
 	public void move(Cell start, Cell end) {
 		
-		if(Divinity.isNear(start, end)); //controllo vicinanza della cella 
+		if((this.isNear(start, end))==true); //controllo vicinanza della cella 
 		//controllo sui livelli 
 	}
 	
@@ -48,7 +49,11 @@ class Divinity {
 		
 	}
 	
-	public boolean isNear(Cell start, Cell end) {
+	public void setup() {
+		
+	}
+// TODO da rivedere dopo creazione coordinate in cell	
+	private boolean isNear(Cell start, Cell end) {
 		int xs=-1;
 		int xe=-1;
 		int ye=-1;
@@ -57,11 +62,11 @@ class Divinity {
 		//salvo le coordinate delle celle 
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 5; j++) {
-				if(start.equals(gameMap.getCell(i,j))){
+				if(start.equals(game.getMap().getCell(i,j))){
 					xs = i;
 					ys = j;
 				}
-				if(end.equals(gameMap.getCell(i,j))) {
+				if(end.equals(game.getMap().getCell(i,j))) {
 					xe = i;
 					ye = j;
 				}

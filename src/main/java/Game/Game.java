@@ -7,8 +7,12 @@ public class Game {
 	private int round=0;
 	private Player currentPlayer;
 	private ArrayList<Player> playerList;
-	private Map map = new Map();
-	ArrayList<ActivePower> effectList;
+	private  Map map = new Map();
+	private ArrayList<ActivePower> effectList;
+	
+	public Map getMap() {
+		return map;
+	}
 	
 	public Game(ArrayList<User> participants, ArrayList<Divinity> deck){
 		ArrayList<Divinity> list = selectCard(deck, participants.get(0));
@@ -25,13 +29,13 @@ public class Game {
 	
 	private Player rotation() {
 		if (playerList.indexOf(currentPlayer)==(playerList.size()-1)){
-			round++;
+			round = getRound() + 1;
 			return playerList.get(0);
 			}
 				
 		return playerList.get(playerList.indexOf(currentPlayer)+1);
 		}
-	private void startGame() {
+	public void startGame() {
 		while (true) {
 			rotation();
 			if (win()==true) {
@@ -40,12 +44,23 @@ public class Game {
 		}
 	}
 	boolean win(){
-		//verificate condizioni vittoria
+		return false;
+		// TODO verificate condizioni vittoria
 		}
 	private Divinity choseCard(ArrayList<Divinity> deck, User player) {
-		//sceglie carte tra la lista
+		return null;
+		//TODO sceglie carte tra la lista
 	}
 	private ArrayList<Divinity> selectCard(ArrayList<Divinity> deck, User player){
-		// scegliere le carte da usare
+		return null;
+		// TODO scegliere le carte da usare
+	}
+
+	public int getRound() {
+		return round;
+	}
+
+	public ArrayList<ActivePower> getEffectList() {
+		return effectList;
 	}
 }
