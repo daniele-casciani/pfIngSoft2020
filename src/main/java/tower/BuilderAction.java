@@ -1,7 +1,7 @@
 package tower;
 import Game.*;
 
- class BuilderAction implements Action {
+ public class BuilderAction implements Action {
 	private Game game;
 	
 	public BuilderAction(Game game) {
