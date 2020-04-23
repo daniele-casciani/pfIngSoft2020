@@ -27,9 +27,7 @@ public class Divinity {
 	
 	public void build(Level builderCell, Level whereBuild) {
 		
-		Divinity god = new Divinity(game);
-		
-		if(god.isPossibleBuild(builderCell, whereBuild)) {
+		if(isPossibleBuild(builderCell, whereBuild)) {
 			if(whereBuild instanceof TowerL2) {
 				// nel caso base costruisco la cupola sulla torrel2
 				BuilderAction nowbuild = new BuilderAction(game);
@@ -46,12 +44,11 @@ public class Divinity {
 	
 	public void move(Level start, Level end) {
 		
-		Divinity god = new Divinity(game);
 		
-		if(god.isNear((Cell)start, (Cell)end)) { // controllo prima la vicinanza 
+		if(isNear((Cell)start, (Cell)end)) { // controllo prima la vicinanza 
 			
 			// controllo movimento di livello 
-			if(god.isNextLevel(start, end) || god.isPreviousLevel(start, end) || god.isSameLevel(start, end) ) {
+			if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
 				// se entro qui posso chiamare lo spostamento
 			}
 			//mossa non valida 
@@ -62,9 +59,27 @@ public class Divinity {
 	public void win() {
 		
 	}
+	public void lose(Level builderCell) {
+		if(!isThereMove(builderCell)) {
+			//costruttore è bloccato 
+		}
+		//altrimenti non faccio nulla e procedo con il round
+	}
 	
-	public void lose() {
+	private boolean isThereMove(Level builderCell) {
 		
+		for(int i=0; i<5; i++)
+			for(int j=0; j<5;j++) {
+				if(isNear((Cell)builderCell, (Cell)game.getMap().getCell(i, j))) {
+					if(isNextLevel(builderCell, game.getMap().getCell(i, j)) || isPreviousLevel(builderCell, game.getMap().getCell(i, j)) || isSameLevel(builderCell, game.getMap().getCell(i, j))) {
+						//se entro qui il mio costruttore ha almeno una mossa disponibile
+						return true;
+					}
+					// al contrario continua a scorrere 	
+				}
+				// al contrario continua a scorrere
+			}
+		return false;	//se non ho mosse possibili		
 	}
 	
 	public void endRound() {
