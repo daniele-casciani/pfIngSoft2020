@@ -3,6 +3,7 @@ package divinity;
 import Game.Game;
 import tower.BuilderAction;
 import tower.Level;
+import tower.Cell;
 
 public class Divinity {
 	final private boolean threeplayer = true;
@@ -50,7 +51,7 @@ public class Divinity {
 		if(god.isNear((Cell)start, (Cell)end)) { // controllo prima la vicinanza 
 			
 			// controllo movimento di livello 
-			if(god.isNextLevel(start, end) || god.isPreviousLevel(start, end)) {
+			if(god.isNextLevel(start, end) || god.isPreviousLevel(start, end) || god.isSameLevel(start, end) ) {
 				// se entro qui posso chiamare lo spostamento
 			}
 			//mossa non valida 
@@ -67,15 +68,19 @@ public class Divinity {
 	}
 	
 	public void endRound() {
-		
+		// nel gioco base non fa nulla
 	}
 	
 	public void startRound() {
-		
+		// nel gioco base non fa nulla 
 	}
 	
 	public void setup() {
-		
+		// per il gioco base si tratta solo di scegliere due celle per i costruttori
+		// si richide al client una cella 
+		// si controlla che non ci siano altri builder
+		// se non ci sono chiamo il costruttore di builder
+		// mossa non valida altrimenti
 	}
 
 	private boolean isNear(Cell start, Cell end) {
@@ -112,6 +117,10 @@ public class Divinity {
 	}
 	
 	private boolean isSameLevel(Level start, Level end) {
+		
+		if(end instanceof Dome) return false;
+		if(end instanceof Builder) return false;
+		
 		if(start.getClass() == end.getClass()) return true;
 		else return false;
 	}
