@@ -10,4 +10,11 @@ public class Cell implements Level{
 	public int[] getPosition() {
 		return position;
 	}
+	Level getLevel() {
+		return this;
+	}
+	public int getHeight() {
+		return 0;
+	}
 }
+

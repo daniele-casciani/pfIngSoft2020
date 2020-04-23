@@ -8,4 +8,7 @@ class Floor implements Level{
 	Level getLevel() {
 		return level;
 	}
+	 public int getHeight() {
+		return level.getHeight()+1;
+	}
 }

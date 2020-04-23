@@ -37,7 +37,7 @@ public class Divinity {
 	public void build(Level builderCell, Level whereBuild) {
 		
 		if(isPossibleBuild(builderCell, whereBuild)) {
-			if(whereBuild instanceof TowerL2) {
+			if(whereBuild instanceof TowerL3) {
 				// nel caso base costruisco la cupola sulla torrel2
 				BuilderAction nowbuild = new BuilderAction(game);
 				nowbuild.buildDome(whereBuild);
@@ -155,9 +155,9 @@ public class Divinity {
 		if(end instanceof Builder) return false;
 		
 		else {
-			if(start instanceof Cell && end instanceof TowerL0) return true;
-			if(start instanceof TowerL0 && end instanceof TowerL1) return true;
+			if(start instanceof Cell && end instanceof TowerL1) return true;
 			if(start instanceof TowerL1 && end instanceof TowerL2) return true;
+			if(start instanceof TowerL2 && end instanceof TowerL3) return true;
 		}
 		
 		return false;
@@ -169,9 +169,9 @@ public class Divinity {
 		if(end instanceof Builder) return false;
 		
 		else {
+			if(start instanceof TowerL3 && end instanceof TowerL2) return true;
 			if(start instanceof TowerL2 && end instanceof TowerL1) return true;
-			if(start instanceof TowerL1 && end instanceof TowerL0) return true;
-			if(start instanceof TowerL0 && end instanceof Cell) return true;
+			if(start instanceof TowerL1 && end instanceof Cell) return true;
 		}
 		
 		return false;

@@ -1,14 +1,14 @@
 package tower;
 
 final class Builder extends Floor {
-	final private String color;
+	final private String name;
 	private  Level level;
-	 Builder(Level level, String color) {
+	 Builder(Level level, String name) {
 		this.level=level;
-		this.color=color;
+		this.name=name;
 	}
-	public String getColor() {
-		return color;
+	public String getName() {
+		return name;
 	}
 	//prende la nuova casella e restituisce la vecchia
 	 Level move(Level level) {
@@ -18,5 +18,8 @@ final class Builder extends Floor {
 	}
 	 Level kill() {
 		 return level;
+	 }
+	 public int getHeight() {
+		 return -1;
 	 }
 }

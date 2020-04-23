@@ -38,15 +38,10 @@ public class Game {
 	public void startGame() {
 		while (true) {
 			rotation();
-			if (win()==true) {
-				break;
-			}
+			// TODO verificate condizioni vittoria
 		}
 	}
-	boolean win(){
-		return false;
-		// TODO verificate condizioni vittoria
-		}
+
 	private Divinity choseCard(ArrayList<Divinity> deck, User player) {
 		return null;
 		//TODO sceglie carte tra la lista

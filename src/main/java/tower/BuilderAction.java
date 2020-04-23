@@ -27,19 +27,19 @@ import Game.*;
 	public void buildTower(Level level) {
 
 		if (level.getClass()==Cell.class){
-			game.getMap().setCell( new TowerL0(level));
-		}
-		else if (level.getClass()==TowerL0.class){
 			game.getMap().setCell( new TowerL1(level));
 		}
 		else if (level.getClass()==TowerL1.class){
 			game.getMap().setCell( new TowerL2(level));
 		}
+		else if (level.getClass()==TowerL2.class){
+			game.getMap().setCell( new TowerL3(level));
+		}
 	}
 
 	@Override
-	public void newBuilder(Level level,String color) {
-		Builder builder=new Builder(level, color);
+	public void newBuilder(Level level,String name) {
+		Builder builder=new Builder(level, name);
 		game.getMap().setCell(builder);
 	}
 
@@ -47,6 +47,17 @@ import Game.*;
 	public  void killBuilder(Level dead) {
 		Level cleanfloor=((Builder)((Floor) dead)).kill();
 		game.getMap().setCell(cleanfloor);
+	}
+	
+	//return 0=cell 1/2/3=tower 4=dome -1=builder
+	int getHeight(Level level) {
+		return level.getHeight();
+	}
+
+	@Override
+	public String builderName(Builder builder) {
+		return builder.getName();
+		
 	}
 	
 
