@@ -22,6 +22,15 @@ public class Divinity {
 	}
 	
 	public void round() {
+		//inizio turno giocatore x
+		//lancio startRound
+		//lancio lose sui costruttori di x
+		//selezione del costruttore
+		//lancio di move 
+		//selezione cella dove costruire 
+		//lancio di build
+		//lancio di win 
+		//lancio di endRound
 		
 	}
 	
