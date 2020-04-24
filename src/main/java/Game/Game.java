@@ -14,6 +14,10 @@ public class Game {
 		return map;
 	}
 	
+	public Player getCurrentPlayer() {
+		return this.currentPlayer;
+	}
+	
 	public Game(ArrayList<User> participants, ArrayList<Divinity> deck){
 		ArrayList<Divinity> list = selectCard(deck, participants.get(0));
 		Divinity chosenCard;

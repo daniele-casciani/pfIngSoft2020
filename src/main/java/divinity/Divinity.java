@@ -3,7 +3,7 @@ package divinity;
 import Game.Game;
 import tower.BuilderAction;
 import tower.Level;
-import tower.Cell;
+
 
 public class Divinity {
 	final private boolean threeplayer = true;
@@ -22,6 +22,7 @@ public class Divinity {
 	}
 	
 	public void round() {
+		
 		//inizio turno giocatore x
 		//lancio startRound
 		//lancio lose sui costruttori di x
@@ -29,6 +30,7 @@ public class Divinity {
 		//lancio di move 
 		//selezione cella dove costruire 
 		//lancio di build
+		
 		//lancio di win 
 		//lancio di endRound
 		
@@ -37,8 +39,8 @@ public class Divinity {
 	public void build(Level builderCell, Level whereBuild) {
 		
 		if(isPossibleBuild(builderCell, whereBuild)) {
-			if(whereBuild instanceof TowerL3) {
-				// nel caso base costruisco la cupola sulla torrel2
+			if(whereBuild.getHeight()==3) {
+				
 				BuilderAction nowbuild = new BuilderAction(game);
 				nowbuild.buildDome(whereBuild);
 			}
@@ -54,11 +56,21 @@ public class Divinity {
 	public void move(Level start, Level end) {
 		
 		
-		if(isNear((Cell)start, (Cell)end)) { // controllo prima la vicinanza 
+		if(isNear(start, end)) { // controllo prima la vicinanza 
 			
 			// controllo movimento di livello 
 			if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
-				// se entro qui posso chiamare lo spostamento
+				BuilderAction nowmove = new BuilderAction(game);
+				//controllo se sono al terzo livello
+				if(end.getHeight()==3) {
+					// se entro qui muovo e dichiaro il vincitore
+					nowmove.movement(start, end);				
+					
+				}
+				else {
+					// se entro qui faccio solo il movimento
+					nowmove.movement(start, end);
+				}
 			}
 			//mossa non valida 
 		}
@@ -68,9 +80,17 @@ public class Divinity {
 	public void win() {
 		
 	}
-	public void lose(Level builderCell) {
+	public void lose() {
+		for(int i = 0; i<5; i++)
+			for(int j=0; j<5; j++) {
+				
+			}
+	}
+	private void deleteBuilder(Level builderCell) {
 		if(!isThereMove(builderCell)) {
 			//costruttore è bloccato 
+			BuilderAction nowkill = new BuilderAction(game);
+			nowkill.killBuilder(builderCell);
 		}
 		//altrimenti non faccio nulla e procedo con il round
 	}
@@ -79,7 +99,7 @@ public class Divinity {
 		
 		for(int i=0; i<5; i++)
 			for(int j=0; j<5;j++) {
-				if(isNear((Cell)builderCell, (Cell)game.getMap().getCell(i, j))) {
+				if(isNear(builderCell, game.getMap().getCell(i, j))) {
 					if(isNextLevel(builderCell, game.getMap().getCell(i, j)) || isPreviousLevel(builderCell, game.getMap().getCell(i, j)) || isSameLevel(builderCell, game.getMap().getCell(i, j))) {
 						//se entro qui il mio costruttore ha almeno una mossa disponibile
 						return true;
@@ -100,24 +120,33 @@ public class Divinity {
 	}
 	
 	public void setup() {
-		// per il gioco base si tratta solo di scegliere due celle per i costruttori
+		Level selecetedLevel;
+		int i=0;
 		// si richide al client una cella 
 		// si controlla che non ci siano altri builder
-		// se non ci sono chiamo il costruttore di builder
-		// mossa non valida altrimenti
+		while(i<2) {
+			if(selecetedLevel.getHeight()==0) {
+				BuilderAction newBuilder = new BuilderAction(game);
+				newBuilder.newBuilder(selectedLevel, game.getCurrentPlayer().getName());
+				i++;
+			}
+			else {
+				// mossa non valida altrimenti
+			}
+		}
 	}
 
-	private boolean isNear(Cell start, Cell end) {
+	private boolean isNear(Level start, Level end) {
 		int xs, ys, xe, ye;
 		
-		//salvo le coordinate delle celle 
+		
 		xs = start.getPosition()[0];
 		ys = start.getPosition()[1];
 		
 		xe = end.getPosition()[0];
 		ye = end.getPosition()[1];		
 		 
-		//segue un controllo sulla vicinanza degli indici
+		
 		if(xe == xs) {
 				if(ye == ys + 1) return true;
 				if(ye == ys - 1) return true;
@@ -142,49 +171,44 @@ public class Divinity {
 	
 	private boolean isSameLevel(Level start, Level end) {
 		
-		if(end instanceof Dome) return false;
-		if(end instanceof Builder) return false;
+		if(end.getHeight()==4) return false;
+		if(end.getHeight()==-1) return false;
 		
-		if(start.getClass() == end.getClass()) return true;
+		if(start.getHeight() == end.getHeight()) return true;
 		else return false;
 	}
 	
 	private boolean isNextLevel(Level start, Level end) { //controllo sul movimento verso l'alto
 		
-		if(end instanceof Dome) return false;
-		if(end instanceof Builder) return false;
+		if(end.getHeight()==4) return false;
+		if(end.getHeight()==-1) return false;
 		
 		else {
-			if(start instanceof Cell && end instanceof TowerL1) return true;
-			if(start instanceof TowerL1 && end instanceof TowerL2) return true;
-			if(start instanceof TowerL2 && end instanceof TowerL3) return true;
+			if(start.getHeight()==0 && end.getHeight()==1) return true;
+			if(start.getHeight()==1 && end.getHeight()==2) return true;
+			if(start.getHeight()==2 && end.getHeight()==3) return true;
 		}
 		
 		return false;
 	}
 	
 	private boolean isPreviousLevel(Level start, Level end) {// controllo il movimento verso il basso 
-		
-		if(end instanceof Dome) return false;
-		if(end instanceof Builder) return false;
-		
+		if(end.getHeight()==4) return false;
+		if(end.getHeight()==-1) return false;
 		else {
-			if(start instanceof TowerL3 && end instanceof TowerL2) return true;
-			if(start instanceof TowerL2 && end instanceof TowerL1) return true;
-			if(start instanceof TowerL1 && end instanceof Cell) return true;
+			if(end.getHeight()-start.getHeight()<0) return true;
 		}
 		
 		return false;
 	}
 	
 	private boolean isPossibleBuild(Level builderCell, Level whereBuild) {
-		Divinity god = new Divinity(game);
 		
-		if(god.isNear((Cell)builderCell, (Cell)whereBuild)) { // controllo vicinanza
-			if(end instanceof Dome) return false;			// controllo no cupola 
-			if(end instanceof Builder) return false;		// controllo no costruttore
+		if(isNear(builderCell, whereBuild)) {
+			if(whereBuild.getHeight()==4) return false;
+			if(whereBuild.getHeight()==-1)return false;
 			return true;
-			}
+		}
 		else return false;
 	}
 }
