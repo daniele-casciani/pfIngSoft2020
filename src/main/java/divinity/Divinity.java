@@ -92,11 +92,11 @@ public class Divinity {
 							for(int k=i;k<5;k++)
 								for(int l=0;l<5;l++) {
 									Level otherBuilder = game.getMap().getCell(k, l);
-									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName()) {
+									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
 										if(!canBuilderMove(otherBuilder)) {
 											action.killBuilder(otherBuilder);
 											action.killBuilder(firstBuilder);
-											//metodo che elimina dalla lista dei giocatori
+											game.loseGame();
 										}
 										k=5;l=5;i=5;j=5;//trovati i due builder esco dalla ricerca
 									}
@@ -137,6 +137,7 @@ public class Divinity {
 		// si richide al client una cella 
 		// si controlla che non ci siano altri builder
 		while(i<2) {
+			
 			if(selecetedLevel.getHeight()==0) {
 				BuilderAction newBuilder = new BuilderAction(game);
 				newBuilder.newBuilder(selectedLevel, game.getCurrentPlayer().getName());

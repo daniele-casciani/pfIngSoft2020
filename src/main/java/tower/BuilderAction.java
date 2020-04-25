@@ -55,8 +55,8 @@ import Game.*;
 	}
 
 	@Override
-	public String builderName(Builder builder) {
-		return builder.getName();
+	public String builderName(Level builder) {
+		return ((Builder)(Floor)builder).getName();
 		
 	}
 	

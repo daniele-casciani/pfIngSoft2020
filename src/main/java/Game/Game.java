@@ -62,4 +62,9 @@ public class Game {
 	public ArrayList<ActivePower> getEffectList() {
 		return effectList;
 	}
+	
+	public void loseGame() {
+		//TODO 
+	}
+	
 }
