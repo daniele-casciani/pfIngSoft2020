@@ -23,17 +23,17 @@ public class Divinity {
 	
 	public void round() {
 		
-		//inizio turno giocatore x
-		//lancio startRound
-		//lancio lose sui costruttori di x
-		//selezione del costruttore
-		//lancio di move 
-		//selezione cella dove costruire 
-		//lancio di build
+		startRound();
 		
-		//lancio di win 
-		//lancio di endRound
+		lose();
 		
+		//selezione del costruttore e cella movimento 
+		move(start, end);
+		
+		//selezione cella dove costruire
+		build(builder, whereBuild);
+		
+		endRound();
 	}
 	
 	public void build(Level builderCell, Level whereBuild) {
@@ -98,10 +98,11 @@ public class Divinity {
 											action.killBuilder(firstBuilder);
 											//metodo che elimina dalla lista dei giocatori
 										}
-										k=5;l=5;i=5;j=5;//trovati i due builder esco dalla ricerca
+										k=5;l=5;//trovati i due builder esco dalla ricerca
 									}
 								}
 						}
+						i=5;j=5;
 					}
 				}
 			}
