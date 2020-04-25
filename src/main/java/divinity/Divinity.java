@@ -63,9 +63,8 @@ public class Divinity {
 				BuilderAction nowmove = new BuilderAction(game);
 				//controllo se sono al terzo livello
 				if(end.getHeight()==3) {
-					// se entro qui muovo e dichiaro il vincitore
 					nowmove.movement(start, end);				
-					
+					win();
 				}
 				else {
 					// se entro qui faccio solo il movimento
@@ -78,24 +77,37 @@ public class Divinity {
 	}
 	
 	public void win() {
-		
-	}
-	public void lose() {
-		for(int i = 0; i<5; i++)
-			for(int j=0; j<5; j++) {
-				
-			}
-	}
-	private void deleteBuilder(Level builderCell) {
-		if(!isThereMove(builderCell)) {
-			//costruttore è bloccato 
-			BuilderAction nowkill = new BuilderAction(game);
-			nowkill.killBuilder(builderCell);
-		}
-		//altrimenti non faccio nulla e procedo con il round
+		// dichiara il vincitore
 	}
 	
-	private boolean isThereMove(Level builderCell) {
+	public void lose() {
+		
+		for(int i = 0; i<5; i++)
+			for(int j=0; j<5; j++) {
+				Level firstBuilder = game.getMap().getCell(i, j);
+				if(firstBuilder.getHeight() == -1) {
+					BuilderAction action = new BuilderAction(game);
+					if(action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {
+						if(!canBuilderMove(firstBuilder)) {
+							for(int k=i;k<5;k++)
+								for(int l=0;l<5;l++) {
+									Level otherBuilder = game.getMap().getCell(k, l);
+									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName()) {
+										if(!canBuilderMove(otherBuilder)) {
+											action.killBuilder(otherBuilder);
+											action.killBuilder(firstBuilder);
+											//metodo che elimina dalla lista dei giocatori
+										}
+										k=5;l=5;i=5;j=5;//trovati i due builder esco dalla ricerca
+									}
+								}
+						}
+					}
+				}
+			}
+	}
+	
+	private boolean canBuilderMove(Level builderCell) {
 		
 		for(int i=0; i<5; i++)
 			for(int j=0; j<5;j++) {
