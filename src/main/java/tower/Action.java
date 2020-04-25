@@ -6,7 +6,7 @@ public interface Action {
 	void buildDome(Level level);
 	void newBuilder(Level level,String color);
 	void killBuilder(Level dead);
-	String builderName(Builder builder);
+	String builderName(Level builder);
 	int getHeight(Level level);//return 0=cell 1/2/3=tower 4=dome -1=builder
 	
 }
