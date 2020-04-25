@@ -49,8 +49,8 @@ import Game.*;
 		game.getMap().setCell(cleanfloor);
 	}
 	
-	//return 0=cell 1/2/3=tower 4=dome -1=builder
-	int getHeight(Level level) {
+	@Override
+	public int getHeight(Level level) {
 		return level.getHeight();
 	}
 
