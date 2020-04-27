@@ -9,17 +9,8 @@ public class Divinity {
 	final private boolean threeplayer = true;
 	final private boolean fourplayer = true;
 	private Game game;
+	private int cardID=0;
 
-	public boolean isFourplayer() {
-		return fourplayer;
-	}
-	public boolean isThreeplayer() {
-		return threeplayer;
-	}
-
-	public Divinity(Game game) {
-		this.game = game;
-	}
 	
 	public void round() {
 		
@@ -27,10 +18,10 @@ public class Divinity {
 		
 		lose();
 		
-		//selezione del costruttore e cella movimento 
+		//TODO selezione del costruttore e cella movimento 
 		move(start, end);
 		
-		//selezione cella dove costruire
+		//TODO selezione cella dove costruire
 		build(builder, whereBuild);
 		
 		endRound();
@@ -64,7 +55,7 @@ public class Divinity {
 				//controllo se sono al terzo livello
 				if(end.getHeight()==3) {
 					nowmove.movement(start, end);				
-					win();
+					game.winGame();
 				}
 				else {
 					// se entro qui faccio solo il movimento
@@ -74,10 +65,6 @@ public class Divinity {
 			//mossa non valida 
 		}
 		//mossa non valida
-	}
-	
-	public void win() {
-		// dichiara il vincitore
 	}
 	
 	public void lose() {
@@ -135,17 +122,17 @@ public class Divinity {
 	public void setup() {
 		Level selecetedLevel;
 		int i=0;
-		// si richide al client una cella 
-		// si controlla che non ci siano altri builder
+		//TODO si richide al client una cella 
+		//TODO si controlla che non ci siano altri builder
 		while(i<2) {
 			
 			if(selecetedLevel.getHeight()==0) {
 				BuilderAction newBuilder = new BuilderAction(game);
-				newBuilder.newBuilder(selectedLevel, game.getCurrentPlayer().getName());
+				newBuilder.newBuilder(,game.getCurrentPlayer().getName());
 				i++;
 			}
 			else {
-				// mossa non valida altrimenti
+				//TODO mossa non valida altrimenti
 			}
 		}
 	}
@@ -225,4 +212,18 @@ public class Divinity {
 		}
 		else return false;
 	}
+
+	public boolean isFourplayer() {
+		return fourplayer;
+	}
+	public boolean isThreeplayer() {
+		return threeplayer;
+	}
+	public int getID() {
+		return cardID;
+	}
+	public Divinity(Game game) {
+		this.game = game;
+	}
 }
+

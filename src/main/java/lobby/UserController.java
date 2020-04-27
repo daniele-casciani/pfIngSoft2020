@@ -1,12 +1,14 @@
-package Controller;
+package lobby;
 
 import java.awt.event.ActionListener;
 
-public class Controller {
+import Game.Model;
+
+public class UserController {
 	private Model model;
 	private View view;
 	
-	public Controller(Model model, View view) {
+	public UserController(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}
