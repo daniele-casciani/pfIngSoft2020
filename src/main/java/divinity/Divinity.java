@@ -9,7 +9,7 @@ public class Divinity {
 	final private boolean threeplayer = true;
 	final private boolean fourplayer = true;
 	private Game game;
-	
+
 	public boolean isFourplayer() {
 		return fourplayer;
 	}
