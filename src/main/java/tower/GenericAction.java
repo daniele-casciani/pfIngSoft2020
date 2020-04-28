@@ -1,6 +1,6 @@
 package tower;
 
-public interface Action {
+public interface GenericAction {
 	void movement(Level start,Level end);
 	void buildTower(Level level);
 	void buildDome(Level level);

@@ -1,5 +1,7 @@
 package divinity;
 
+import java.io.IOException;
+
 import Game.Game;
 import tower.BuilderAction;
 import tower.Level;
@@ -17,54 +19,80 @@ public class Divinity {
 		startRound();
 		
 		lose();
+
+		tryer(new Move());
 		
-		//TODO selezione del costruttore e cella movimento 
-		move(start, end);
-		
-		//TODO selezione cella dove costruire
-		build(builder, whereBuild);
+		tryer(new Build());
 		
 		endRound();
 	}
 	
-	public void build(Level builderCell, Level whereBuild) {
-		
-		if(isPossibleBuild(builderCell, whereBuild)) {
-			if(whereBuild.getHeight()==3) {
-				
-				BuilderAction nowbuild = new BuilderAction(game);
-				nowbuild.buildDome(whereBuild);
-			}
-			//altriemnti costruisco pezzi di torre
-			else {
-				BuilderAction nowbuild = new BuilderAction(game);
-				nowbuild.buildTower(whereBuild);
-			}
+	private void tryer(Action action) {
+		boolean state= false;
+		while (state==false) {
+			Object[] parameters;
+			try {
+				parameters = action.request();
+				try {
+				state = action.execute(parameters[0],parameters[1]);
+				}
+				catch(ClassCastException e1){state=false;game.getController().invalidAction();}
+			} catch (IOException e) {state=false;game.getController().invalidAction();}
 		}
-		// mossa non valida
 	}
 	
-	public void move(Level start, Level end) {
-		
-		
-		if(isNear(start, end)) { // controllo prima la vicinanza 
-			
-			// controllo movimento di livello 
-			if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
-				BuilderAction nowmove = new BuilderAction(game);
-				//controllo se sono al terzo livello
-				if(end.getHeight()==3) {
-					nowmove.movement(start, end);				
-					game.winGame();
+	class Build implements Action {
+		public boolean execute(Object start, Object end) {
+			Level whereBuild = (Level)start;
+			Level builderCell = (Level)end;
+			if(isPossibleBuild(builderCell, whereBuild)) {
+				if(whereBuild.getHeight()==3) {
+				
+					BuilderAction nowbuild = new BuilderAction(game);
+					nowbuild.buildDome(whereBuild);
 				}
+				//altriemnti costruisco pezzi di torre
 				else {
-					// se entro qui faccio solo il movimento
-					nowmove.movement(start, end);
+					BuilderAction nowbuild = new BuilderAction(game);
+					nowbuild.buildTower(whereBuild);
 				}
 			}
-			//mossa non valida 
+			else return false;
+			return true;
 		}
-		//mossa non valida
+
+		@Override
+		public Level[] request() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+	
+	class Move implements Action {
+		public boolean execute (Object arg0, Object arg1) {
+			Level start = (Level)arg0;
+			Level end = (Level)arg1;
+			if(isNear(start, end)) { // controllo prima la vicinanza 
+				// controllo movimento di livello 
+				if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
+					BuilderAction nowmove = new BuilderAction(game);
+					//controllo se sono al terzo livello
+					if(end.getHeight()==3) {
+						nowmove.movement(start, end);				
+						game.winGame();
+					}
+				else return false;
+				}
+			else return false;
+			}
+			return true;
+		}
+
+		@Override
+		public Level[] request() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 	
 	public void lose() {
@@ -119,24 +147,30 @@ public class Divinity {
 		// nel gioco base non fa nulla 
 	}
 	
-	public void setup() {
-		Level selecetedLevel;
-		int i=0;
-		//TODO si richide al client una cella 
-		//TODO si controlla che non ci siano altri builder
-		while(i<2) {
-			
-			if(selecetedLevel.getHeight()==0) {
-				BuilderAction newBuilder = new BuilderAction(game);
-				newBuilder.newBuilder(,game.getCurrentPlayer().getName());
-				i++;
-			}
-			else {
-				//TODO mossa non valida altrimenti
-			}
+	public void setup(){
+		tryer(new Setup());
+		tryer(new Setup());
+	}
+	
+	class Setup implements Action{
+		public boolean execute(Object arg0, Object arg1) {
+			Level selectedLevel = (Level)arg0;
+			//TODO si controlla che non ci siano altri builder
+				if(selectedLevel.getHeight()==0) {
+					BuilderAction newBuilder = new BuilderAction(game);
+					newBuilder.newBuilder(selectedLevel,game.getCurrentPlayer().getName());
+				}
+				else return false;
+			return true;
+		}
+
+		@Override
+		public Level[] request() throws IOException {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
-
+		
 	private boolean isNear(Level start, Level end) {
 		int xs, ys, xe, ye;
 		

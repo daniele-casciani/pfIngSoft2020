@@ -12,7 +12,8 @@ public class Game implements Model {
 	private ArrayList<ActivePower> effectList;
 	private ServerController serverController;
 	
-	public Game(ArrayList<User> participants, ArrayList<Divinity> deck){
+	public Game(ArrayList<User> participants, ArrayList<Divinity> deck, ServerController serverController){
+		this.serverController=serverController;
 		ArrayList<Divinity> list = serverController.selectCard(deck, participants.get(0));
 		Divinity chosenCard;
 		for (int i=1; i<participants.size(); i++) {
