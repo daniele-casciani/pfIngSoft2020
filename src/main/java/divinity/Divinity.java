@@ -11,7 +11,7 @@ public class Divinity {
 	final private boolean threeplayer = true;
 	final private boolean fourplayer = true;
 	private Game game;
-	private int cardID=0;
+	final private int cardID=0;
 
 	
 	public void round() {
@@ -73,9 +73,14 @@ public class Divinity {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
 			if(isNear(start, end)) { // controllo prima la vicinanza 
-				// controllo movimento di livello 
+				//controllo movimento di livello 
 				if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
 					BuilderAction nowmove = new BuilderAction(game);
+					if(game.getEffectList().isEmpty()==false) {
+						for (ActivePower x : game.getEffectList()) {
+							if (x.move()==true && x.actionLimitation(start, end) ) return false;
+						}
+					}
 					//controllo se sono al terzo livello
 					if(end.getHeight()==3) {
 						nowmove.movement(start, end);				
@@ -242,6 +247,11 @@ public class Divinity {
 		if(isNear(builderCell, whereBuild)) {
 			if(whereBuild.getHeight()==4) return false;
 			if(whereBuild.getHeight()==-1)return false;
+			if(game.getEffectList().isEmpty()==false) {
+				for (ActivePower x : game.getEffectList()) {
+					if (x.build()==true && x.actionLimitation(builderCell, whereBuild) ) return false;
+				}
+			}
 			return true;
 		}
 		else return false;
@@ -253,7 +263,7 @@ public class Divinity {
 	public boolean isThreeplayer() {
 		return threeplayer;
 	}
-	public int getID() {
+	public int getCardID() {
 		return cardID;
 	}
 	public Divinity(Game game) {
