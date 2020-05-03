@@ -1,18 +1,22 @@
 package lobby;
 import Game.*;
 import divinity.*;
+import utils.*;
+
 import java.util.ArrayList;
 
 class Lobby implements ServerController , Runnable {
 	private Model model;
 	private ArrayList<User> userlist;
+	private Server server;
 	
-	public Lobby(ArrayList<User> userlist) {
+	public Lobby(ArrayList<User> userlist, Server server) {
 		this.userlist=userlist;
+		this.server = server;
 	}
 	
 	void createGame() {
-		Model game = new Game(userlist,createDeck(), this);
+		Model game = new Game(userlist, createDeck(), this);
 		this.model=game;
 	 }
 	
@@ -31,19 +35,35 @@ class Lobby implements ServerController , Runnable {
 		return null;
 	}
 	@Override
-	public void choseMovement() {
-		// TODO Auto-generated method stub
+	public void choseMovement(Player player) {
+		// HP: il model attende una azione e chiama il controller
 		
+		for (User x : userlist) {
+			if(model.getCurrentPlayer().equals(x.getUserID())) {
+				// richiesta selezione del builder 
+				String builderR = server.sendRequest("Select Builder", x);
+				// richiesta selezione della cella vicina 
+				String cellR = server.sendRequest("Select Cell", x);
+				//TODO passaggio delle selezioni al model
+			}
+		}
 	}
 	@Override
-	public void wereBuild() {
-		// TODO Auto-generated method stub
-		
+	public void wereBuild(Player player) {
+		// HP: il model attende una azione e chiama il controller 
+		for (User x : userlist) {
+			if(model.getCurrentPlayer().equals(x.getUserID())) {
+				// richiesta selezione del builder 
+				String builderR = server.sendRequest("Select Builder", x);
+				// richiesta selezione della cella vicina 
+				String cellR = server.sendRequest("Select Cell", x);
+				//TODO passaggio delle selezioni al model
+			}
+		}
 	}
 	@Override
 	public void invalidAction() {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void loser(Player player) {

@@ -1,5 +1,6 @@
 package lobby;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
@@ -22,9 +23,11 @@ class Server {
 					new Thread(()->{
 						try {
 							DataInputStream input = new DataInputStream(socket.getInputStream());
+							DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 							boolean created=false;
 							while (created=false) {
-								//TODO richiesta nome
+								//send name request
+								output.writeUTF("Inser userID");
 								// Get message from the client
 								String message = input.readUTF();
 								//send message via server broadcast
@@ -49,5 +52,19 @@ class Server {
 	private void createLobby(){
 		//TODO
 	}
-	
+
+	public String sendRequest(String message, User user) {
+		String clientResponse = null;
+		try {
+			DataInputStream input = new DataInputStream(user.getSocket().getInputStream());
+			DataOutputStream output = new DataOutputStream(user.getSocket().getOutputStream());
+			output.writeUTF(message);
+			clientResponse = input.readUTF();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return clientResponse;
+	}
 }

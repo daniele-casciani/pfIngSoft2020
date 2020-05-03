@@ -72,6 +72,7 @@ public class Game implements Model {
 	public ServerController getController() {
 		return serverController;
 	}
+	@Override
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
