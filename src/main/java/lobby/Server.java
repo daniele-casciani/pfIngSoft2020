@@ -2,6 +2,8 @@ package lobby;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.ArrayList;
 import utils.*;
@@ -17,24 +19,24 @@ class Server {
 				// Create a server socket
 				serverSocket = new ServerSocket(5000);
 				while (true) {
-					// Listen for a connection request, add new connection to the list
+					// Listen for a connection request
 					Socket socket = serverSocket.accept();
 					//create a new thread
 					new Thread(()->{
-						try {
-							DataInputStream input = new DataInputStream(socket.getInputStream());
-							DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-							boolean created=false;
-							while (created=false) {
-								//send name request
-								output.writeUTF("Inser userID");
+
+						try {//handling new User
+							ObjectInputStream input;
+							ObjectOutputStream output= new ObjectOutputStream(socket.getOutputStream());
+							while (true) {
+								output.writeObject(new UserNameRequest());
+								input = new ObjectInputStream(socket.getInputStream());
+
 								// Get message from the client
-								String message = input.readUTF();
-								//send message via server broadcast
-								if(true) {//TODO tipomessaggio=nomeplayer
+								try {//creating new user
+									String message = ((UserNameResponse)(MessageToServer) input).getName();
 									userList.add(new User(message,socket));
-									created=true;
-								}
+									break;
+								}catch(ClassCastException ex) {output.writeObject(new InvalidAction("UserName Expected"));};
 							}
 						}
 						catch (IOException ex) {ex.printStackTrace();}
