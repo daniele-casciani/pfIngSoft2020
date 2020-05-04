@@ -1,6 +1,6 @@
 package divinity;
 
-import Game.Game;
+import game.Game;
 
 final class Artemis extends Divinity {
 	final private  int cardID=2;

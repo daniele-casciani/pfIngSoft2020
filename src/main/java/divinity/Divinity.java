@@ -2,7 +2,7 @@ package divinity;
 
 import java.io.IOException;
 
-import Game.Game;
+import game.Game;
 import tower.BuilderAction;
 import tower.Level;
 

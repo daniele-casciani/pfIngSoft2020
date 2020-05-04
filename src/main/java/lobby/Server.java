@@ -29,6 +29,7 @@ class Server {
 							ObjectOutputStream output= new ObjectOutputStream(socket.getOutputStream());
 							while (true) {
 								output.writeObject(new UserNameRequest());
+								output.flush();
 								input = new ObjectInputStream(socket.getInputStream());
 
 								// Get message from the client
@@ -55,11 +56,11 @@ class Server {
 		//TODO
 	}
 
-	public String sendRequest(String message, User user) {
-		String clientResponse = null;
+	public Object sendRequest(String message, User user) {
+		Object clientResponse = null;
 		try {
 			DataInputStream input = new DataInputStream(user.getSocket().getInputStream());
-			DataOutputStream output = new DataOutputStream(user.getSocket().getOutputStream());
+			ObjectOutputStream output = new ObjectOutputStream(user.getSocket().getOutputStream());
 			output.writeUTF(message);
 			clientResponse = input.readUTF();
 		} catch (IOException e) {

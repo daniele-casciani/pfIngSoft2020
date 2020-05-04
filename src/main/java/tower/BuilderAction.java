@@ -1,5 +1,5 @@
 package tower;
-import Game.*;
+import game.*;
 
  public class BuilderAction implements GenericAction {
 	private Game game;

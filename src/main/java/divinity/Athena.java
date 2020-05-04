@@ -1,6 +1,6 @@
 package divinity;
 
-import Game.Game;
+import game.Game;
 
 final class Athena extends Divinity {
 	final private  int cardID=3;

@@ -1,6 +1,6 @@
 package divinity;
 
-import Game.Game;
+import game.Game;
 
 final class Atlas extends Divinity {
 	final private  int cardID=4;

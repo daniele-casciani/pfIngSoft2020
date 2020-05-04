@@ -1,5 +1,5 @@
 package utils;
 
-public class CellResponce extends MessageToServer{
+public class CellResponce implements MessageToServer{
 
 }
