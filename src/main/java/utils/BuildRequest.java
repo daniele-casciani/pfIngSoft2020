@@ -1,6 +1,6 @@
 package utils;
 
-public class UserNameRequest implements MessageSystem{
+public class BuildRequest implements MessageToClient {
 
 	private static final long serialVersionUID = 1L;
 

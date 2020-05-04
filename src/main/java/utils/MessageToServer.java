@@ -2,5 +2,5 @@ package utils;
 
 import java.io.Serializable;
 
-public interface MessageToServer {
+public interface MessageToServer extends Serializable{
 }
