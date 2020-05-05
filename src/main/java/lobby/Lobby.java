@@ -3,16 +3,17 @@ import divinity.*;
 import game.*;
 import utils.*;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 class Lobby implements ServerController , Runnable {
 	private Model model;
 	private ArrayList<User> userlist;
-	private Server server;
 	
-	public Lobby(ArrayList<User> userlist, Server server) {
+	public Lobby(ArrayList<User> userlist) {
 		this.userlist=userlist;
-		this.server = server;
 	}
 	
 	void createGame() {
@@ -35,56 +36,151 @@ class Lobby implements ServerController , Runnable {
 		return null;
 	}
 	@Override
-	public void choseMovement(String player) {
+	public Object[] choseMovement(String player) {
 		// HP: il model attende una azione e chiama il controller
+		Object[] parametres = null;
+		ObjectInputStream input;
+		ObjectOutputStream output;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
-				// richiesta selezione del builder 
-				Object builderR = server.sendRequest("Select Builder", x);
-				// richiesta selezione della cella vicina 
-				Object cellR = server.sendRequest("Select Cell", x);
-				//TODO passaggio delle selezioni al model
+				try {
+					input = new ObjectInputStream(x.getSocket().getInputStream());
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					//move request
+					for(int i = 0; i<2; i++) {	
+						output.writeObject(new MoveRequest());
+						output.flush();
+						try {
+							parametres[i] = input.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		return parametres;
 	}
 	@Override
-	public Object[] wereBuild(String player) {
+	public Object[] whereBuild(String player) {
 		// HP: il model attende una azione e chiama il controller 
-		Object[] parametres;
+		Object[] parametres = null;
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
-				// richiesta selezione del builder 
-				Object builderR = server.sendRequest("Select Builder", x);
-				// richiesta selezione della cella vicina 
-				Object cellR = server.sendRequest("Select Cell", x);
-				//TODO passaggio delle selezioni al model
+				try {
+					input = new ObjectInputStream(x.getSocket().getInputStream());
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					//build request
+					for(int i = 0; i<2; i++) {	
+						output.writeObject(new BuildRequest());
+						output.flush();
+						try {
+							parametres[i] = input.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		return parametres;
 	}
 	@Override
 	public void invalidAction(String player) {
 		// TODO Auto-generated method stub
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
-				
+				try {
+					input = new ObjectInputStream(x.getSocket().getInputStream());
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					//send error
+					output.writeObject(new InvalidAction("Invalid Action"));
+					output.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
 			}
 		}
 	}
 	@Override
 	public void loser(Player player) {
-		// TODO Auto-generated method stub
 		
+		
+		ObjectOutputStream output;
+		
+		for (User x : userlist) {
+			try {
+				
+				output = new ObjectOutputStream(x.getSocket().getOutputStream());
+				//send loser message
+				output.writeObject(new Loser());
+				output.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+		}
 	}
 	@Override
 	public void winner(Player player) {
-		// TODO Auto-generated method stub
 		
+		ObjectOutputStream output;
+		
+		for (User x : userlist) {
+			try {
+				
+				output = new ObjectOutputStream(x.getSocket().getOutputStream());
+				//send loser message
+				output.writeObject(new Winner());
+				output.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+		}
 	}
+	
 	@Override
-	public void positionBuilder() {
-		// TODO Auto-generated method stub
+	public Object[] positionBuilder(String player) {
 		
+		Object[] parametres = null;
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		
+		for (User x : userlist) {
+			if(player.equals(x.getUserID())) {
+				try {
+					input = new ObjectInputStream(x.getSocket().getInputStream());
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					//builders request
+					for(int i = 0; i<2; i++) {	
+						output.writeObject(new BuilderRequest());
+						output.flush();
+						try {
+							parametres[i] = input.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return parametres;
 	}
 
 	@Override

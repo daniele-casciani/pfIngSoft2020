@@ -54,19 +54,4 @@ class Server {
 	private void createLobby(){
 		//TODO
 	}
-
-	public Object sendRequest(String message, User user) {
-		Object clientResponse = null;
-		try {
-			DataInputStream input = new DataInputStream(user.getSocket().getInputStream());
-			ObjectOutputStream output = new ObjectOutputStream(user.getSocket().getOutputStream());
-			output.writeUTF(message);
-			clientResponse = input.readUTF();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return clientResponse;
-	}
 }

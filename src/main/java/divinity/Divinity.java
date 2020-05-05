@@ -36,8 +36,8 @@ public class Divinity {
 				try {
 				state = action.execute(parameters[0],parameters[1]);
 				}
-				catch(ClassCastException e1){state=false;game.getController().invalidAction();}
-			} catch (IOException e) {state=false;game.getController().invalidAction();}
+				catch(ClassCastException e1){state=false;game.getController().invalidAction(game.getCurrentPlayer().getName());}
+			} catch (IOException e) {state=false;game.getController().invalidAction(game.getCurrentPlayer().getName());}
 		}
 	}
 	
@@ -63,8 +63,7 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			// TODO Auto-generated method stub
-			return null;
+			return (Level[]) game.getController().whereBuild(game.getCurrentPlayer().getName());			
 		}
 	}
 	
@@ -95,8 +94,7 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			// TODO Auto-generated method stub
-			return null;
+			return (Level[]) game.getController().choseMovement(game.getCurrentPlayer().getName());
 		}
 	}
 	
@@ -171,8 +169,8 @@ public class Divinity {
 
 		@Override
 		public Level[] request() throws IOException {
-			// TODO Auto-generated method stub
-			return null;
+			
+			return (Level[]) game.getController().positionBuilder(game.getCurrentPlayer().getName());
 		}
 	}
 		
