@@ -1,18 +1,20 @@
 package lobby;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import utils.*;
 
 class Server {
 	ArrayList<Lobby> lobbyList =new ArrayList<Lobby>();
 	ServerSocket serverSocket;
-	ArrayList<User> userList =new ArrayList<User>();
+	List<User> synUserList = Collections.synchronizedList(new ArrayList<User>());
 	
 	public void start() {
+		createLobby();
 		new Thread(() -> {
 			try {
 				// Create a server socket
@@ -34,7 +36,8 @@ class Server {
 								// Get message from the client
 								try {//creating new user
 									String message = ((UserNameResponse)(MessageToServer) input).getName();
-									userList.add(new User(message,socket));
+									synUserList.add(new User(message,socket));
+									notifyAll();
 									break;
 								}catch(ClassCastException ex) {output.writeObject(new InvalidAction("UserName Expected"));};
 							}
@@ -52,6 +55,37 @@ class Server {
 		}
 	
 	private void createLobby(){
-		//TODO
-	}
+			new Thread(() -> {
+				while(true) {
+					try {
+/*if no user wait*/ if (synUserList.size()==0) {try {wait();} catch (InterruptedException e) {e.printStackTrace();}}
+					if (synUserList.size()>0) {
+						int gameplayer;
+						ObjectOutputStream output= new ObjectOutputStream(synUserList.get(0).getSocket().getOutputStream());
+						ObjectInputStream input = new ObjectInputStream(synUserList.get(0).getSocket().getInputStream());
+						while (true) {
+							output.writeObject(new PlayerNumberRequest());
+							output.flush();
+							try {
+								gameplayer = ((PlayerNumberResponse)(MessageToServer) input).getNumber();
+								break;
+							}catch(ClassCastException ex) {output.writeObject(new InvalidAction("player number Expected"));};
+						}
+						while (true) {
+							if (synUserList.size()>=gameplayer) {
+								ArrayList<User> userList =new ArrayList<User>();
+								for (int i=0; i<gameplayer;i++) {
+									userList.add(synUserList.remove(0));
+								}
+								Lobby lobby=new Lobby(userList);
+								lobbyList.add(lobby);
+								break;
+							}
+							else {try {wait();} catch (InterruptedException e) {e.printStackTrace();}}
+						}		
+					}
+					} catch (IOException ex) {System.out.println("lobby creation error");}
+				}	
+			}).start();
+			}
 }
