@@ -103,63 +103,66 @@ class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public Object[] choseMovement(String player) {
+	public int[] choseMovement(String player) {
 		
-		Object[] parametres = null;
 		ObjectInputStream input;
 		ObjectOutputStream output;
+		int[] response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
-				try {
-					input = new ObjectInputStream(x.getSocket().getInputStream());
-					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					//move request
-					for(int i = 0; i<2; i++) {	
+				while(true) {
+					try {
+						input = new ObjectInputStream(x.getSocket().getInputStream());
+						output = new ObjectOutputStream(x.getSocket().getOutputStream());
+						//move request
+							
 						output.writeObject(new MoveRequest());
 						output.flush();
-						try {
-							parametres[i] = input.readObject();
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						}
+							try {
+								response = ((MoveResponse)(MessageToServer)input).getMovement();
+								break;
+							}catch(ClassCastException ex) {invalidAction(player, "Move not Valid");};
+							
+						} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		}
-		return parametres;
+		return response;
 	}
 	
 	@Override
-	public Object[] whereBuild(String player) {
+	public int[] whereBuild(String player) {
 		
-		Object[] parametres = null;
+
 		ObjectInputStream input;
 		ObjectOutputStream output;
+		int[] response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
-				try {
-					input = new ObjectInputStream(x.getSocket().getInputStream());
-					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					//build request
-					for(int i = 0; i<2; i++) {	
+				while(true) {
+					try {
+						input = new ObjectInputStream(x.getSocket().getInputStream());
+						output = new ObjectOutputStream(x.getSocket().getOutputStream());
+						//build request
+							
 						output.writeObject(new BuildRequest());
 						output.flush();
-						try {
-							parametres[i] = input.readObject();
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						}
+							try {
+								response = ((BuildResponse)(MessageToServer)input).getBuilding();
+								break;
+							}catch(ClassCastException ex) {invalidAction(player, "Build not Valid");};
+							
+						} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		}
-		return parametres;
+		return response;
 	}
 	
 	@Override
@@ -221,34 +224,34 @@ class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public Object[] positionBuilder(String player) {
+	public int[] positionBuilder(String player) {
 		
-		Object[] parametres = null;
 		ObjectInputStream input;
 		ObjectOutputStream output;
+		int[] response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
-				try {
-					input = new ObjectInputStream(x.getSocket().getInputStream());
-					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					//builders request
-					for(int i = 0; i<2; i++) {	
+				while(true) {
+					try {
+						input = new ObjectInputStream(x.getSocket().getInputStream());
+						output = new ObjectOutputStream(x.getSocket().getOutputStream());
+						//builder request
+							
 						output.writeObject(new BuilderRequest());
 						output.flush();
-						try {
-							parametres[i] = input.readObject();
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						}
+							try {
+								response = ((BuilderResponse)(MessageToServer)input).getPosition();
+								break;
+							}catch(ClassCastException ex) {invalidAction(player, "Position not valid");};
+							
+						} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		}
-		
-		return parametres;
+		return response;
 	}
 
 	@Override

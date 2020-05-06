@@ -36,8 +36,8 @@ public class Divinity {
 				try {
 				state = action.execute(parameters[0],parameters[1]);
 				}
-				catch(ClassCastException e1){state=false;game.getController().invalidAction(game.getCurrentPlayer().getName());}
-			} catch (IOException e) {state=false;game.getController().invalidAction(game.getCurrentPlayer().getName());}
+				catch(ClassCastException e1){state=false;}
+			} catch (IOException e) {state=false;}
 		}
 	}
 	
@@ -63,7 +63,9 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			return (Level[]) game.getController().whereBuild(game.getCurrentPlayer().getName());			
+			int[] client = game.getController().positionBuilder(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
+			return clientRequest;			
 		}
 	}
 	
@@ -94,7 +96,9 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			return (Level[]) game.getController().choseMovement(game.getCurrentPlayer().getName());
+			int[] client = game.getController().positionBuilder(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
+			return clientRequest;
 		}
 	}
 	
@@ -169,8 +173,9 @@ public class Divinity {
 
 		@Override
 		public Level[] request() throws IOException {
-			
-			return (Level[]) game.getController().positionBuilder(game.getCurrentPlayer().getName());
+			int[] client = game.getController().positionBuilder(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), null};
+			return clientRequest;
 		}
 	}
 		
