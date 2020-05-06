@@ -22,18 +22,62 @@ class Lobby implements ServerController , Runnable {
 	 }
 	
 	ArrayList<Divinity> createDeck(){
-		// TODO
+		//aggiunge in un array tutte le divinity nel db 
 		 return null ;
 	 }
 	@Override
 	public Divinity choseCard(ArrayList<Divinity> deck, User player) {
-		// TODO Auto-generated method stub
+		// restituisce la divinity scelta dal giocatore x 
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		
+		
 		return null;
 	}
 	@Override
 	public ArrayList<Divinity> selectCard(ArrayList<Divinity> deck, User player) {
-		// TODO Auto-generated method stub
-		return null;
+		// fa scegliere le carte al player 0 restituisce le carte selezionate
+		boolean state = false;
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		int[] oldDeck = {1, 2, 3, 4, 5};
+		ChoseCardResponse response = null;
+		
+		while(state == false) {
+			try {
+				input = new ObjectInputStream(player.getSocket().getInputStream());
+				output = new ObjectOutputStream(player.getSocket().getOutputStream());
+				
+				output.writeObject(new ChoseCardRequest(oldDeck));
+				output.flush();
+				
+				try {
+					response = (ChoseCardResponse) input.readObject();
+					if(response.getCardlist() == null) {
+						state = false;
+						invalidAction(player.getUserID());
+					}
+					else state = true;
+				} catch (ClassNotFoundException e) {
+					state=false;
+				}				
+			} catch (IOException e) {
+				state = false;
+			}
+		}
+		
+		for(Divinity x : deck){
+			boolean found = false;
+			int i = 0;
+			while(found == false && i < 10){
+				if(x.getCardID() == response.getCardlist()[i]) found = true;
+				else i++;
+			}
+			if (found == false) {
+				deck.remove(x);
+			}
+		}
+		return deck;
 	}
 	@Override
 	public Object[] choseMovement(String player) {
@@ -122,7 +166,6 @@ class Lobby implements ServerController , Runnable {
 		
 		for (User x : userlist) {
 			try {
-				
 				output = new ObjectOutputStream(x.getSocket().getOutputStream());
 				//send loser message
 				output.writeObject(new Loser());

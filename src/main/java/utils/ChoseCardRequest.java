@@ -10,7 +10,7 @@ public class ChoseCardRequest implements MessageToClient {
 		return cardlist;
 	}
 	
-	ChoseCardRequest(int[] card){
+	public ChoseCardRequest(int[] card){
 		cardlist= card;
 	}
 }
