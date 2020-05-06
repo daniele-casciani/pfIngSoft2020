@@ -21,41 +21,31 @@ class Lobby implements ServerController , Runnable {
 		this.model=game;
 	 }
 	
-	ArrayList<Divinity> createDeck(){
-		//aggiunge in un array tutte le divinity nel db 
-		 return null ;
+	int[] createDeck(){
+		int[] deck = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		return deck;
 	 }
+	
 	@Override
-	public Divinity choseCard(ArrayList<Divinity> deck, User player) {
+	public int choseCard( int[] deck, User player) {
 		// restituisce la divinity scelta dal giocatore x 
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		
-		
-		return null;
-	}
-	@Override
-	public ArrayList<Divinity> selectCard(ArrayList<Divinity> deck, User player) {
-		// fa scegliere le carte al player 0 restituisce le carte selezionate
 		boolean state = false;
-		ObjectInputStream input;
-		ObjectOutputStream output;
-		int[] oldDeck = {1, 2, 3, 4, 5};
-		ChoseCardResponse response = null;
-		
+		SelectCardResponse response = null;
 		while(state == false) {
 			try {
 				input = new ObjectInputStream(player.getSocket().getInputStream());
 				output = new ObjectOutputStream(player.getSocket().getOutputStream());
 				
-				output.writeObject(new ChoseCardRequest(oldDeck));
+				output.writeObject(new SelectCardRequest(deck));
 				output.flush();
 				
 				try {
-					response = (ChoseCardResponse) input.readObject();
-					if(response.getCardlist() == null) {
+					response = (SelectCardResponse) input.readObject();
+					if(response.getCard() < 1) {
 						state = false;
-						invalidAction(player.getUserID());
+						invalidAction(player.getUserID(), "Card not exists");
 					}
 					else state = true;
 				} catch (ClassNotFoundException e) {
@@ -66,22 +56,55 @@ class Lobby implements ServerController , Runnable {
 			}
 		}
 		
-		for(Divinity x : deck){
-			boolean found = false;
-			int i = 0;
-			while(found == false && i < 10){
-				if(x.getCardID() == response.getCardlist()[i]) found = true;
-				else i++;
-			}
-			if (found == false) {
-				deck.remove(x);
+		return response.getCard();
+	}
+	
+	@Override
+	public int[] selectCard(int[] deck, User player) {
+		
+		boolean state = false;
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		ChoseCardResponse response = null;
+		
+		while(state == false) {
+			try {
+				input = new ObjectInputStream(player.getSocket().getInputStream());
+				output = new ObjectOutputStream(player.getSocket().getOutputStream());
+				
+				output.writeObject(new ChoseCardRequest(deck));
+				output.flush();
+				
+				try {
+					response = (ChoseCardResponse) input.readObject();
+					if(response.getCardlist() == null) {
+						state = false;
+						invalidAction(player.getUserID(), "Selection not valid");
+					}
+					else {
+						for(int i = 0; i < userlist.size(); i++) {
+							if(response.getCardlist()[i]<=0) {
+								state = false;
+								invalidAction(player.getUserID(), "Selection not valid");
+								break;
+							}
+							state = true;
+						}
+					}
+				} catch (ClassNotFoundException e) {
+					state=false;
+				}				
+			} catch (IOException e) {
+				state = false;
 			}
 		}
-		return deck;
+		
+		return response.getCardlist();
 	}
+	
 	@Override
 	public Object[] choseMovement(String player) {
-		// HP: il model attende una azione e chiama il controller
+		
 		Object[] parametres = null;
 		ObjectInputStream input;
 		ObjectOutputStream output;
@@ -108,9 +131,10 @@ class Lobby implements ServerController , Runnable {
 		}
 		return parametres;
 	}
+	
 	@Override
 	public Object[] whereBuild(String player) {
-		// HP: il model attende una azione e chiama il controller 
+		
 		Object[] parametres = null;
 		ObjectInputStream input;
 		ObjectOutputStream output;
@@ -137,19 +161,18 @@ class Lobby implements ServerController , Runnable {
 		}
 		return parametres;
 	}
+	
 	@Override
-	public void invalidAction(String player) {
-		// TODO Auto-generated method stub
-		ObjectInputStream input;
+	public void invalidAction(String player, String message) {
+		
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
 				try {
-					input = new ObjectInputStream(x.getSocket().getInputStream());
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
 					//send error
-					output.writeObject(new InvalidAction("Invalid Action"));
+					output.writeObject(new InvalidAction(message));
 					output.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -158,6 +181,7 @@ class Lobby implements ServerController , Runnable {
 			}
 		}
 	}
+	
 	@Override
 	public void loser(Player player) {
 		
@@ -176,6 +200,7 @@ class Lobby implements ServerController , Runnable {
 			}				
 		}
 	}
+	
 	@Override
 	public void winner(Player player) {
 		
