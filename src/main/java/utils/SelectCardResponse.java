@@ -1,16 +1,20 @@
 package utils;
 
-	//getCard return selected divinity ID
+import java.util.ArrayList;
+
+//getCard return selected divinity ID
 public class SelectCardResponse implements MessageToServer {
 
 	private static final long serialVersionUID = 1L;
-	private int card;
+	private ArrayList<Integer> cards;
 	
-	public int getCard() {
-		return card;
+	public ArrayList<Integer> getCard() {
+		return cards;
 	}
 	
-	SelectCardResponse(int card){
-		this.card= card;
+	public SelectCardResponse(ArrayList<Integer> card){
+		for(Integer x : card) {
+			cards.add(x);
+		}
 	}
 }

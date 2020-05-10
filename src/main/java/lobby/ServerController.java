@@ -1,14 +1,22 @@
 package lobby;
 
+import java.util.ArrayList;
+
 import game.Player;
 
 public interface ServerController {
-	int choseCard(int[] deck, User player);
-	int[] selectCard(int[] deck, User player);
+	
 	void loser(Player player);
 	void winner(Player player);
 	int[] positionBuilder(String player);
-	int[] choseMovement(String player);
-	int[] whereBuild(String player);
+	ArrayList<Integer> choseMovement(String player);
+	ArrayList<Integer> whereBuild(String player);
 	void invalidAction(String player, String message);
+	
+	void updateMovement(int[] position, int[] position2);	
+	void updateBuild(int[] position, int[] position2);
+	void updateNewBuilder(int[] position);
+	
+	ArrayList<Integer> selectCard(ArrayList<Integer> deck, User player);
+	int choseCard(ArrayList<Integer> deck, User player);
 }

@@ -1,16 +1,18 @@
 package utils;
 
-	//getCardlist return array of divinity ID	
+import java.util.ArrayList;
+
+//getCardlist return array of divinity ID	
 public class ChoseCardRequest implements MessageToClient {
 
 	private static final long serialVersionUID = 1L;
-	private int[] cardlist;
+	private ArrayList<Integer> cards;
 	
-	public int[] getCardlist() {
-		return cardlist;
+	public ArrayList<Integer> getCardlist() {
+		return cards;
 	}
 	
-	public ChoseCardRequest(int[] card){
-		cardlist= card;
+	public ChoseCardRequest(ArrayList<Integer> card){
+		this.cards= card;
 	}
 }

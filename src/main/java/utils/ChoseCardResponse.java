@@ -4,13 +4,13 @@ package utils;
 public class ChoseCardResponse implements MessageToServer {
 
 	private static final long serialVersionUID = 1L;
-	private int[] cardlist;
+	private int card;
 	
-	public int[] getCardlist() {
-		return cardlist;
+	public int getCard() {
+		return card;
 	}
 	
-	ChoseCardResponse(int[] card){
-		cardlist= card;
+	ChoseCardResponse(int card){
+		this.card= card;
 	}
 }

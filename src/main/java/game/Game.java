@@ -12,14 +12,21 @@ public class Game implements Model {
 	private ArrayList<ActivePower> effectList;
 	private ServerController serverController;
 	
-	public Game(ArrayList<User> participants, ArrayList<Divinity> deck, ServerController serverController){
+	public Game(ArrayList<User> participants, ArrayList<Integer> deck, ServerController serverController){
 		this.serverController=serverController;
-		ArrayList<Divinity> list = serverController.selectCard(deck, participants.get(0));
-		Divinity chosenCard;
-		for (int i=1; i<participants.size(); i++) {
-			chosenCard=serverController.choseCard(deck,participants.get(i));
-			playerList.add(new Player(participants.get(i).getUserID(),chosenCard));
-			list.remove(chosenCard);
+		if(deck.size()==0) {
+			for(User x: participants) {
+				playerList.add(new Player(x.getUserID(),0, this));
+			}
+		}
+		else {
+			ArrayList<Integer> selectedCards = serverController.selectCard(deck, participants.get(0));
+			int chosenCard;
+			for (int i=1; i<participants.size(); i++) {
+				chosenCard = serverController.choseCard(selectedCards, participants.get(i));
+				playerList.add(new Player(participants.get(i).getUserID(), chosenCard, this));
+				selectedCards.remove(chosenCard);
+			}
 		}
 		for (Player x : playerList) {
 			currentPlayer=x;

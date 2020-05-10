@@ -1,6 +1,7 @@
 package divinity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import game.Game;
 import tower.BuilderAction;
@@ -43,18 +44,20 @@ public class Divinity {
 	
 	class Build implements Action {
 		public boolean execute(Object start, Object end) {
-			Level whereBuild = (Level)start;
-			Level builderCell = (Level)end;
+			Level builderCell = (Level)start;
+			Level whereBuild = (Level)end;
 			if(isPossibleBuild(builderCell, whereBuild)) {
 				if(whereBuild.getHeight()==3) {
 				
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildDome(whereBuild);
+					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
 				}
 				//altriemnti costruisco pezzi di torre
 				else {
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildTower(whereBuild);
+					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
 				}
 			}
 			else return false;
@@ -63,10 +66,11 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			int[] client = game.getController().positionBuilder(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
+			ArrayList<Integer> client = game.getController().whereBuild(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client.get(0), client.get(1)), game.getMap().getCell(client.get(2), client.get(3))};
 			return clientRequest;			
 		}
+		
 	}
 	
 	class Move implements Action {
@@ -81,23 +85,25 @@ public class Divinity {
 						for (ActivePower x : game.getEffectList()) {
 							if (x.move()==true && x.actionLimitation(start, end) ) return false;
 						}
+					} 
+					else { //effect list is empty
+						nowmove.movement(start, end);
+						game.getController().updateMovement(start.getPosition(), end.getPosition());
+						if(end.getHeight()==3) {
+							game.winGame();
+						}
+						return true;
 					}
-					//controllo se sono al terzo livello
-					if(end.getHeight()==3) {
-						nowmove.movement(start, end);				
-						game.winGame();
-					}
-				else return false;
 				}
-			else return false;
+				else return false;
 			}
-			return true;
+			return false;
 		}
 
 		@Override
 		public Level[] request() {
-			int[] client = game.getController().positionBuilder(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
+			ArrayList<Integer> client = game.getController().choseMovement(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client.get(0), client.get(1)), game.getMap().getCell(client.get(2), client.get(3))};
 			return clientRequest;
 		}
 	}
@@ -162,10 +168,11 @@ public class Divinity {
 	class Setup implements Action{
 		public boolean execute(Object arg0, Object arg1) {
 			Level selectedLevel = (Level)arg0;
-			//TODO si controlla che non ci siano altri builder
+			
 				if(selectedLevel.getHeight()==0) {
 					BuilderAction newBuilder = new BuilderAction(game);
 					newBuilder.newBuilder(selectedLevel,game.getCurrentPlayer().getName());
+					game.getController().updateNewBuilder(selectedLevel.getPosition());
 				}
 				else return false;
 			return true;

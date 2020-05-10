@@ -1,16 +1,23 @@
 package utils;
 
-	//getMovement return {x.start,y.start,x.end,y.end}
+import java.util.ArrayList;
+
+//getMovement return {x.start,y.start,x.end,y.end}
 public class MoveResponse implements MessageToServer{
 
 	private static final long serialVersionUID = 1L;
-	private int[] movement;
+	private  ArrayList<Integer> movement;
 	
-	public int[] getMovement() {
+	public ArrayList<Integer> getMovement(){
 		return movement;
 	}
 	
-	MoveResponse(int[] start,int[]end){
-		movement= new int[]{start[0],start[1],end[0],end[1] };
+	void movementResponse(int[] start, int[] end){
+		for(int i = 0; i<2; i++) {
+			movement.add(start[i]);
+		}
+		for(int i = 0; i<2; i++) {
+			movement.add(end[i]);
+		}	
 	}
 }

@@ -1,5 +1,5 @@
 package lobby;
-import divinity.*;
+
 import game.*;
 import utils.*;
 
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class Lobby implements ServerController , Runnable {
 	private Model model;
@@ -21,93 +22,80 @@ class Lobby implements ServerController , Runnable {
 		this.model=game;
 	 }
 	
-	int[] createDeck(){
-		int[] deck = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	ArrayList<Integer> createDeck(){
+		ArrayList<Integer> deck = (ArrayList<Integer>) Arrays.asList(1, 2, 3, 4, 5, 6, 8, 9, 10);
 		return deck;
 	 }
 	
 	@Override
-	public int choseCard( int[] deck, User player) {
-		// restituisce la divinity scelta dal giocatore x 
-		ObjectInputStream input;
-		ObjectOutputStream output;
-		boolean state = false;
-		SelectCardResponse response = null;
-		while(state == false) {
-			try {
-				input = new ObjectInputStream(player.getSocket().getInputStream());
-				output = new ObjectOutputStream(player.getSocket().getOutputStream());
-				
-				output.writeObject(new SelectCardRequest(deck));
-				output.flush();
-				
-				try {
-					response = (SelectCardResponse) input.readObject();
-					if(response.getCard() < 1) {
-						state = false;
-						invalidAction(player.getUserID(), "Card not exists");
-					}
-					else state = true;
-				} catch (ClassNotFoundException e) {
-					state=false;
-				}				
-			} catch (IOException e) {
-				state = false;
-			}
-		}
+	public int choseCard( ArrayList<Integer> deck, User player) {
 		
-		return response.getCard();
-	}
-	
-	@Override
-	public int[] selectCard(int[] deck, User player) {
 		
 		boolean state = false;
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		ChoseCardResponse response = null;
+		
+		int selectedCard = 0;
 		
 		while(state == false) {
 			try {
+				
 				input = new ObjectInputStream(player.getSocket().getInputStream());
 				output = new ObjectOutputStream(player.getSocket().getOutputStream());
 				
 				output.writeObject(new ChoseCardRequest(deck));
 				output.flush();
 				
-				try {
-					response = (ChoseCardResponse) input.readObject();
-					if(response.getCardlist() == null) {
-						state = false;
-						invalidAction(player.getUserID(), "Selection not valid");
-					}
-					else {
-						for(int i = 0; i < userlist.size(); i++) {
-							if(response.getCardlist()[i]<=0) {
-								state = false;
-								invalidAction(player.getUserID(), "Selection not valid");
-								break;
-							}
-							state = true;
-						}
-					}
-				} catch (ClassNotFoundException e) {
-					state=false;
-				}				
+				selectedCard = ((ChoseCardResponse)(MessageToServer)input).getCard();
+				state = true;
+				
 			} catch (IOException e) {
 				state = false;
+				invalidAction(player.getUserID(), "Selection not Valid");
 			}
+			
 		}
 		
-		return response.getCardlist();
+		return selectedCard;
 	}
 	
 	@Override
-	public int[] choseMovement(String player) {
+	public ArrayList<Integer> selectCard(ArrayList<Integer> deck, User player) {
+		
+		boolean state = false;
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		
+		ArrayList<Integer> selectedCards = null;
+		
+		while(state == false) {
+			try {
+				
+				input = new ObjectInputStream(player.getSocket().getInputStream());
+				output = new ObjectOutputStream(player.getSocket().getOutputStream());
+				
+				output.writeObject(new SelectCardRequest(deck));
+				output.flush();
+				
+				selectedCards = ((SelectCardResponse)(MessageToServer)input).getCard();
+				state = true;
+				
+			} catch (IOException e) {
+				state = false;
+				invalidAction(player.getUserID(), "Selection not Valid");
+			}
+			
+		}
+		
+		return selectedCards;
+	}
+	
+	@Override
+	public ArrayList<Integer> choseMovement(String player) {
 		
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		int[] response = null;
+		ArrayList<Integer> response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
@@ -134,12 +122,12 @@ class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public int[] whereBuild(String player) {
+	public ArrayList<Integer> whereBuild(String player) {
 		
 
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		int[] response = null;
+		ArrayList<Integer> response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
@@ -174,7 +162,6 @@ class Lobby implements ServerController , Runnable {
 			if(player.equals(x.getUserID())) {
 				try {
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					//send error
 					output.writeObject(new InvalidAction(message));
 					output.flush();
 				} catch (IOException e) {
@@ -194,7 +181,6 @@ class Lobby implements ServerController , Runnable {
 		for (User x : userlist) {
 			try {
 				output = new ObjectOutputStream(x.getSocket().getOutputStream());
-				//send loser message
 				output.writeObject(new Loser());
 				output.flush();
 			} catch (IOException e) {
@@ -213,7 +199,6 @@ class Lobby implements ServerController , Runnable {
 			try {
 				
 				output = new ObjectOutputStream(x.getSocket().getOutputStream());
-				//send loser message
 				output.writeObject(new Winner());
 				output.flush();
 			} catch (IOException e) {
@@ -253,10 +238,78 @@ class Lobby implements ServerController , Runnable {
 		}
 		return response;
 	}
+	
+	@Override
+	public void updateBuild(int[] position, int[] position2) {
+		ObjectOutputStream output;
+		boolean state = false;
+		for(User x: userlist) {
+			while(state == false){
+				try {
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					output.writeObject(new BuildUpdate(position, position2));
+					output.flush();
+					
+					state = true;
+				} catch (IOException e) {
+					state = false;
+				}
+			}
+		}	
+		
+	}
+	
+	@Override
+	public void updateMovement(int[] position, int[] position2) {
+		
+		ObjectOutputStream output;
+		boolean state = false;
+		for(User x: userlist) {
+			while(state == false) {	
+				try {
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					output.writeObject(new MoveUpdate(position, position2));
+					output.flush();
+					state = true;
+				} catch (IOException e) {
+					state = false;
+				}
+			}
+		}	
+					
+	}
+	
+	@Override
+	public void updateNewBuilder(int[] position) {
+		ObjectOutputStream output;
+		boolean state = false;
+		for(User x: userlist) {
+			while(state == false){
+				try {
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					output.writeObject(new NewBuilderUpdate(position));
+					output.flush();
+					
+					state = true;
+				} catch (IOException e) {
+					state = false;
+				}
+			}
+		}	
+	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		
+		createGame();
+		//chiusura lobby 
 	}
+	
+	//TODO disconnessione 
+	//TODO chiusura della lobby 
+	//TODO implementare le sub divinity con numero di giocatori 
+	
+	// implemementato gli update
+	//cambiato chosecard e selected e modificato i messaggi
+	// aggiustato il model 
 }
