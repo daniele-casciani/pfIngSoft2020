@@ -297,19 +297,87 @@ class Lobby implements ServerController , Runnable {
 			}
 		}	
 	}
-
+	
+	 public void close(){
+		 
+		 for(User x : userlist) {
+			while(true) { 
+		        try {
+		            x.getSocket().close();
+		            break;
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+			}			
+		 }
+		 userlist.clear();
+	 }
+	 
 	@Override
 	public void run() {
-		
-		createGame();
-		//chiusura lobby 
+
+		try {
+			createGame();
+			
+			while(true) {
+				
+			}
+			
+		} finally {
+			close();
+		}
 	}
-	
-	//TODO disconnessione 
-	//TODO chiusura della lobby 
-	//TODO implementare le sub divinity con numero di giocatori 
-	
-	// implemementato gli update
-	//cambiato chosecard e selected e modificato i messaggi
-	// aggiustato il model 
+
+	@Override
+	public void updateSwitcBuilder(int[] position, int[] position2) {
+		
+		ObjectOutputStream output;
+		boolean state = false;
+		for(User x: userlist) {
+			while(state == false){
+				try {
+					output = new ObjectOutputStream(x.getSocket().getOutputStream());
+					output.writeObject(new SwitchPositionUpdate(position, position2));
+					output.flush();
+					
+					state = true;
+				} catch (IOException e) {
+					state = false;
+				}
+			}
+		}	
+		
+	}
+
+	@Override
+	public boolean askEffect(String user) {
+		ObjectOutputStream output;
+		ObjectInputStream input;
+		
+		boolean response = false;
+		
+		for (User x : userlist) {
+			if(user.equals(x.getUserID())) {
+				while(true) {
+					try {
+						input = new ObjectInputStream(x.getSocket().getInputStream());
+						output = new ObjectOutputStream(x.getSocket().getOutputStream());
+							
+						output.writeObject(new EffectRequest());
+						output.flush();
+							try {
+								response = ((EffectResponse)(MessageToServer)input).getBool();
+								break;
+							}catch(ClassCastException ex) {invalidAction(user, "Please retry");};
+							
+						} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return response;
+		
+	}
+
 }
