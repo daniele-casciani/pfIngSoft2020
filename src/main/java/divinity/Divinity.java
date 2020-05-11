@@ -11,7 +11,7 @@ import tower.Level;
 public class Divinity {
 	final private boolean threeplayer = true;
 	final private boolean fourplayer = true;
-	private Game game;
+	Game game;
 	final private int cardID=0;
 
 	
@@ -28,7 +28,7 @@ public class Divinity {
 		endRound();
 	}
 	
-	private void tryer(Action action) {
+	 void tryer(Action action) {
 		boolean state= false;
 		while (state==false) {
 			Object[] parameters;
@@ -47,20 +47,24 @@ public class Divinity {
 			Level builderCell = (Level)start;
 			Level whereBuild = (Level)end;
 			if(isPossibleBuild(builderCell, whereBuild)) {
+				
 				if(whereBuild.getHeight()==3) {
 				
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildDome(whereBuild);
 					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
 				}
-				//altriemnti costruisco pezzi di torre
+				
 				else {
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildTower(whereBuild);
 					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
 				}
 			}
-			else return false;
+			else {
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Build");
+				return false;
+			}
 			return true;
 		}
 
@@ -77,26 +81,35 @@ public class Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
-			if(isNear(start, end)) { // controllo prima la vicinanza 
-				//controllo movimento di livello 
-				if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
-					BuilderAction nowmove = new BuilderAction(game);
-					if(game.getEffectList().isEmpty()==false) {
-						for (ActivePower x : game.getEffectList()) {
-							if (x.move()==true && x.actionLimitation(start, end) ) return false;
-						}
-					} 
-					else { //effect list is empty
-						nowmove.movement(start, end);
+			if(isNear(start, end)) { 
+				if(end.getHeight()!=-1 && end.getHeight()!=4) {
+					if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
+						BuilderAction nowmove = new BuilderAction(game);
+						if(game.getEffectList().isEmpty()==false) {
+							for (ActivePower x : game.getEffectList()) {
+								if (x.move()==true && x.actionLimitation(start, end) ) {
+									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+									return false;
+								}
+							}
+						} 
 						game.getController().updateMovement(start.getPosition(), end.getPosition());
 						if(end.getHeight()==3) {
+							nowmove.movement(start, end);
 							game.winGame();
-						}
+						}else nowmove.movement(start, end);
 						return true;
 					}
+					else {
+						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+						return false;
+						}
+				}else {
+					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+					return false;
 				}
-				else return false;
 			}
+			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
 			return false;
 		}
 
@@ -108,7 +121,7 @@ public class Divinity {
 		}
 	}
 	
-	public void lose() {
+	void lose() {
 		
 		for(int i = 0; i<5; i++)
 			for(int j=0; j<5; j++) {
@@ -152,11 +165,11 @@ public class Divinity {
 		return false;	//se non ho mosse possibili		
 	}
 	
-	public void endRound() {
+	void endRound() {
 		// nel gioco base non fa nulla
 	}
 	
-	public void startRound() {
+	void startRound() {
 		// nel gioco base non fa nulla 
 	}
 	
@@ -186,7 +199,7 @@ public class Divinity {
 		}
 	}
 		
-	private boolean isNear(Level start, Level end) {
+	public boolean isNear(Level start, Level end) {
 		int xs, ys, xe, ye;
 		
 		
@@ -219,40 +232,31 @@ public class Divinity {
 		return false;
 	}
 	
-	private boolean isSameLevel(Level start, Level end) {
+	boolean isSameLevel(Level start, Level end) {
 		
-		if(end.getHeight()==4) return false;
-		if(end.getHeight()==-1) return false;
 		
 		if(start.getHeight() == end.getHeight()) return true;
 		else return false;
 	}
 	
-	private boolean isNextLevel(Level start, Level end) { //controllo sul movimento verso l'alto
+	boolean isNextLevel(Level start, Level end) { //controllo sul movimento verso l'alto
 		
-		if(end.getHeight()==4) return false;
-		if(end.getHeight()==-1) return false;
-		
-		else {
 			if(start.getHeight()==0 && end.getHeight()==1) return true;
 			if(start.getHeight()==1 && end.getHeight()==2) return true;
 			if(start.getHeight()==2 && end.getHeight()==3) return true;
-		}
 		
 		return false;
 	}
 	
-	private boolean isPreviousLevel(Level start, Level end) {// controllo il movimento verso il basso 
-		if(end.getHeight()==4) return false;
-		if(end.getHeight()==-1) return false;
-		else {
-			if(end.getHeight()-start.getHeight()<0) return true;
-		}
+	boolean isPreviousLevel(Level start, Level end) {// controllo il movimento verso il basso 
+
+	
+		if(end.getHeight()-start.getHeight()<0) return true;
 		
 		return false;
 	}
 	
-	private boolean isPossibleBuild(Level builderCell, Level whereBuild) {
+	boolean isPossibleBuild(Level builderCell, Level whereBuild) {
 		
 		if(isNear(builderCell, whereBuild)) {
 			if(whereBuild.getHeight()==4) return false;

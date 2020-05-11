@@ -8,8 +8,11 @@ public class AthenaEffect implements ActivePower{
 	final private boolean win = false;
 
 	@Override
-	public boolean actionLimitation(Level param1, Level param2) {
-		// TODO Auto-generated method stub
+	public boolean actionLimitation(Level start, Level end) {
+		if(start.getHeight()==0 && end.getHeight()==1) return true;
+		if(start.getHeight()==1 && end.getHeight()==2) return true;
+		if(start.getHeight()==2 && end.getHeight()==3) return true;
+	
 		return false;
 	}
 
