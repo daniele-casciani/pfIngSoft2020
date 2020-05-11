@@ -1,17 +1,22 @@
 package utils;
 
-import java.util.ArrayList;
+import client.ClientLauncher;
 
-public class NewBuilderUpdate {
-	private ArrayList<Integer> position;
+public class NewBuilderUpdate implements MessageSystem{
+	private static final long serialVersionUID = 1L;
+	private int[] position;
 	
 	 public NewBuilderUpdate(int[] position){
-		 for(int i = 0; i<2 ; i++) {
-			this.position.add(position[i]);
-		 }
+			this.position=position;
 	 }
 	 
-	 public  ArrayList<Integer> getPosition(){
+	 public  int[] getPosition(){
 		 return position;
 	 }
+
+		@Override
+		public void accept(ClientLauncher clientLauncher) {
+			clientLauncher.notify(this);
+			
+		}
 }

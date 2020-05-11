@@ -1,6 +1,8 @@
 package client;
 
+import utils.Message;
+
 public interface Client {
-	void run();
 	void sendMessage();
+	void handle(Message message);
 }

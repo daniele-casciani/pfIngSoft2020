@@ -1,7 +1,9 @@
 package utils;
 
-import java.io.Serializable;
+import client.ClientLauncher;
 
-public interface MessageToClient extends Serializable{
+public interface MessageToClient extends Message{
+
+	void accept(ClientLauncher clientLauncher);
 
 }

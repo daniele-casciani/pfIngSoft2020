@@ -1,6 +1,8 @@
 package utils;
 import java.util.ArrayList;
 
+import client.ClientLauncher;
+
 public class MoveUpdate implements MessageToClient {
 
 	private static final long serialVersionUID = 1L;
@@ -19,5 +21,9 @@ public class MoveUpdate implements MessageToClient {
 	public ArrayList<Integer> getMovement(){
 		return this.movement;
 	}
-	
+	@Override
+	public void accept(ClientLauncher clientLauncher) {
+		clientLauncher.notify(this);
+		
+	}
 }

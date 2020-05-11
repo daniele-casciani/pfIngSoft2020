@@ -1,17 +1,10 @@
 package client;
 
-public class ClientController implements Client {
+public interface ClientController extends Runnable{
+	
+	void setText(String string);
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	void addConstructor(int x, int y);
 
-	}
-
-	@Override
-	public void sendMessage() {
-		// TODO Auto-generated method stub
-
-	}
-
+	void construction(int x, int y, int z);
 }

@@ -7,7 +7,12 @@ import utils.*;
 
 public class Listener implements Runnable{
 	ObjectInputStream input;
-	Listener(Socket socket){
+	ClientLauncher launcher;
+	Message message;
+	
+	
+	Listener(Socket socket,ClientLauncher launcher){
+		this.launcher=launcher;
 		try {
 			input=new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
@@ -15,17 +20,17 @@ public class Listener implements Runnable{
 		}
 	}
 
-	@Override
 	public void run() {
 		while(true) {
 			try {
-				MessageToClient message = (MessageToClient) input.readObject();
+				message = (Message) input.readObject();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				launcher.handle(message);
 			}
 			
 		}
