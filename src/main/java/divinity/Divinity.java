@@ -52,13 +52,13 @@ public class Divinity {
 				
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildDome(whereBuild);
-					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
+					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
 				}
 				
 				else {
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildTower(whereBuild);
-					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
+					game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
 				}
 			}
 			else {

@@ -240,7 +240,7 @@ class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public void updateBuild(int[] position, int[] position2) {
+	public void updateBuild(int[] position, int position2) {
 		ObjectOutputStream output;
 		boolean state = false;
 		for(User x: userlist) {

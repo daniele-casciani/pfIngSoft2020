@@ -59,11 +59,6 @@ public final class Athena extends Divinity {
 					return true;
 				} else {
 					if(isNextLevel(start, end)) { 
-						
-						// a different here where effect is active 
-						AthenaEffect active = new AthenaEffect();
-						game.getEffectList().add(active);
-						
 						BuilderAction nowmove = new BuilderAction(game);
 						if(game.getEffectList().isEmpty()==false) {
 							for (ActivePower x : game.getEffectList()) {
@@ -72,7 +67,12 @@ public final class Athena extends Divinity {
 									return false;
 								}
 							}
-						} 
+						}
+
+						// a different here where effect is active 
+						AthenaEffect active = new AthenaEffect();
+						game.getEffectList().add(active);
+						
 						game.getController().updateMovement(start.getPosition(), end.getPosition());
 						if(end.getHeight()==3) {
 							nowmove.movement(start, end);

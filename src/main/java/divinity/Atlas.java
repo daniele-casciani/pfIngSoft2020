@@ -37,7 +37,7 @@ public final class Atlas extends Divinity {
 				if(isPossibleBuild( builderCell, whereBuild )) {
 					BuilderAction nowbuild = new BuilderAction(game);
 					nowbuild.buildDome(whereBuild);
-					game.getController().updateBuild(builderCell.getPosition(), whereBuild.getPosition());
+					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
 					return true;
 				}else {
 					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Build");
