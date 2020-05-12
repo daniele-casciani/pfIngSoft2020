@@ -22,4 +22,8 @@ final class Builder extends Floor {
 	 public int getHeight() {
 		 return -1;
 	 }
+	 
+	 public int getDownLevelHeight() {
+		return this.level.getHeight();
+	 }
 }

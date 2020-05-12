@@ -7,4 +7,4 @@ public final class Pan extends Divinity {
 	public Pan(Game game) {
 		super(game);
 	}
-}da implemntare
+}

@@ -7,4 +7,4 @@ public final class Prometheus extends Divinity {
 	public Prometheus(Game game) {
 		super(game);
 	}
-}da implemntare
+}

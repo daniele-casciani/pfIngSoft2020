@@ -7,4 +7,4 @@ public final class Minotaur extends Divinity {
 	public Minotaur(Game game) {
 		super(game);
 	}
-}da implemntare
+}

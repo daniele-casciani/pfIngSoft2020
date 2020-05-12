@@ -247,7 +247,7 @@ class Lobby implements ServerController , Runnable {
 			while(state == false){
 				try {
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					output.writeObject(new BuildUpdate(position2));
+					output.writeObject(new BuildUpdate(position, position2));
 					output.flush();
 					
 					state = true;
@@ -260,7 +260,7 @@ class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public void updateMovement(int[] position, int[] position2) {
+	public void updateMovement(int[] position, int height1, int[] position2, int height2) {
 		
 		ObjectOutputStream output;
 		boolean state = false;
@@ -268,7 +268,7 @@ class Lobby implements ServerController , Runnable {
 			while(state == false) {	
 				try {
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					output.writeObject(new MoveUpdate(position, position2));
+					output.writeObject(new MoveUpdate(position,height1, position2, height2));
 					output.flush();
 					state = true;
 				} catch (IOException e) {
@@ -329,7 +329,7 @@ class Lobby implements ServerController , Runnable {
 	}
 
 	@Override
-	public void updateSwitcBuilder(int[] position, int[] position2) {
+	public void updateSwitcBuilder(int[] position,int height1, int[] position2, int height2) {
 		
 		ObjectOutputStream output;
 		boolean state = false;
@@ -337,7 +337,7 @@ class Lobby implements ServerController , Runnable {
 			while(state == false){
 				try {
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					output.writeObject(new SwitchPositionUpdate(position, position2));
+					output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
 					output.flush();
 					
 					state = true;

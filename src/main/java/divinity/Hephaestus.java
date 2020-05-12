@@ -1,9 +1,5 @@
 package divinity;
 
-import java.io.IOException;
-
-import divinity.Divinity.Build;
-import divinity.Divinity.Move;
 import game.Game;
 
 public final class Hephaestus extends Divinity {
