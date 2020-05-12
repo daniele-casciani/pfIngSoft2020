@@ -1,5 +1,7 @@
 package utils;
 
+import client.ClientLauncher;
+
 public class UserNameResponse implements MessageSystem{
 	
 	private static final long serialVersionUID = 1L;
@@ -12,4 +14,7 @@ public class UserNameResponse implements MessageSystem{
 	UserNameResponse(String username) {
 		username=name;
 	}
+
+	@Override
+	public void accept(ClientLauncher clientLauncher) {}
 }

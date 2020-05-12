@@ -1,23 +1,30 @@
 package utils;
 
-import java.util.ArrayList;
+import client.ClientLauncher;
 
+//int [x,y], int z, int[x,y], int z, altezza senza builder altrimenti da errore
+//devono esserci lo scambio tra due builder altrimenti è ambiguo
 public class SwitchPositionUpdate implements MessageSystem{
 
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<Integer> positions;
+	private int[] positions;
 	
-	public ArrayList<Integer> getPositions(){
+	public int[] getPositions(){
 		return positions;
 	}
 	
-	public SwitchPositionUpdate(int[] p1, int[]p2) {
-		for(int i = 0; i<2; i++) {
-			positions.add(p1[i]);
-		}
-		for(int i = 0; i<2; i++) {
-			positions.add(p2[i]);
-		}
+	public SwitchPositionUpdate(int[] p1,int height1, int[]p2,int height2) {
+		positions[0]=p1[0];
+		positions[1]=p1[1];
+		positions[2]=height1;
+		positions[3]=p2[0];
+		positions[4]=p2[1];
+		positions[5]=height2;
+	}
+
+	@Override
+	public void accept(ClientLauncher clientLauncher) {
+		clientLauncher.execute(this);	
 	}
 }
