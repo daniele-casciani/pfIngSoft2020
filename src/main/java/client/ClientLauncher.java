@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javafx.application.Application;
 import utils.*;
 
 public class ClientLauncher implements Client {
@@ -22,7 +23,7 @@ public class ClientLauncher implements Client {
 			listT.start();
 			output =new ObjectOutputStream(socket.getOutputStream());
 			controller = new Controller();
-			contT = new Thread (controller);
+			Application.launch();
 			contT.start();
 		} catch (IOException e) {
 			System.out.print("errore : impossibile inizializzare la connessione");

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import utils.Loser;
 import utils.Winner;
 
-public interface ClientController extends Runnable{
+public interface ClientController{
 	
 	void setText(String string);
 

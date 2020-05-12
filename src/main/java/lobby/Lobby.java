@@ -247,7 +247,7 @@ class Lobby implements ServerController , Runnable {
 			while(state == false){
 				try {
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					output.writeObject(new BuildUpdate(position2));
+					output.writeObject(new BuildUpdate(position, position2));
 					output.flush();
 					
 					state = true;
