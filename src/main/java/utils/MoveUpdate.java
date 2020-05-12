@@ -1,24 +1,24 @@
 package utils;
-import java.util.ArrayList;
-
 import client.ClientLauncher;
 
+
+// int [x,y], int z, int[x,y], int z, altezza senza builder altrimenti da errore
 public class MoveUpdate implements MessageToClient {
 
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<Integer> movement;
+	private int[] movement;
 	
-	public MoveUpdate(int[] start, int[] end) {
-		for(int i = 0; i<2; i++) {
-			movement.add(start[i]);
-		}
-		for(int i = 0; i<2; i++) {
-			movement.add(end[i]);
-		}
+	public MoveUpdate(int[] start,int height1, int[] end, int height2) {
+		movement[0]=start[0];
+		movement[1]=start[1];
+		movement[2]=height1;
+		movement[3]=end[0];
+		movement[4]=end[1];
+		movement[5]=height2;
 	}
 	
-	public ArrayList<Integer> getMovement(){
+	public int[] getMovement(){
 		return this.movement;
 	}
 	@Override

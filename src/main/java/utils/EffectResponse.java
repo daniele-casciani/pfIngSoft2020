@@ -2,11 +2,7 @@ package utils;
 
 public class EffectResponse implements MessageToServer{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
 	private boolean bool;
 	
 	public EffectResponse(boolean bool){
