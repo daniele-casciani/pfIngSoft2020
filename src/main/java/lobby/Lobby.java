@@ -74,7 +74,7 @@ class Lobby implements ServerController , Runnable {
 				input = new ObjectInputStream(player.getSocket().getInputStream());
 				output = new ObjectOutputStream(player.getSocket().getOutputStream());
 				
-				output.writeObject(new SelectCardRequest(deck));
+				output.writeObject(new SelectCardRequest(deck,userlist.size()));
 				output.flush();
 				
 				selectedCards = ((SelectCardResponse)(MessageToServer)input).getCard();
@@ -247,7 +247,7 @@ class Lobby implements ServerController , Runnable {
 			while(state == false){
 				try {
 					output = new ObjectOutputStream(x.getSocket().getOutputStream());
-					output.writeObject(new BuildUpdate(position, position2));
+					output.writeObject(new BuildUpdate(position2));
 					output.flush();
 					
 					state = true;
