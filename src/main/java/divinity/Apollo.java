@@ -31,20 +31,22 @@ public final class Apollo extends Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 		Level start = (Level)arg0;
 		Level end = (Level)arg1;
-		if(isNear(start, end)) { 
+		BuilderAction nowmove = new BuilderAction(game);
+		
+		if(isNear(start, end) && start.getHeight() == -1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) { 
 			if( end.getHeight()!=4) {
-				if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
-					BuilderAction nowmove = new BuilderAction(game);
+				if(isNextLevel(nowmove.getLUnderB(start), end) || isPreviousLevel(nowmove.getLUnderB(start), end) || isSameLevel(nowmove.getLUnderB(start), end) ) {
+					
 					if(game.getEffectList().isEmpty()==false) {
 						for (ActivePower x : game.getEffectList()) {
-							if (x.move()==true && x.actionLimitation(start, end) ) {
+							if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
 								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
 								return false;
 							}
 						}
 					}
 					if(end.getHeight()==-1) {
-						game.getController().updateSwitcBuilder(start.getPosition(), end.getPosition());
+						game.getController().updateSwitcBuilder(start.getPosition(),nowmove.getLUnderB(start).getHeight(), end.getPosition(), nowmove.getLUnderB(end).getHeight());
 						
 						String nameBuilderend = nowmove.builderName(end);
 						nowmove.killBuilder(end);
@@ -54,7 +56,7 @@ public final class Apollo extends Divinity {
 						return true;
 					}
 					else {
-						game.getController().updateMovement(start.getPosition(), end.getPosition());
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
 						if(end.getHeight()==3) {
 							nowmove.movement(start, end);
 							game.winGame();

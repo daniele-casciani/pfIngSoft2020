@@ -59,6 +59,11 @@ import game.*;
 		return ((Builder)(Floor)builder).getName();
 		
 	}
+
+	@Override
+	public Level getLUnderB(Level level) {
+		return ((Builder)(Floor)level).getLevel();
+	}
 	
 
 }
