@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import utils.*;
 
-class Server {
+public class Server {
 	ArrayList<Lobby> lobbyList =new ArrayList<Lobby>();
 	ServerSocket serverSocket;
 	List<User> synUserList = Collections.synchronizedList(new ArrayList<User>());
@@ -18,10 +18,12 @@ class Server {
 		new Thread(() -> {
 			try {
 				// Create a server socket
-				serverSocket = new ServerSocket(5000);
+				serverSocket = new ServerSocket(7648);
+				System.out.println("serverSocket created");
 				while (true) {
 					// Listen for a connection request
 					Socket socket = serverSocket.accept();
+					System.out.println("serverSocket listenig");
 					//create a new thread
 					new Thread(()->{
 
@@ -42,23 +44,37 @@ class Server {
 								}catch(ClassCastException ex) {output.writeObject(new InvalidAction("UserName Expected"));};
 							}
 						}
-						catch (IOException ex) {ex.printStackTrace();}
+						catch (IOException ex) {
+							System.out.println("start connection to client error");
+							ex.printStackTrace();
+							System.out.println("end connection to client error");
+							}
 					}).start();
 				}
-			} catch (IOException ex) {System.out.println("start error");}
+			} catch (IOException ex) {
+				System.out.println("start server main thread error");
+				ex.printStackTrace();
+				System.out.println("end server main thread error");
+				}
 			finally {
 				try {
 				serverSocket.close();
-				} catch (IOException ex) {System.out.println("server shutdown");}
+				System.out.println("server shutdown");
+				} catch (IOException ex) {System.out.println("server not shutdown");}
 				}
 		}).start();
 		}
 	
 	private void createLobby(){
 			new Thread(() -> {
+				System.out.println("thread create lobby started");
 				while(true) {
 					try {
-/*if no user wait*/ if (synUserList.size()==0) {try {wait();} catch (InterruptedException e) {e.printStackTrace();}}
+						if (synUserList.size()==0) {try {wait();} catch (InterruptedException e) {
+												System.out.println("start lobby wait error");
+												e.printStackTrace();
+												System.out.println("end lobby wait error");
+												}}
 					if (synUserList.size()>0) {
 						int gameplayer;
 						ObjectOutputStream output= new ObjectOutputStream(synUserList.get(0).getSocket().getOutputStream());
@@ -81,10 +97,18 @@ class Server {
 								lobbyList.add(lobby);
 								break;
 							}
-							else {try {wait();} catch (InterruptedException e) {e.printStackTrace();}}
+							else {try {wait();} catch (InterruptedException e) {
+								System.out.println("start wait lobby error");
+								e.printStackTrace();
+								System.out.println("end wait lobby error");
+								}}
 						}		
 					}
-					} catch (IOException ex) {System.out.println("lobby creation error");}
+					} catch (IOException ex) {
+						System.out.println("start lobby creation error");
+						ex.printStackTrace();
+						System.out.println("end lobby creation error");
+					}
 				}	
 			}).start();
 			}
