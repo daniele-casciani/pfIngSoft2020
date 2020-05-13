@@ -8,20 +8,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LoginController">
    <children>
       <StackPane>
          <children>
             <ImageView fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@copertina_santorini_2016.jpg" />
+                  <Image url="@../resources/copertina_santorini_2016.jpg" />
                </image>
             </ImageView>
             <HBox maxHeight="50.0" maxWidth="200.0" prefHeight="50.0" prefWidth="200.0" spacing="10.0" StackPane.alignment="BOTTOM_CENTER">
                <children>
-                  <TextField id="usernametext" alignment="BOTTOM_CENTER" promptText="username" />
-                  <Button mnemonicParsing="false" text="ok" />
+                  <TextField id="usernametext" fx:id="usernametext" alignment="BOTTOM_CENTER" promptText="username" />
+                  <Button fx:id="okbutton" mnemonicParsing="false" onAction="#saveusername" text="ok" />
                </children>
             </HBox>
          </children>

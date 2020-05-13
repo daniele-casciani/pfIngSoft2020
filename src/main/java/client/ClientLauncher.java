@@ -114,12 +114,21 @@ public class ClientLauncher implements Client {
 	}
 
 	public void execute(UserNameRequest request) {
-		controller.login();	
+		try {
+			controller.login();
+		} catch (IOException e) {
+			System.out.print("errore : impossibile aprire finestra login");
+			e.printStackTrace();
+		}	
 	}
 
-	public void execute(EffectRequest request) {
+	public void execute(EffectRequest request){
 		controller.setText("vuoi attivare il tuo potere?");
-		controller.boolChoice("attivare il potere?");
+		try {
+			controller.boolChoice("attivare il potere?");
+		} catch (IOException e) {
+			System.out.print("errore : impossibile richiedere scelta");
+		}
 	}
 
 	public void execute(SwitchPositionUpdate update) {

@@ -8,12 +8,12 @@ import javafx.scene.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import utils.Loser;
-import utils.Winner;
+import utils.*;
 
 public class Controller extends  Application implements ClientController{
+	ClientLauncher client;
 	Stage Pstage;
-	AnchorPane login = null;
+	Stage Sstage;
 	Scene game = null;
 	
 	@Override
@@ -22,10 +22,8 @@ public class Controller extends  Application implements ClientController{
 		
 		try {
 			game = (Scene)FXMLLoader.load(getClass().getResource("game 2.fxml"));
-			login = (AnchorPane)FXMLLoader.load(getClass().getResource("log-in.fxml"));
 		} catch (IOException e) {
-			System.out.print("errore : impossibile caricare fxml");
-			e.printStackTrace();
+			System.out.print("errore : impossibile caricare game.fxml");
 		}	
 			Pstage.setScene(game);
 			Pstage.show();
@@ -62,14 +60,20 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	@Override
-	public void login() {
-		Scene logScene= new Scene(login);
-		Stage logStage= new Stage();
-		logStage.initModality(Modality.APPLICATION_MODAL);
-		logStage.setScene(logScene);
-		logStage.showAndWait();
-		
-		
+	public void login() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("log-in.fxml"));
+		AnchorPane an = loader.load();
+		Scene scene = new Scene(an,480,640);
+		Sstage.initModality(Modality.APPLICATION_MODAL);
+		Sstage.setResizable(false);
+		Sstage.setScene(scene);
+		Sstage.showAndWait();
+		String user = ((LoginController) loader.getController()).getusername();
+		if(user.isEmpty()) {
+			user="player " + Math.random()%1000;
+		}
+		client.sendMessage(new UserNameResponse(user));
+		System.out.print("inviato username" + user);
 	}
 
 	@Override
@@ -97,9 +101,17 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	@Override
-	public void boolChoice(String string) {
-		// TODO Auto-generated method stub
-		
+	public void boolChoice(String string) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("scelta.fxml"));
+		AnchorPane an = loader.load();
+		Scene scene = new Scene(an,220,100);
+		Sstage.initModality(Modality.APPLICATION_MODAL);
+		Sstage.setResizable(false);
+		((BooleanController) loader.getController()).setText(string);
+		Sstage.setScene(scene);
+		Sstage.showAndWait();
+		boolean choice = ((BooleanController) loader.getController()).getChoice();
+		client.sendMessage(new EffectResponse(choice));
 	}
 
 }

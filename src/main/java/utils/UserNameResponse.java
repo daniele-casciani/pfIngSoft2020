@@ -11,7 +11,7 @@ public class UserNameResponse implements MessageSystem{
 		return name;
 	}
 	
-	UserNameResponse(String username) {
+	public UserNameResponse(String username) {
 		username=name;
 	}
 

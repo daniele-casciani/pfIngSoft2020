@@ -1,5 +1,6 @@
 package client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import utils.Loser;
@@ -17,7 +18,7 @@ public interface ClientController{
 
 	void endWinner(Winner winner);
 
-	void login();
+	void login() throws IOException;
 
 	void playerNumber();
 
@@ -27,5 +28,5 @@ public interface ClientController{
 
 	void catchSelection(ArrayList<Integer> cardlist, int i);
 
-	void boolChoice(String string);
+	void boolChoice(String string) throws IOException;
 }
