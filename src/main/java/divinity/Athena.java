@@ -10,6 +10,7 @@ public final class Athena extends Divinity {
 		super(game);
 	}
 	
+	@Override
 	public void round() {
 		
 		startRound();
@@ -25,7 +26,7 @@ public final class Athena extends Divinity {
 	
 	@Override
 	void startRound() {
-		if(game.getEffectList().isEmpty()) {
+		if(game.getEffectList().isEmpty()==false) {
 			for(ActivePower x : game.getEffectList()) {
 				if(x instanceof AthenaEffect) game.getEffectList().remove(x);
 			}
@@ -37,18 +38,20 @@ public final class Athena extends Divinity {
 		public boolean execute(Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
-			if(isNear(start, end)) {
-				if( isPreviousLevel(start, end) || isSameLevel(start, end) ) {
-					BuilderAction nowmove = new BuilderAction(game);
+			BuilderAction nowmove = new BuilderAction(game);
+			
+			if(isNear(start, end) && start.getHeight()==-1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) {
+				if( isPreviousLevel(nowmove.getLUnderB(start), end) || isSameLevel(nowmove.getLUnderB(start), end) ) {
+					
 					if(game.getEffectList().isEmpty()==false) {
 						for (ActivePower x : game.getEffectList()) {
-							if (x.move()==true && x.actionLimitation(start, end) ) {
+							if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
 								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
 								return false;
 							}
 						}
 					} 
-					game.getController().updateMovement(start.getPosition(), end.getPosition());
+					game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
 					if(end.getHeight()==3) {
 						nowmove.movement(start, end);
 						game.winGame();
@@ -56,11 +59,11 @@ public final class Athena extends Divinity {
 					else nowmove.movement(start, end);
 					return true;
 				} else {
-					if(isNextLevel(start, end)) { 
-						BuilderAction nowmove = new BuilderAction(game);
+					if(isNextLevel(nowmove.getLUnderB(start), end)) { 
+						
 						if(game.getEffectList().isEmpty()==false) {
 							for (ActivePower x : game.getEffectList()) {
-								if (x.move()==true && x.actionLimitation(start, end) ) {
+								if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
 									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
 									return false;
 								}
@@ -71,7 +74,7 @@ public final class Athena extends Divinity {
 						AthenaEffect active = new AthenaEffect();
 						game.getEffectList().add(active);
 						
-						game.getController().updateMovement(start.getPosition(), end.getPosition());
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
 						if(end.getHeight()==3) {
 							nowmove.movement(start, end);
 							game.winGame();

@@ -1,6 +1,7 @@
 package divinity;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 
 import game.Game;
@@ -13,6 +14,8 @@ public class Divinity {
 	final private boolean fourplayer = true;
 	Game game;
 	final private int cardID=0;
+	
+	
 
 	
 	public void round() {
@@ -46,17 +49,19 @@ public class Divinity {
 		public boolean execute(Object start, Object end) {
 			Level builderCell = (Level)start;
 			Level whereBuild = (Level)end;
-			if(isPossibleBuild(builderCell, whereBuild)) {
+			BuilderAction nowbuild = new BuilderAction(game);
+			
+			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
 				
 				if(whereBuild.getHeight()==3) {
 				
-					BuilderAction nowbuild = new BuilderAction(game);
+					
 					nowbuild.buildDome(whereBuild);
 					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
 				}
 				
 				else {
-					BuilderAction nowbuild = new BuilderAction(game);
+					
 					nowbuild.buildTower(whereBuild);
 					game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
 				}
@@ -81,19 +86,22 @@ public class Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
-			if(isNear(start, end)) { 
-				if(end.getHeight()!=-1 && end.getHeight()!=4) {
-					if(isNextLevel(start, end) || isPreviousLevel(start, end) || isSameLevel(start, end) ) {
-						BuilderAction nowmove = new BuilderAction(game);
+			BuilderAction nowmove = new BuilderAction(game);
+			
+			
+			if(isNear(start, end) && start.getHeight() == -1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) { 
+				if(end.getHeight()!=-1 && end.getHeight()!=4 ) {
+					if(isNextLevel(nowmove.getLUnderB(start), end) || isPreviousLevel(nowmove.getLUnderB(start), end) || isSameLevel(nowmove.getLUnderB(start), end) ) {
+						
 						if(game.getEffectList().isEmpty()==false) {
 							for (ActivePower x : game.getEffectList()) {
-								if (x.move()==true && x.actionLimitation(start, end) ) {
+								if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
 									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
 									return false;
 								}
 							}
 						} 
-						game.getController().updateMovement(start.getPosition(), end.getPosition());
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
 						if(end.getHeight()==3) {
 							nowmove.movement(start, end);
 							game.winGame();
@@ -150,19 +158,19 @@ public class Divinity {
 	}
 	
 	private boolean canBuilderMove(Level builderCell) {
-		
+		BuilderAction nowmove = new BuilderAction(game);
 		for(int i=0; i<5; i++)
 			for(int j=0; j<5;j++) {
 				if(isNear(builderCell, game.getMap().getCell(i, j))) {
-					if(isNextLevel(builderCell, game.getMap().getCell(i, j)) || isPreviousLevel(builderCell, game.getMap().getCell(i, j)) || isSameLevel(builderCell, game.getMap().getCell(i, j))) {
-						//se entro qui il mio costruttore ha almeno una mossa disponibile
+					if(isNextLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isPreviousLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isSameLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j))) {
+						
 						return true;
 					}
-					// al contrario continua a scorrere 	
+					 	
 				}
-				// al contrario continua a scorrere
+				
 			}
-		return false;	//se non ho mosse possibili		
+		return false;	
 	}
 	
 	void endRound() {
@@ -232,14 +240,13 @@ public class Divinity {
 		return false;
 	}
 	
-	boolean isSameLevel(Level start, Level end) {
-		
+	boolean isSameLevel(Level start, Level end) { // start has to be the level under the builder
 		
 		if(start.getHeight() == end.getHeight()) return true;
 		else return false;
 	}
 	
-	boolean isNextLevel(Level start, Level end) { //controllo sul movimento verso l'alto
+	boolean isNextLevel(Level start, Level end) { // start has to be the level under the builder
 		
 			if(start.getHeight()==0 && end.getHeight()==1) return true;
 			if(start.getHeight()==1 && end.getHeight()==2) return true;
@@ -248,7 +255,7 @@ public class Divinity {
 		return false;
 	}
 	
-	boolean isPreviousLevel(Level start, Level end) {// controllo il movimento verso il basso 
+	boolean isPreviousLevel(Level start, Level end) {// start has to be the level under the builder
 
 	
 		if(end.getHeight()-start.getHeight()<0) return true;
