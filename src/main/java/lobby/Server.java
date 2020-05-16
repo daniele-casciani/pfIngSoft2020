@@ -82,7 +82,7 @@ public class Server {
 		public void run() {
 			try {
 				// Create a server socket
-				serverSocket = new ServerSocket(8888);
+				serverSocket = new ServerSocket(51344);
 				System.out.println("serverSocket created");
 				while (true) {
 					// Listen for a connection request

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javafx.application.Application;
 import utils.*;
 
 public class ClientLauncher implements Client {
@@ -13,20 +12,18 @@ public class ClientLauncher implements Client {
 	private ObjectOutputStream output;
 	private Listener listener;
 	private Thread listT;
-	private Thread contT;
 	
-	 public static void main( String[] args ) {
+	public static void main( String[] args ) {
 		 new ClientLauncher().main();
 	 }
 	public void main(){
 		try {
-			socket= new Socket("127.0.0.1", 8888);
+			controller = new Controller();
+			socket= new Socket("127.0.0.1", 51344);
 			output =new ObjectOutputStream(socket.getOutputStream());
 			listener = new Listener(socket,this);
 			listT= new Thread (listener);
 			listT.start();
-			controller = new Controller();
-			contT.start();
 		} catch (IOException e) {
 		System.out.print(" start server unreachble ");
 		e.printStackTrace();
