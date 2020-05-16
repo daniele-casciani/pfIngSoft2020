@@ -9,32 +9,48 @@ public class Listener implements Runnable{
 	ObjectInputStream input;
 	ClientLauncher launcher;
 	Message message;
+	Socket socket;
 	
 	
 	Listener(Socket socket,ClientLauncher launcher){
 		this.launcher=launcher;
+		this.socket = socket;
 		try {
 			input=new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
-	public void run() {
+	
+	@Override
+	public void  run() {
+		try {
 		while(true) {
 			try {
+				
 				message = (Message) input.readObject();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				launcher.handle(message);
+				
+			} catch (ClassNotFoundException e) {
+				System.out.print(" start message cast error ");
+				e.printStackTrace();
+				System.out.print(" end message cast error ");
 			}
 			
 		}
 		
+	
+		}catch(IOException e) {
+			System.out.print(" start socket error ");
+			e.printStackTrace();
+			System.out.print(" end socket error ");
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				System.out.print(" socket close error ");
+			}
+		}
 	}
 
 }

@@ -15,20 +15,23 @@ public class ClientLauncher implements Client {
 	private Thread listT;
 	private Thread contT;
 	
+	 public static void main( String[] args ) {
+		 new ClientLauncher().main();
+	 }
 	public void main(){
 		try {
-			socket= new Socket("127.0.0.1", 5000);	
+			socket= new Socket("127.0.0.1", 8888);
+			output =new ObjectOutputStream(socket.getOutputStream());
 			listener = new Listener(socket,this);
 			listT= new Thread (listener);
 			listT.start();
-			output =new ObjectOutputStream(socket.getOutputStream());
 			controller = new Controller();
-			Application.launch();
 			contT.start();
 		} catch (IOException e) {
-			System.out.print("errore : impossibile inizializzare la connessione");
-			e.printStackTrace();
-		}
+		System.out.print(" start server unreachble ");
+		e.printStackTrace();
+		System.out.print(" end server unreachble ");
+	}
 
 	}
 
@@ -117,8 +120,9 @@ public class ClientLauncher implements Client {
 		try {
 			controller.login();
 		} catch (IOException e) {
-			System.out.print("errore : impossibile aprire finestra login");
+			System.out.print("start : impossibile aprire finestra login");
 			e.printStackTrace();
+			System.out.print("end : impossibile aprire finestra login");
 		}	
 	}
 
