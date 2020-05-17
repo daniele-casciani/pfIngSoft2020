@@ -6,8 +6,6 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import client.ClientLauncher;
 import utils.*;
 
 public class Server {
@@ -30,6 +28,7 @@ public class Server {
 		
 		@Override
 		public void run() {
+			Thread.currentThread().setName("lobbyCreator");
 			System.out.println("thread create lobby started");
 			while(true) {
 				try {
@@ -80,6 +79,7 @@ public class Server {
 		
 		@Override
 		public void run() {
+			Thread.currentThread().setName("acceptClient");
 			try {
 				// Create a server socket
 				serverSocket = new ServerSocket(51344);
@@ -90,7 +90,7 @@ public class Server {
 					System.out.println("serverSocket listenig");
 					//create a new thread
 					new Thread(()->{
-
+						Thread.currentThread().setName(getName()+" userHandler");
 						try {//handling new User
 							ObjectInputStream input;
 							ObjectOutputStream output= new ObjectOutputStream(socket.getOutputStream());

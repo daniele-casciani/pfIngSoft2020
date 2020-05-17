@@ -315,7 +315,7 @@ class Lobby implements ServerController , Runnable {
 	 
 	@Override
 	public void run() {
-
+		Thread.currentThread().setName(Thread.currentThread().getName()+ " lobby");
 		try {
 			createGame();
 			
