@@ -21,9 +21,11 @@ public class Controller extends  Application implements ClientController{
 		Pstage= stage;
 		
 		try {
-			game = (Scene)FXMLLoader.load(getClass().getResource("game 2.fxml"));
+			game = (Scene)FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
 		} catch (IOException e) {
-			System.out.print("errore : impossibile caricare game.fxml");
+			System.out.println("start impossibile caricare game.fxml");
+			e.printStackTrace();
+			System.out.println("end impossibile caricare game.fxml");
 		}	
 			Pstage.setScene(game);
 			Pstage.show();
@@ -61,8 +63,9 @@ public class Controller extends  Application implements ClientController{
 
 	@Override
 	public void login() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("log-in.fxml"));
-		AnchorPane an = loader.load();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
+		AnchorPane an = (AnchorPane) loader.load();
 		Scene scene = new Scene(an,480,640);
 		Sstage.initModality(Modality.APPLICATION_MODAL);
 		Sstage.setResizable(false);

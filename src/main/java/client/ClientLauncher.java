@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javafx.application.Application;
 import utils.*;
 
 public class ClientLauncher implements Client {
@@ -19,6 +20,7 @@ public class ClientLauncher implements Client {
 	public void main(){
 		try {
 			controller = new Controller();
+			Application.launch(Controller.class);
 			socket= new Socket("127.0.0.1", 51344);
 			output =new ObjectOutputStream(socket.getOutputStream());
 			listener = new Listener(socket,this);
