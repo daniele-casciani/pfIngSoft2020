@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -17,150 +16,147 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <root>
-      <StackPane>
+
+<StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.GameController">
+   <children>
+      <ImageView fitHeight="725.0" fitWidth="1288.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/SantoriniBoard.png" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="647.0" prefWidth="1288.0">
          <children>
-            <ImageView fitHeight="725.0" fitWidth="1288.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../image/SantoriniBoard.png" />
-               </image>
-            </ImageView>
-            <AnchorPane prefHeight="647.0" prefWidth="1288.0">
-               <children>
-                  <ScrollPane layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1014.0" AnchorPane.topAnchor="5.0">
-                     <content>
-                        <TextFlow id="text" fx:id="text" lineSpacing="2.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="715.0" prefWidth="263.0">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator prefHeight="9.0" prefWidth="266.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="46.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="75.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="11.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="26.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="55.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="78.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="11.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="26.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="55.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="78.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="101.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="130.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="153.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="176.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="205.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="228.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="251.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="280.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="303.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="325.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="339.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="354.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="377.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="385.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="400.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="429.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="452.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="475.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="489.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="504.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="512.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="527.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="535.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="550.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="564.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="579.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="587.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="602.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="11.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="26.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="55.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="78.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="101.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="130.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="153.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="176.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="205.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="228.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="251.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="280.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="303.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="325.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="339.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="354.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="377.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="385.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                              <Separator layoutX="10.0" layoutY="400.0" prefHeight="9.0" prefWidth="266.0" />
-                              <Text layoutX="10.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
-                              <Separator layoutX="10.0" layoutY="429.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
-                              <Separator layoutX="10.0" layoutY="452.0" prefHeight="0.0" prefWidth="264.0" />
-                              <Text layoutX="10.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </TextFlow>
-                     </content>
-                  </ScrollPane>
-                  <GridPane fx:id="grid" layoutX="375.0" layoutY="96.0" onDragDetected="#dragStart" onDragDropped="#dragEnd" prefHeight="534.0" prefWidth="532.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                  </GridPane>
-               </children>
-            </AnchorPane>
-            <HBox alignment="BOTTOM_RIGHT" prefWidth="1288.0">
-               <children>
-                  <TextField fx:id="textinput" alignment="CENTER" prefHeight="37.0" prefWidth="203.0" />
-                  <Button fx:id="okbutton" mnemonicParsing="false" onAction="#passturn" prefHeight="38.0" prefWidth="112.0" text="pass turn" />
-               </children>
-            </HBox>
+            <ScrollPane layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1014.0" AnchorPane.topAnchor="5.0">
+               <content>
+                  <TextFlow id="text" fx:id="text" lineSpacing="2.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="715.0" prefWidth="263.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator prefHeight="9.0" prefWidth="266.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="46.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="75.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="11.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="26.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="55.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="78.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="11.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="26.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="55.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="78.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="101.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="130.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="153.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="176.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="205.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="228.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="251.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="280.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="303.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="325.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="339.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="354.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="377.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="385.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="400.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="429.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="452.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="475.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="489.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="504.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="512.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="527.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="535.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="550.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="564.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="579.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="587.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="602.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="11.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="26.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="55.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="78.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="101.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="130.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="153.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="176.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="205.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="228.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="251.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="280.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="303.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="325.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="339.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="354.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="377.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="385.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                        <Separator layoutX="10.0" layoutY="400.0" prefHeight="9.0" prefWidth="266.0" />
+                        <Text layoutX="10.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli la mossa " />
+                        <Separator layoutX="10.0" layoutY="429.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scegli dove costruire " />
+                        <Separator layoutX="10.0" layoutY="452.0" prefHeight="0.0" prefWidth="264.0" />
+                        <Text layoutX="10.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </TextFlow>
+               </content>
+            </ScrollPane>
+            <GridPane fx:id="grid" layoutX="375.0" layoutY="96.0" onDragDetected="#dragStart" onDragDropped="#dragEnd" prefHeight="534.0" prefWidth="532.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
          </children>
-      </StackPane>
-   </root>
-</Scene>
+      </AnchorPane>
+      <HBox alignment="BOTTOM_RIGHT" prefWidth="1288.0">
+         <children>
+            <TextField fx:id="textinput" alignment="CENTER" prefHeight="37.0" prefWidth="203.0" />
+            <Button fx:id="okbutton" mnemonicParsing="false" onAction="#passturn" prefHeight="38.0" prefWidth="112.0" text="pass turn" />
+         </children>
+      </HBox>
+   </children>
+</StackPane>

@@ -6,6 +6,7 @@ import javafx.application.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import utils.*;
@@ -13,28 +14,34 @@ import utils.*;
 public class Controller extends  Application implements ClientController{
 	ClientLauncher client;
 	Stage Pstage;
+	Scene Pscene;
+	FXMLLoader ploader;
+	StackPane game = null;
 	Stage Sstage;
-	Scene game = null;
+	
 	
 	@Override
 	public void start(Stage stage) {
 		Pstage= stage;
 		
 		try {
-			game = (Scene)FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
+			ploader = new FXMLLoader();
+			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
+			game = (StackPane)ploader.load();
+			Pscene = new Scene(game,1288,725);
 		} catch (IOException e) {
 			System.out.println("start impossibile caricare game.fxml");
 			e.printStackTrace();
 			System.out.println("end impossibile caricare game.fxml");
 		}	
-			Pstage.setScene(game);
+			Pstage.setResizable(false);
+			Pstage.setScene(Pscene);
 			Pstage.show();
 	}
 
 	@Override
 	public void setText(String message) {
-		// TODO Auto-generated method stub
-		
+		((GameController) ploader.getController()).setText(message);
 	}
 
 	@Override
@@ -81,8 +88,21 @@ public class Controller extends  Application implements ClientController{
 
 	@Override
 	public void playerNumber() {
-		// TODO Auto-generated method stub
-		
+		GameController gc = ((GameController) ploader.getController());
+		int num = 0;
+		while (!(num>1|num<4)) {
+			try {
+			//	TODO aspetto inserimento input
+			num= Integer.parseInt(gc.getTextInput());
+			break;
+			}catch(NumberFormatException e) {
+				num=0;
+				gc.setText("numero non valido");
+				System.out.print("numero non valido");
+			}
+		}
+		client.sendMessage(new PlayerNumberResponse(num));
+		System.out.print("inviato username" + num);
 	}
 
 	@Override

@@ -106,6 +106,7 @@ public class ClientLauncher implements Client {
 	}
 
 	public void execute(PlayerNumberRequest request) {
+		controller.setText("digita numerogiocatori");
 		controller.playerNumber();
 	}
 

@@ -8,7 +8,7 @@ public class PlayerNumberResponse implements MessageToServer {
 	public int getNumber() {
 		return number;
 	}
-	PlayerNumberResponse(int number){
+	public PlayerNumberResponse(int number){
 		this.number=number;
 	}
 
