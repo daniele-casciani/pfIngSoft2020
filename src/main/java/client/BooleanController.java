@@ -8,13 +8,10 @@ import javafx.stage.Stage;
 public class BooleanController {
 	
 	boolean choice;
-	
     @FXML
     private Text text;
-	
     @FXML
     private Button butyes;
-
     @FXML
     private Button butno;
 

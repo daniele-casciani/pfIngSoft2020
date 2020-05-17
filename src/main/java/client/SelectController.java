@@ -10,10 +10,8 @@ import javafx.scene.layout.TilePane;
 public class SelectController {
 	
 	private ArrayList<Integer> card;
-
     @FXML
     private TilePane imagepane;
-
     @FXML
     private TilePane checkpane;
     
@@ -21,7 +19,7 @@ public class SelectController {
     	this.card=card;
     }
     
-    void initialize() {
+    public void initialize() {
     	imagepane.getChildren().clear();
     	checkpane.getChildren().clear();
     	for(Integer x : card) {

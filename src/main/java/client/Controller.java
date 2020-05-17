@@ -30,7 +30,7 @@ public class Controller extends  Application implements ClientController{
 	@Override
 	public void start(Stage stage) {
 		Pstage= stage;
-		
+		Thread.currentThread().setName("PrimaryStage");
 		try {
 			ploader = new FXMLLoader();
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
@@ -130,6 +130,7 @@ public class Controller extends  Application implements ClientController{
 		loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
 		AnchorPane an = (AnchorPane) loader.load();
 		Scene scene = new Scene(an,480,640);
+		Sstage = new Stage();
 		Sstage.initModality(Modality.APPLICATION_MODAL);
 		Sstage.setResizable(false);
 		Sstage.setScene(scene);
@@ -174,8 +175,20 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	@Override
-	public void catchSelection(ArrayList<Integer> cardlist, int i) {
-		// TODO Auto-generated method stub
+	public ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/select card.fxml"));
+		AnchorPane an = (AnchorPane)loader.load();
+		Scene scene = new Scene(an,480,640);
+		Sstage.initModality(Modality.APPLICATION_MODAL);
+		Sstage.setResizable(false);
+		Sstage.setScene(scene);
+		int numcard = cardlist.size();
+		ArrayList<Integer> array = null;
+		while (numcard!=i) {
+			Sstage.showAndWait();
+			array = ((SelectController)loader.getController()).getSelection();
+		}
+		return array;
 		
 	}
 

@@ -10,7 +10,7 @@ public class ChoseCardResponse implements MessageToServer {
 		return card;
 	}
 	
-	ChoseCardResponse(int card){
+	public ChoseCardResponse(int card){
 		this.card= card;
 	}
 }

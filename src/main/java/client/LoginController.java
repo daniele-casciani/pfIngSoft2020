@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class LoginController {
+public class LoginController{
 	private String username;
 	
     @FXML
@@ -18,7 +18,8 @@ public class LoginController {
     void saveusername(ActionEvent event) {
     	username= usernametext.getText();
     }
-    void initialize(){
+    @FXML
+    public void initialize(){
     	usernametext.clear();
     }
     String getusername(){
