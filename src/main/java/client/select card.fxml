@@ -13,7 +13,7 @@
    <children>
       <ImageView fitHeight="485.0" fitWidth="640.0" pickOnBounds="true">
          <image>
-            <Image url="@../resources/SantoriniBoard.png" />
+            <Image url="@../../resources/image/SantoriniBoard.png" />
          </image>
          <viewport>
             <Rectangle2D minX="100.0" minY="200.0" />
