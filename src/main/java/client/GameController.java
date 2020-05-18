@@ -24,7 +24,7 @@ public class GameController {
     @FXML
     private Button okbutton;
     
-    void initialize(){
+    public void initialize(){
     	textinput.clear();
     	text.getChildren().clear();
     	text.getChildren().add(new Label("in attesa del login"));

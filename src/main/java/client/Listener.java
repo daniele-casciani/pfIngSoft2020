@@ -24,6 +24,7 @@ public class Listener implements Runnable{
 	
 	@Override
 	public void  run() {
+		Thread.currentThread().setName("listener");
 		try {
 		while(true) {
 			try {

@@ -26,7 +26,7 @@ public interface ClientController{
 
 	void catchPosition();
 
-	void catchSelection(ArrayList<Integer> cardlist, int i);
+	ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException;
 
 	void boolChoice(String string) throws IOException;
 }

@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import utils.*;
@@ -96,8 +97,16 @@ public class ClientLauncher implements Client {
 
 	public void execute(ChoseCardRequest request) {
 		controller.setText("scegli la tua carta");
-		controller.catchSelection(request.getCardlist(),1);
-		
+		int cardID;
+		try {
+			 cardID = controller.catchSelection(request.getCardlist(),1).get(0);
+		} catch (IOException e) {
+			System.out.print("start impossibile caricare select image");
+			e.printStackTrace();
+			System.out.print("end impossibile caricare select image");
+			return;
+		}
+		sendMessage(new ChoseCardResponse(cardID));
 	}
 
 	public void execute(MoveRequest request) {
@@ -112,8 +121,16 @@ public class ClientLauncher implements Client {
 
 	public void execute(SelectCardRequest request) {
 		controller.setText("scegli le carte da usare");
-		controller.catchSelection(request.getCardlist(),request.getNumber());
-		
+		ArrayList<Integer> array;
+		try {
+			array = controller.catchSelection(request.getCardlist(),request.getNumber());
+		} catch (IOException e) {
+			System.out.print("start impossibile caricare select image");
+			e.printStackTrace();
+			System.out.print("end impossibile caricare select image");
+			return;
+		}
+		sendMessage(new SelectCardResponse(array));
 	}
 
 	public void execute(UserNameRequest request) {
