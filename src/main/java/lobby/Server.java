@@ -91,7 +91,7 @@ public class Server {
 					Socket socket = serverSocket.accept();
 					//create a new thread
 					new Thread(()->{
-						Thread.currentThread().setName(getName()+" userHandler");
+						Thread.currentThread().setName("userHandler");
 						try {//handling new User
 							ObjectInputStream input;
 							ObjectOutputStream output= new ObjectOutputStream(socket.getOutputStream());
@@ -105,12 +105,13 @@ public class Server {
 								// Get message from the client
 								try {//creating new user
 									
-									String message = ((UserNameResponse)(MessageToServer) (Message) input.readObject()).getName();
+									String message = ((UserNameResponse)(Message) input.readObject()).getName();
 									synUserList.add(new User(message,socket));
-									obj.notifyAll();
+									obj.notify();
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {
-									System.out.println("Invalid name");}
+									System.out.println("Invalid name");
+									ex.printStackTrace();}
 								catch(SocketException | EOFException e ) {
 									System.out.println("client disconnected");
 									break;

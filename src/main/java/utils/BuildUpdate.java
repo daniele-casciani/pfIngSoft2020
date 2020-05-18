@@ -1,6 +1,7 @@
 package utils;
 
 import client.ClientLauncher;
+import client.Controller;
 
 public class BuildUpdate implements MessageToClient {
 
@@ -19,8 +20,9 @@ public class BuildUpdate implements MessageToClient {
 		return building;
 	}
 	
+	
 	@Override
-	public void accept(ClientLauncher clientLauncher) {
+	public void accept(Controller clientLauncher) {
 		clientLauncher.notify(this);
 		
 	}

@@ -1,6 +1,7 @@
 package utils;
 
 import client.ClientLauncher;
+import client.Controller;
 
 public class NewBuilderUpdate implements MessageSystem{
 	private static final long serialVersionUID = 1L;
@@ -14,8 +15,8 @@ public class NewBuilderUpdate implements MessageSystem{
 		 return position;
 	 }
 
-		@Override
-		public void accept(ClientLauncher clientLauncher) {
+	 @Override
+		public void accept(Controller clientLauncher) {
 			clientLauncher.notify(this);
 			
 		}

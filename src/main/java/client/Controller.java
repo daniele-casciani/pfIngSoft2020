@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import utils.*;
 
 public class Controller extends  Application implements ClientController{
-	ClientLauncher client;
 	Stage Pstage;
 	Scene Pscene;
 	FXMLLoader ploader;
@@ -33,7 +32,6 @@ public class Controller extends  Application implements ClientController{
 	private Thread listT;
 	private Socket socket;
 	private ObjectOutputStream output;
-	ClientLauncher clientlauncher=new ClientLauncher();
 	
 	
 	@Override
@@ -53,14 +51,6 @@ public class Controller extends  Application implements ClientController{
 		listener = new Listener(socket,this);
 		listT= new Thread (listener);
 		listT.start();
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		
@@ -188,10 +178,10 @@ public class Controller extends  Application implements ClientController{
 		Sstage.showAndWait();
 		String user = ((LoginController) loader.getController()).getusername();
 		if(user.isEmpty()) {
-			user="player " + Math.random()%1000;
+			user=("player " + (int)(Math.random()*1000));
 		}
 		System.out.println(user);
-		clientlauncher.sendMessage(new UserNameResponse(user));
+		sendMessage(new UserNameResponse(user));
 		
 		System.out.print("username sent " + user);
 		setText("logged as "+ user );
@@ -214,7 +204,7 @@ public class Controller extends  Application implements ClientController{
 				System.out.print("numero non valido");
 			}
 		}
-		client.sendMessage(new PlayerNumberResponse(num));
+		sendMessage(new PlayerNumberResponse(num));
 		System.out.print("number of player " + num);
 
 	}
@@ -263,16 +253,16 @@ public class Controller extends  Application implements ClientController{
 		Sstage.setScene(scene);
 		Sstage.showAndWait();
 		boolean choice = ((BooleanController) loader.getController()).getChoice();
-		client.sendMessage(new EffectResponse(choice));
+		sendMessage(new EffectResponse(choice));
 		
 		System.out.println("message bool choice sent");
 	}
 	public void handle(Message message) {
 		if (message instanceof MessageToClient) {
-			((MessageToClient)message).accept(clientlauncher);
+			((MessageToClient)message).accept(this);
 		}
 		else if (message instanceof MessageSystem) {
-			((MessageSystem)message).accept(clientlauncher);
+			((MessageSystem)message).accept(this);
 		}
 		
 	}
@@ -300,12 +290,7 @@ public class Listener implements Runnable{
 				message = (Message) input.readObject();
 				
 				Platform.runLater(()->{
-				try {
-					login();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				handle(message);
 				});
 			} catch (ClassNotFoundException e) {
 				System.out.print(" start message cast error ");
@@ -330,4 +315,121 @@ public class Listener implements Runnable{
 	}
 
 }
+public void notify(InvalidAction message) {
+	setText(message.getError());
 }
+
+public void notify(NewBuilderUpdate update) {
+	addConstructor(update.getPosition()[0],update.getPosition()[1]);	
+}
+
+public void notify(BuildUpdate update) {
+	construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
+}
+
+public void notify(MoveUpdate update) {
+	construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
+	construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
+	addConstructor(3, 4);
+}
+public void notify(Loser loser) {
+	endLoser(loser);
+	
+}
+
+public void notify(Winner winner) {
+	endWinner(winner);
+	
+}
+
+public void execute(BuilderRequest message) {
+	setText("posiziona il costruttore");
+	catchPosition();
+}
+
+public void execute(BuildRequest message) {
+	setText("scegli dove costruire");
+	catchDrag();
+}
+
+public void execute(ChoseCardRequest request) {
+	setText("scegli la tua carta");
+	int cardID;
+	try {
+		 cardID = catchSelection(request.getCardlist(),1).get(0);
+	} catch (IOException e) {
+		System.out.println("start impossibile caricare select image");
+		e.printStackTrace();
+		System.out.println("end impossibile caricare select image");
+		return;
+	}
+	sendMessage(new ChoseCardResponse(cardID));
+}
+
+public void execute(MoveRequest request) {
+	setText("scegli dove muoverti");
+	catchDrag();
+}
+
+public void execute(PlayerNumberRequest request) {
+	setText("digita numerogiocatori");
+	playerNumber();
+}
+
+public void execute(SelectCardRequest request) {
+	setText("scegli le carte da usare");
+	ArrayList<Integer> array;
+	try {
+		array = catchSelection(request.getCardlist(),request.getNumber());
+	} catch (IOException e) {
+		System.out.println("start impossibile caricare select image");
+		e.printStackTrace();
+		System.out.println("end impossibile caricare select image");
+		return;
+	}
+	sendMessage(new SelectCardResponse(array));
+}
+
+public void execute(UserNameRequest request) {
+	System.out.println("start run later");
+	try {
+		login();
+	} catch (IOException e) {
+		System.out.println("start : impossibile aprire finestra login");
+		e.printStackTrace();
+		System.out.println("end : impossibile aprire finestra login");
+	}
+}
+
+public void execute(EffectRequest request){
+	setText("vuoi attivare il tuo potere?");
+	try {
+		boolChoice("attivare il potere?");
+	} catch (IOException e) {
+		System.out.println("errore : impossibile richiedere scelta");
+	}
+}
+
+public void execute(SwitchPositionUpdate update) {
+	construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
+	construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
+	addConstructor(0, 1);
+	addConstructor(3, 4);
+	
+	}
+	public void sendMessage(Message message) {
+		try {
+			output.writeObject(message);
+			output.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void notify(SwitchPositionUpdate switchPositionUpdate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
+

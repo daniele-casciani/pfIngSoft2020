@@ -1,6 +1,7 @@
 package utils;
 
 import client.ClientLauncher;
+import client.Controller;
 
 public class Loser implements MessageSystem {
 
@@ -9,7 +10,7 @@ public class Loser implements MessageSystem {
 	//TODO statistiche partita
 	
 	@Override
-	public void accept(ClientLauncher clientLauncher) {
+	public void accept(Controller clientLauncher) {
 		clientLauncher.notify(this);
 		
 	}

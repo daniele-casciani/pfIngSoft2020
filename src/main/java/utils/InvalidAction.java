@@ -1,6 +1,7 @@
 package utils;
 
 import client.ClientLauncher;
+import client.Controller;
 
 public class InvalidAction implements MessageSystem{
 	
@@ -14,7 +15,7 @@ public class InvalidAction implements MessageSystem{
 			string=error;
 		}
 		@Override
-		public void accept(ClientLauncher clientLauncher) {
+		public void accept(Controller clientLauncher) {
 			clientLauncher.notify(this);
 			
 		}

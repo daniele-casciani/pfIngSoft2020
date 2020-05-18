@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 
 import client.ClientLauncher;
+import client.Controller;
 
 //getCardlist return array of divinity ID	
 public class ChoseCardRequest implements MessageToClient {
@@ -19,7 +20,7 @@ public class ChoseCardRequest implements MessageToClient {
 	}
 	
 	@Override
-	public void accept(ClientLauncher clientLauncher) {
+	public void accept(Controller clientLauncher) {
 		clientLauncher.execute(this);
 		
 	}

@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 
 import client.ClientLauncher;
+import client.Controller;
 
 //getCardlist return array of divinity ID
 public class SelectCardRequest implements MessageToClient {
@@ -21,11 +22,10 @@ public class SelectCardRequest implements MessageToClient {
 	}
 	
 	@Override
-	public void accept(ClientLauncher clientLauncher) {
+	public void accept(Controller clientLauncher) {
 		clientLauncher.execute(this);
 		
 	}
-
 	public int getNumber() {
 		return number;
 	}

@@ -1,6 +1,7 @@
 package utils;
 
 import client.ClientLauncher;
+import client.Controller;
 
 public class UserNameResponse implements MessageSystem{
 	
@@ -16,5 +17,5 @@ public class UserNameResponse implements MessageSystem{
 	}
 
 	@Override
-	public void accept(ClientLauncher clientLauncher) {}
+	public void accept(Controller clientLauncher) {}
 }

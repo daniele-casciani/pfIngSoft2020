@@ -1,5 +1,6 @@
 package utils;
 import client.ClientLauncher;
+import client.Controller;
 
 
 // int [x,y], int z, int[x,y], int z, altezza senza builder altrimenti da errore
@@ -22,7 +23,7 @@ public class MoveUpdate implements MessageToClient {
 		return this.movement;
 	}
 	@Override
-	public void accept(ClientLauncher clientLauncher) {
+	public void accept(Controller clientLauncher) {
 		clientLauncher.notify(this);
 		
 	}
