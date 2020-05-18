@@ -14,7 +14,7 @@ public class LobbyTest {
 		Thread client = new ClientProva();
 		server.start();
 		client.start();
-		Lobby lobby = new Lobby(server.getArray());
+		Lobby lobby = new Lobby(((ServerProva) server).getArray());
 	}
 
 }

@@ -52,7 +52,6 @@ public class Controller extends  Application implements ClientController{
 			Sstage.initOwner(Pstage);
 			Sstage.initModality(Modality.WINDOW_MODAL);
 			Sstage.setResizable(false);
-			
 			System.out.println("Secondary stage created");
 	}
 
@@ -146,16 +145,10 @@ public class Controller extends  Application implements ClientController{
 	public void login() throws IOException {
 		System.out.println("starting login");
 		
-		Platform.runLater(()->{
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
 		AnchorPane an;
-		try {
-			an = (AnchorPane) loader.load();
-		} catch (IOException e) {
-			System.out.print("not loaded" +);
-			e.printStackTrace();
-		}
+		an = (AnchorPane) loader.load();
 		Scene scene = new Scene(an,480,640);
 		Sstage.setScene(scene);
 		Sstage.showAndWait();
@@ -166,7 +159,6 @@ public class Controller extends  Application implements ClientController{
 		client.sendMessage(new UserNameResponse(user));
 		
 		System.out.print("username sent " + user);
-		});
 	}
 
 	@Override

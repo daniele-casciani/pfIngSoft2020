@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import utils.*;
 
 public class ClientLauncher implements Client {
@@ -48,7 +49,7 @@ public class ClientLauncher implements Client {
 	}
 
 	public void handle(Message message) {
-		
+		System.out.print(" handling message ");
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
 		}
@@ -134,13 +135,16 @@ public class ClientLauncher implements Client {
 	}
 
 	public void execute(UserNameRequest request) {
+		System.out.print("start run later");
+		Platform.runLater(()->{
 		try {
 			controller.login();
 		} catch (IOException e) {
 			System.out.print("start : impossibile aprire finestra login");
 			e.printStackTrace();
 			System.out.print("end : impossibile aprire finestra login");
-		}	
+		}
+		});
 	}
 
 	public void execute(EffectRequest request){

@@ -87,8 +87,8 @@ public class Server {
 				System.out.println("serverSocket created");
 				while (true) {
 					// Listen for a connection request
-					Socket socket = serverSocket.accept();
 					System.out.println("serverSocket listenig");
+					Socket socket = serverSocket.accept();
 					//create a new thread
 					new Thread(()->{
 						Thread.currentThread().setName(getName()+" userHandler");
