@@ -27,6 +27,7 @@ public class Controller extends  Application implements ClientController{
 	Stage Sstage;
 	
 	
+	
 	@Override
 	public void start(Stage stage) {
 		Pstage= stage;
@@ -35,7 +36,7 @@ public class Controller extends  Application implements ClientController{
 			ploader = new FXMLLoader();
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
 			game = (StackPane)ploader.load();
-			Pscene = new Scene(game,1288,725);
+			Pscene = new Scene(game,1280,720);
 		} catch (IOException e) {
 			System.out.println("start impossibile caricare game.fxml");
 			e.printStackTrace();
@@ -44,6 +45,15 @@ public class Controller extends  Application implements ClientController{
 			Pstage.setResizable(false);
 			Pstage.setScene(Pscene);
 			Pstage.show();
+			
+			System.out.println("Primary stage show");
+			
+			Sstage = new Stage();
+			Sstage.initOwner(Pstage);
+			Sstage.initModality(Modality.WINDOW_MODAL);
+			Sstage.setResizable(false);
+			
+			System.out.println("Secondary stage created");
 	}
 
 	@Override
@@ -100,6 +110,8 @@ public class Controller extends  Application implements ClientController{
 
 	@Override
 	public void endLoser(Loser loser) {
+		System.out.println("start lose");
+		
 		AnchorPane an = new AnchorPane();
 		Label label = new Label();
 		label.setText("you win");
@@ -108,11 +120,15 @@ public class Controller extends  Application implements ClientController{
 		Sstage.setScene(new Scene(an));
 		Sstage.showAndWait();
 		Thread.currentThread().interrupt();
+		
+		System.out.println("end lose");
 		return;
 	}
 
 	@Override
 	public void endWinner(Winner winner) {
+		System.out.println("start win");
+		
 		AnchorPane an = new AnchorPane();
 		Label label = new Label();
 		label.setText("you lose");
@@ -121,18 +137,26 @@ public class Controller extends  Application implements ClientController{
 		Sstage.setScene(new Scene(an));
 		Sstage.showAndWait();
 		Thread.currentThread().interrupt();
+		
+		System.out.println("end win");
 		return;
 	}
 
 	@Override
 	public void login() throws IOException {
+		System.out.println("starting login");
+		
+		Platform.runLater(()->{
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
-		AnchorPane an = (AnchorPane) loader.load();
+		AnchorPane an;
+		try {
+			an = (AnchorPane) loader.load();
+		} catch (IOException e) {
+			System.out.print("not loaded" +);
+			e.printStackTrace();
+		}
 		Scene scene = new Scene(an,480,640);
-		Sstage = new Stage();
-		Sstage.initModality(Modality.APPLICATION_MODAL);
-		Sstage.setResizable(false);
 		Sstage.setScene(scene);
 		Sstage.showAndWait();
 		String user = ((LoginController) loader.getController()).getusername();
@@ -140,11 +164,15 @@ public class Controller extends  Application implements ClientController{
 			user="player " + Math.random()%1000;
 		}
 		client.sendMessage(new UserNameResponse(user));
-		System.out.print("inviato username" + user);
+		
+		System.out.print("username sent " + user);
+		});
 	}
 
 	@Override
 	public void playerNumber() {
+		System.out.println("starting player selection");
+		
 		GameController gc = ((GameController) ploader.getController());
 		int num = 0;
 		while (!(num>1|num<4)) {
@@ -159,7 +187,7 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 		client.sendMessage(new PlayerNumberResponse(num));
-		System.out.print("inviato username" + num);
+		System.out.print("number of player " + num);
 	}
 
 	@Override
@@ -176,11 +204,11 @@ public class Controller extends  Application implements ClientController{
 
 	@Override
 	public ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException {
+		System.out.println("starting divinity selection");
+		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/select card.fxml"));
 		AnchorPane an = (AnchorPane)loader.load();
 		Scene scene = new Scene(an,480,640);
-		Sstage.initModality(Modality.APPLICATION_MODAL);
-		Sstage.setResizable(false);
 		Sstage.setScene(scene);
 		int numcard = cardlist.size();
 		ArrayList<Integer> array = null;
@@ -188,12 +216,15 @@ public class Controller extends  Application implements ClientController{
 			Sstage.showAndWait();
 			array = ((SelectController)loader.getController()).getSelection();
 		}
+		System.out.println("returned selected divinity");
 		return array;
-		
+
 	}
 
 	@Override
 	public void boolChoice(String string) throws IOException {
+		System.out.println("starting bool choice");
+		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/scelta.fxml"));
 		AnchorPane an = loader.load();
 		Scene scene = new Scene(an,220,100);
@@ -204,6 +235,8 @@ public class Controller extends  Application implements ClientController{
 		Sstage.showAndWait();
 		boolean choice = ((BooleanController) loader.getController()).getChoice();
 		client.sendMessage(new EffectResponse(choice));
+		
+		System.out.println("message bool choice sent");
 	}
 
 }

@@ -1,4 +1,5 @@
 package lobby;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -99,7 +100,6 @@ public class Server {
 							while (true) {
 								output.writeObject(new UserNameRequest());
 								output.flush();
-								
 								System.out.println("name request send");
 								
 								// Get message from the client
@@ -110,8 +110,11 @@ public class Server {
 									obj.notifyAll();
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {
-								
-								System.out.println("Invalid name");};
+									System.out.println("Invalid name");}
+								catch(SocketException | EOFException e ) {
+									System.out.println("client disconnected");
+									break;
+								}
 							}
 						}
 						catch (IOException ex) {
