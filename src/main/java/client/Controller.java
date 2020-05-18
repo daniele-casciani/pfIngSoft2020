@@ -1,6 +1,9 @@
 package client;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import javafx.application.*;
 import javafx.fxml.FXMLLoader;
@@ -26,10 +29,41 @@ public class Controller extends  Application implements ClientController{
 	StackPane game = null;
 	Stage Sstage;
 	
+	private Listener listener;
+	private Thread listT;
+	private Socket socket;
+	private ObjectOutputStream output;
+	ClientLauncher clientlauncher=new ClientLauncher();
 	
 	
 	@Override
 	public void start(Stage stage) {
+
+		try {
+			
+			socket= new Socket("127.0.0.1", 51344);
+			output =new ObjectOutputStream(socket.getOutputStream());
+			
+		} catch (IOException e) {
+		System.out.print(" start server unreachble ");
+		e.printStackTrace();
+		System.out.print(" end server unreachble ");
+		}
+		
+		listener = new Listener(socket,this);
+		listT= new Thread (listener);
+		listT.start();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		Pstage= stage;
 		Thread.currentThread().setName("PrimaryStage");
 		try {
@@ -37,9 +71,9 @@ public class Controller extends  Application implements ClientController{
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
 			game = (StackPane)ploader.load();
 			Pscene = new Scene(game,1280,720);
-		} catch (IOException e) {
+		} catch (IOException e1) {
 			System.out.println("start impossibile caricare game.fxml");
-			e.printStackTrace();
+			e1.printStackTrace();
 			System.out.println("end impossibile caricare game.fxml");
 		}	
 			Pstage.setResizable(false);
@@ -156,9 +190,11 @@ public class Controller extends  Application implements ClientController{
 		if(user.isEmpty()) {
 			user="player " + Math.random()%1000;
 		}
-		client.sendMessage(new UserNameResponse(user));
+		System.out.println(user);
+		clientlauncher.sendMessage(new UserNameResponse(user));
 		
 		System.out.print("username sent " + user);
+		setText("logged as "+ user );
 	}
 
 	@Override
@@ -180,6 +216,7 @@ public class Controller extends  Application implements ClientController{
 		}
 		client.sendMessage(new PlayerNumberResponse(num));
 		System.out.print("number of player " + num);
+
 	}
 
 	@Override
@@ -230,5 +267,67 @@ public class Controller extends  Application implements ClientController{
 		
 		System.out.println("message bool choice sent");
 	}
+	public void handle(Message message) {
+		if (message instanceof MessageToClient) {
+			((MessageToClient)message).accept(clientlauncher);
+		}
+		else if (message instanceof MessageSystem) {
+			((MessageSystem)message).accept(clientlauncher);
+		}
+		
+	}
 
+public class Listener implements Runnable{
+	ObjectInputStream input;
+	Message message;
+	
+	
+	Listener(Socket socket,Controller controller){
+		try {
+			input=new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void  run() {
+		Thread.currentThread().setName("listener");
+		try {
+		while(true) {
+			try {
+				
+				message = (Message) input.readObject();
+				
+				Platform.runLater(()->{
+				try {
+					login();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				});
+			} catch (ClassNotFoundException e) {
+				System.out.print(" start message cast error ");
+				e.printStackTrace();
+				System.out.print(" end message cast error ");
+			}
+			
+		}
+		
+	
+		}catch(IOException e) {
+			System.out.print(" start socket error ");
+			e.printStackTrace();
+			System.out.print(" end socket error ");
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				System.out.print(" socket close error ");
+			}
+		}
+	}
+
+}
 }

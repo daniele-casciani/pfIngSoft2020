@@ -6,57 +6,29 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import utils.*;
 
 public class ClientLauncher implements Client {
 	private ClientController controller ;
-	private Socket socket;
-	private ObjectOutputStream output;
-	private Listener listener;
-	private Thread listT;
+
+	
 	
 	public static void main( String[] args ) {
 		 new ClientLauncher().main();
 	 }
 	public void main(){
-		try {
 			controller = new Controller();
 			Application.launch(Controller.class);
-			socket= new Socket("127.0.0.1", 51344);
-			output =new ObjectOutputStream(socket.getOutputStream());
-			listener = new Listener(socket,this);
-			listT= new Thread (listener);
-			listT.start();
-		} catch (IOException e) {
-		System.out.print(" start server unreachble ");
-		e.printStackTrace();
-		System.out.print(" end server unreachble ");
+		
 	}
 
-	}
 
 	@Override
 	public void sendMessage(Message message) {
-		try {
-			output.writeObject(message);
-			output.flush();
-		} catch (IOException e) {
-			System.out.print("errore : impossibile contattare il server");
-			e.printStackTrace();
-		}
 
 	}
 
-	public void handle(Message message) {
-		if (message instanceof MessageToClient) {
-			((MessageToClient)message).accept(this);
-		}
-		else if (message instanceof MessageSystem) {
-			((MessageSystem)message).accept(this);
-		}
-		
-	}
+	
 	
 	public void notify(InvalidAction message) {
 		controller.setText(message.getError());
@@ -158,6 +130,11 @@ public class ClientLauncher implements Client {
 		controller.construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
 		controller.addConstructor(0, 1);
 		controller.addConstructor(3, 4);
+		
+	}
+	@Override
+	public void handle(Message message) {
+		// TODO Auto-generated method stub
 		
 	}
 }

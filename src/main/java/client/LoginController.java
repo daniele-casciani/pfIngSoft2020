@@ -20,7 +20,7 @@ public class LoginController{
     }
     @FXML
     public void initialize(){
-    	usernametext.clear();
+    	usernametext.setText("");;
     	username=usernametext.getText();
     }
     String getusername(){
