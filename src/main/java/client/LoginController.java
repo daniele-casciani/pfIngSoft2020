@@ -21,6 +21,7 @@ public class LoginController{
     @FXML
     public void initialize(){
     	usernametext.clear();
+    	username=usernametext.getText();
     }
     String getusername(){
     	return username;

@@ -134,9 +134,7 @@ public class ClientLauncher implements Client {
 	}
 
 	public void execute(UserNameRequest request) {
-		
-		Platform.runLater(()->{
-		System.out.print("start run later");
+		System.out.println("start run later");
 		try {
 			controller.login();
 		} catch (IOException e) {
@@ -144,7 +142,6 @@ public class ClientLauncher implements Client {
 			e.printStackTrace();
 			System.out.println("end : impossibile aprire finestra login");
 		}
-		});
 	}
 
 	public void execute(EffectRequest request){
