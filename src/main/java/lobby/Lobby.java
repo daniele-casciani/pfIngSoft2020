@@ -2,15 +2,13 @@ package lobby;
 
 import game.*;
 import utils.*;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class Lobby implements ServerController , Runnable {
-	private Model model;
+public class Lobby implements ServerController , Runnable {
 	private ArrayList<User> userlist;
 	
 	public Lobby(ArrayList<User> userlist) {
@@ -18,8 +16,7 @@ class Lobby implements ServerController , Runnable {
 	}
 	
 	void createGame() {
-		Model game = new Game(userlist, createDeck(), this);
-		this.model=game;
+		new Game(userlist, createDeck(), this);
 	 }
 	
 	ArrayList<Integer> createDeck(){
@@ -51,7 +48,7 @@ class Lobby implements ServerController , Runnable {
 				
 			} catch (IOException e) {
 				state = false;
-				invalidAction(player.getUserID(), "Selection not Valid");
+				invalidAction(player.getUserID(), "please retry selection");
 			}
 			
 		}
@@ -82,7 +79,7 @@ class Lobby implements ServerController , Runnable {
 				
 			} catch (IOException e) {
 				state = false;
-				invalidAction(player.getUserID(), "Selection not Valid");
+				invalidAction(player.getUserID(), "Please retry selection");
 			}
 			
 		}
@@ -110,7 +107,7 @@ class Lobby implements ServerController , Runnable {
 							try {
 								response = ((MoveResponse)(MessageToServer)input).getMovement();
 								break;
-							}catch(ClassCastException ex) {invalidAction(player, "Move not Valid");};
+							}catch(ClassCastException ex) {invalidAction(player, "plase retry retry to move");};
 							
 						} catch (IOException e) {
 						e.printStackTrace();
@@ -142,7 +139,7 @@ class Lobby implements ServerController , Runnable {
 							try {
 								response = ((BuildResponse)(MessageToServer)input).getBuilding();
 								break;
-							}catch(ClassCastException ex) {invalidAction(player, "Build not Valid");};
+							}catch(ClassCastException ex) {invalidAction(player, "plaese retry to build");};
 							
 						} catch (IOException e) {
 						e.printStackTrace();
@@ -165,7 +162,6 @@ class Lobby implements ServerController , Runnable {
 					output.writeObject(new InvalidAction(message));
 					output.flush();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
 			}
@@ -184,7 +180,6 @@ class Lobby implements ServerController , Runnable {
 				output.writeObject(new Loser());
 				output.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}				
 		}
@@ -197,12 +192,10 @@ class Lobby implements ServerController , Runnable {
 		
 		for (User x : userlist) {
 			try {
-				
 				output = new ObjectOutputStream(x.getSocket().getOutputStream());
 				output.writeObject(new Winner());
 				output.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}				
 		}
@@ -315,17 +308,7 @@ class Lobby implements ServerController , Runnable {
 	 
 	@Override
 	public void run() {
-
-		try {
-			createGame();
-			
-			while(true) {
-				
-			}
-			
-		} finally {
-			close();
-		}
+		createGame();
 	}
 
 	@Override
