@@ -49,7 +49,6 @@ public class ClientLauncher implements Client {
 	}
 
 	public void handle(Message message) {
-		System.out.print(" handling message ");
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
 		}
@@ -102,9 +101,9 @@ public class ClientLauncher implements Client {
 		try {
 			 cardID = controller.catchSelection(request.getCardlist(),1).get(0);
 		} catch (IOException e) {
-			System.out.print("start impossibile caricare select image");
+			System.out.println("start impossibile caricare select image");
 			e.printStackTrace();
-			System.out.print("end impossibile caricare select image");
+			System.out.println("end impossibile caricare select image");
 			return;
 		}
 		sendMessage(new ChoseCardResponse(cardID));
@@ -126,23 +125,24 @@ public class ClientLauncher implements Client {
 		try {
 			array = controller.catchSelection(request.getCardlist(),request.getNumber());
 		} catch (IOException e) {
-			System.out.print("start impossibile caricare select image");
+			System.out.println("start impossibile caricare select image");
 			e.printStackTrace();
-			System.out.print("end impossibile caricare select image");
+			System.out.println("end impossibile caricare select image");
 			return;
 		}
 		sendMessage(new SelectCardResponse(array));
 	}
 
 	public void execute(UserNameRequest request) {
-		System.out.print("start run later");
+		
 		Platform.runLater(()->{
+		System.out.print("start run later");
 		try {
 			controller.login();
 		} catch (IOException e) {
-			System.out.print("start : impossibile aprire finestra login");
+			System.out.println("start : impossibile aprire finestra login");
 			e.printStackTrace();
-			System.out.print("end : impossibile aprire finestra login");
+			System.out.println("end : impossibile aprire finestra login");
 		}
 		});
 	}
@@ -152,7 +152,7 @@ public class ClientLauncher implements Client {
 		try {
 			controller.boolChoice("attivare il potere?");
 		} catch (IOException e) {
-			System.out.print("errore : impossibile richiedere scelta");
+			System.out.println("errore : impossibile richiedere scelta");
 		}
 	}
 
