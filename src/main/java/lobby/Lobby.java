@@ -25,7 +25,7 @@ public class Lobby implements ServerController , Runnable {
 		ArrayList<Integer> deck= new ArrayList<Integer>();
 		b = askEffect(userlist.get(0).getUserID(), "usare divinità?");
 		if (b) {
-		 deck = (ArrayList<Integer>) Arrays.asList(1, 2, 3, 4, 5, 6, 8, 9, 10);
+		 deck = (ArrayList<Integer>) Arrays.asList(new Integer[]{1, 2, 3, 4, 5, 6, 8, 9, 10});
 		}
 		return deck;
 	 }
@@ -330,8 +330,10 @@ public class Lobby implements ServerController , Runnable {
 		try {
 			createGame();
 			game.startGame();
+			System.out.println("end game");
 		} finally {
 			close();
+			System.out.println("lobby closed");
 		}
 
 	}

@@ -380,6 +380,7 @@ public class Controller extends  Application implements ClientController{
 			} finally {
 				try {
 					socket.close();
+					System.out.println("socket closed");
 				} catch (IOException e) {
 					System.out.println("socket close error ");
 				}

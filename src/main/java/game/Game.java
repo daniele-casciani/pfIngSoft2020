@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Game implements Model {
 	private int round=0;
 	private Player currentPlayer;
-	private ArrayList<Player> playerList;
+	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private Map map = new Map();
 	private ArrayList<ActivePower> effectList;
 	private ServerController serverController;

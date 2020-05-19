@@ -15,7 +15,7 @@ public class SelectController {
     @FXML
     private TilePane checkpane;
     
-    SelectController(ArrayList<Integer> card){
+    public SelectController(ArrayList<Integer> card){
     	this.card=card;
     }
     

@@ -27,7 +27,7 @@ public class BooleanController {
     	((Stage) butyes.getScene().getWindow()).close();
     }
 
-    BooleanController(){
+    public BooleanController(){
     	choice=false;
     }
     
