@@ -22,37 +22,31 @@ import javafx.stage.Stage;
 import utils.*;
 
 public class Controller extends  Application implements ClientController{
-	Stage Pstage;
-	Scene Pscene;
-	FXMLLoader ploader;
-	StackPane game = null;
-	Stage Sstage;
+	private Stage Pstage;
+	private Scene Pscene;
+	private FXMLLoader ploader;
+	private StackPane game = null;
+	private Stage Sstage;
 	
 	private Listener listener;
 	private Thread listT;
 	private Socket socket;
 	private ObjectOutputStream output;
 	
-	
 	@Override
 	public void start(Stage stage) {
 
 		try {
-			
 			socket= new Socket("127.0.0.1", 51344);
 			output =new ObjectOutputStream(socket.getOutputStream());
-			
-		} catch (IOException e) {
-		System.out.print(" start server unreachble ");
-		e.printStackTrace();
-		System.out.print(" end server unreachble ");
-		}
-		
+			} catch (IOException e) {
+				System.out.print(" start server unreachble ");
+				e.printStackTrace();
+				System.out.print(" end server unreachble ");
+			}
 		listener = new Listener(socket,this);
 		listT= new Thread (listener);
 		listT.start();
-		
-		
 		
 		Pstage= stage;
 		Thread.currentThread().setName("PrimaryStage");
@@ -66,24 +60,29 @@ public class Controller extends  Application implements ClientController{
 			e1.printStackTrace();
 			System.out.println("end impossibile caricare game.fxml");
 		}	
-			Pstage.setResizable(false);
-			Pstage.setScene(Pscene);
-			Pstage.show();
+		Pstage.setResizable(false);
+		Pstage.setScene(Pscene);
+		Pstage.show();
+		System.out.println("Primary stage show");
 			
-			System.out.println("Primary stage show");
-			
-			Sstage = new Stage();
-			Sstage.initOwner(Pstage);
-			Sstage.initModality(Modality.WINDOW_MODAL);
-			Sstage.setResizable(false);
-			System.out.println("Secondary stage created");
+		Sstage = new Stage();
+		Sstage.initOwner(Pstage);
+		Sstage.initModality(Modality.WINDOW_MODAL);
+		Sstage.setResizable(false);
+		System.out.println("Secondary stage created");
 	}
 
+	public void notify(InvalidAction message) {
+		setText(message.getError());
+	}
 	@Override
 	public void setText(String message) {
 		((GameController) ploader.getController()).setText(message);
 	}
 
+	public void notify(NewBuilderUpdate update) {
+		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
+	}
 	@Override
 	public void addConstructor(int x, int y) {
 		GameController cont = ploader.getController();
@@ -93,6 +92,21 @@ public class Controller extends  Application implements ClientController{
 		cont.addElement(node, x, y);
 	}
 
+	public void notify(SwitchPositionUpdate update) {
+		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
+		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
+		addConstructor(0, 1);
+		addConstructor(3, 4);
+		
+		}
+	public void notify(MoveUpdate update) {
+		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
+		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
+		addConstructor(3, 4);
+	}
+	public void notify(BuildUpdate update) {
+		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
+	}
 	@Override
 	public void construction(int x, int y, int z) {
 		GameController cont = ploader.getController();
@@ -130,7 +144,10 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
-
+	
+	public void notify(Loser loser) {
+		endLoser(loser);	
+	}
 	@Override
 	public void endLoser(Loser loser) {
 		System.out.println("start lose");
@@ -148,6 +165,9 @@ public class Controller extends  Application implements ClientController{
 		return;
 	}
 
+	public void notify(Winner winner) {
+		endWinner(winner);	
+	}
 	@Override
 	public void endWinner(Winner winner) {
 		System.out.println("start win");
@@ -165,6 +185,16 @@ public class Controller extends  Application implements ClientController{
 		return;
 	}
 
+	public void execute(UserNameRequest request) {
+		System.out.println("start run later");
+		try {
+			login();
+		} catch (IOException e) {
+			System.out.println("start : impossibile aprire finestra login");
+			e.printStackTrace();
+			System.out.println("end : impossibile aprire finestra login");
+		}
+	}
 	@Override
 	public void login() throws IOException {
 		System.out.println("starting login");
@@ -173,12 +203,12 @@ public class Controller extends  Application implements ClientController{
 		loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
 		AnchorPane an;
 		an = (AnchorPane) loader.load();
-		Scene scene = new Scene(an,480,640);
+		Scene scene = new Scene(an,470,470);
 		Sstage.setScene(scene);
 		Sstage.showAndWait();
 		String user = ((LoginController) loader.getController()).getusername();
 		if(user.isEmpty()) {
-			user=("player " + (int)(Math.random()*1000));
+			user=("player" + (int)(Math.random()*1000));
 		}
 		System.out.println(user);
 		sendMessage(new UserNameResponse(user));
@@ -187,6 +217,10 @@ public class Controller extends  Application implements ClientController{
 		setText("logged as "+ user );
 	}
 
+	public void execute(PlayerNumberRequest request) {
+		setText("digita numerogiocatori");
+		playerNumber();
+	}
 	@Override
 	public void playerNumber() {
 		System.out.println("starting player selection");
@@ -209,18 +243,56 @@ public class Controller extends  Application implements ClientController{
 
 	}
 
+	public void execute(BuildRequest message) {
+		setText("scegli dove costruire");
+		catchDrag();
+	}
+	public void execute(MoveRequest request) {
+		setText("scegli dove muoverti");
+		catchDrag();
+	}
 	@Override
 	public void catchDrag() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	public void execute(BuilderRequest message) {
+		setText("posiziona il costruttore");
+		catchPosition();
+	}
 	@Override
 	public void catchPosition() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	public void execute(SelectCardRequest request) {
+		setText("scegli le carte da usare");
+		ArrayList<Integer> array;
+		try {
+			array = catchSelection(request.getCardlist(),request.getNumber());
+		} catch (IOException e) {
+			System.out.println("start impossibile caricare select image");
+			e.printStackTrace();
+			System.out.println("end impossibile caricare select image");
+			return;
+		}
+		sendMessage(new SelectCardResponse(array));
+	}
+	public void execute(ChoseCardRequest request) {
+		setText("scegli la tua carta");
+		int cardID;
+		try {
+			 cardID = catchSelection(request.getCardlist(),1).get(0);
+		} catch (IOException e) {
+			System.out.println("start impossibile caricare select image");
+			e.printStackTrace();
+			System.out.println("end impossibile caricare select image");
+			return;
+		}
+		sendMessage(new ChoseCardResponse(cardID));
+	}
 	@Override
 	public ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException {
 		System.out.println("starting divinity selection");
@@ -240,6 +312,14 @@ public class Controller extends  Application implements ClientController{
 
 	}
 
+	public void execute(EffectRequest request){
+		setText("vuoi attivare il tuo potere?");
+		try {
+			boolChoice("attivare il potere?");
+		} catch (IOException e) {
+			System.out.println("errore : impossibile richiedere scelta");
+		}
+	}		
 	@Override
 	public void boolChoice(String string) throws IOException {
 		System.out.println("starting bool choice");
@@ -257,6 +337,7 @@ public class Controller extends  Application implements ClientController{
 		
 		System.out.println("message bool choice sent");
 	}
+	
 	public void handle(Message message) {
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
@@ -266,157 +347,7 @@ public class Controller extends  Application implements ClientController{
 		}
 		
 	}
-
-public class Listener implements Runnable{
-	ObjectInputStream input;
-	Message message;
 	
-	
-	Listener(Socket socket,Controller controller){
-		try {
-			input=new ObjectInputStream(socket.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void  run() {
-		Thread.currentThread().setName("listener");
-		try {
-		while(true) {
-			try {
-				
-				message = (Message) input.readObject();
-				
-				Platform.runLater(()->{
-				handle(message);
-				});
-			} catch (ClassNotFoundException e) {
-				System.out.print(" start message cast error ");
-				e.printStackTrace();
-				System.out.print(" end message cast error ");
-			}
-			
-		}
-		
-	
-		}catch(IOException e) {
-			System.out.print(" start socket error ");
-			e.printStackTrace();
-			System.out.print(" end socket error ");
-		} finally {
-			try {
-				socket.close();
-			} catch (IOException e) {
-				System.out.print(" socket close error ");
-			}
-		}
-	}
-
-}
-public void notify(InvalidAction message) {
-	setText(message.getError());
-}
-
-public void notify(NewBuilderUpdate update) {
-	addConstructor(update.getPosition()[0],update.getPosition()[1]);	
-}
-
-public void notify(BuildUpdate update) {
-	construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
-}
-
-public void notify(MoveUpdate update) {
-	construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
-	construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
-	addConstructor(3, 4);
-}
-public void notify(Loser loser) {
-	endLoser(loser);
-	
-}
-
-public void notify(Winner winner) {
-	endWinner(winner);
-	
-}
-
-public void execute(BuilderRequest message) {
-	setText("posiziona il costruttore");
-	catchPosition();
-}
-
-public void execute(BuildRequest message) {
-	setText("scegli dove costruire");
-	catchDrag();
-}
-
-public void execute(ChoseCardRequest request) {
-	setText("scegli la tua carta");
-	int cardID;
-	try {
-		 cardID = catchSelection(request.getCardlist(),1).get(0);
-	} catch (IOException e) {
-		System.out.println("start impossibile caricare select image");
-		e.printStackTrace();
-		System.out.println("end impossibile caricare select image");
-		return;
-	}
-	sendMessage(new ChoseCardResponse(cardID));
-}
-
-public void execute(MoveRequest request) {
-	setText("scegli dove muoverti");
-	catchDrag();
-}
-
-public void execute(PlayerNumberRequest request) {
-	setText("digita numerogiocatori");
-	playerNumber();
-}
-
-public void execute(SelectCardRequest request) {
-	setText("scegli le carte da usare");
-	ArrayList<Integer> array;
-	try {
-		array = catchSelection(request.getCardlist(),request.getNumber());
-	} catch (IOException e) {
-		System.out.println("start impossibile caricare select image");
-		e.printStackTrace();
-		System.out.println("end impossibile caricare select image");
-		return;
-	}
-	sendMessage(new SelectCardResponse(array));
-}
-
-public void execute(UserNameRequest request) {
-	System.out.println("start run later");
-	try {
-		login();
-	} catch (IOException e) {
-		System.out.println("start : impossibile aprire finestra login");
-		e.printStackTrace();
-		System.out.println("end : impossibile aprire finestra login");
-	}
-}
-
-public void execute(EffectRequest request){
-	setText("vuoi attivare il tuo potere?");
-	try {
-		boolChoice("attivare il potere?");
-	} catch (IOException e) {
-		System.out.println("errore : impossibile richiedere scelta");
-	}
-}
-
-public void execute(SwitchPositionUpdate update) {
-	construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
-	construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
-	addConstructor(0, 1);
-	addConstructor(3, 4);
-	
-	}
 	public void sendMessage(Message message) {
 		try {
 			output.writeObject(message);
@@ -426,10 +357,53 @@ public void execute(SwitchPositionUpdate update) {
 		}
 	}
 
-	public void notify(SwitchPositionUpdate switchPositionUpdate) {
-		// TODO Auto-generated method stub
+	public class Listener implements Runnable{
+		ObjectInputStream input;
+		Message message;
 		
+		
+		Listener(Socket socket,Controller controller){
+			try {
+				input=new ObjectInputStream(socket.getInputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
+		public void  run() {
+			Thread.currentThread().setName("listener");
+			try {
+			while(true) {
+				try {
+					
+					message = (Message) input.readObject();
+					
+					Platform.runLater(()->{
+					handle(message);
+					});
+				} catch (ClassNotFoundException e) {
+					System.out.print(" start message cast error ");
+					e.printStackTrace();
+					System.out.print(" end message cast error ");
+				}
+				
+			}
+			
+		
+			}catch(IOException e) {
+				System.out.print(" start socket error ");
+				e.printStackTrace();
+				System.out.print(" end socket error ");
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					System.out.print(" socket close error ");
+				}
+			}
+		}
+
 	}
 
 }
-
