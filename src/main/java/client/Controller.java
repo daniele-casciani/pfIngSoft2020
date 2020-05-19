@@ -1,11 +1,9 @@
 package client;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import javafx.application.*;
 import javafx.fxml.FXMLLoader;
@@ -81,14 +79,14 @@ public class Controller extends  Application implements ClientController{
 	public void notify(InvalidAction message) {
 		setText(message.getError());
 	}
-	public void setText(String message) {
+	private void setText(String message) {
 		((GameController) ploader.getController()).setText(message);
 	}
 
 	public void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
 	}
-	public void addConstructor(int x, int y) {
+	private void addConstructor(int x, int y) {
 		GameController cont = ploader.getController();
 		ImageView node = new ImageView("/image/builder.png");
 		node.setFitHeight(80);
@@ -149,9 +147,6 @@ public class Controller extends  Application implements ClientController{
 	}
 	
 	public void notify(Loser loser) {
-		endLoser(loser);	
-	}
-	public void endLoser(Loser loser) {
 		System.out.println("start lose");
 		
 		AnchorPane an = new AnchorPane();
@@ -168,9 +163,6 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public void notify(Winner winner) {
-		endWinner(winner);	
-	}
-	public void endWinner(Winner winner) {
 		System.out.println("start win");
 		
 		AnchorPane an = new AnchorPane();
@@ -187,34 +179,29 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public void execute(UserNameRequest request) {
-		System.out.println("start run later");
+		System.out.println("start login");
 		try {
-			login();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
+			AnchorPane an;
+			an = (AnchorPane) loader.load();
+			Scene scene = new Scene(an,470,470);
+			Sstage.setScene(scene);
+			Sstage.showAndWait();
+			
+			String user = ((LoginController) loader.getController()).getusername();
+			if(user.isEmpty()) {
+				user=("player" + (int)(Math.random()*1000));
+			}
+			sendMessage(new UserNameResponse(user));
+			System.out.println("username sent " + user);
+			setText("logged as "+ user );
+			
 		} catch (IOException e) {
 			System.out.println("start : impossibile aprire finestra login");
 			e.printStackTrace();
 			System.out.println("end : impossibile aprire finestra login");
 		}
-	}
-	public void login() throws IOException {
-		System.out.println("starting login");
-		
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
-		AnchorPane an;
-		an = (AnchorPane) loader.load();
-		Scene scene = new Scene(an,470,470);
-		Sstage.setScene(scene);
-		Sstage.showAndWait();
-		String user = ((LoginController) loader.getController()).getusername();
-		if(user.isEmpty()) {
-			user=("player" + (int)(Math.random()*1000));
-		}
-		System.out.println(user);
-		sendMessage(new UserNameResponse(user));
-		
-		System.out.println("username sent " + user);
-		setText("logged as "+ user );
 	}
 
 	public void execute(PlayerNumberRequest request) {
@@ -244,7 +231,8 @@ public class Controller extends  Application implements ClientController{
 		sendMessage(new PlayerNumberResponse(num));
 		System.out.println("number of player " + num);
 		Platform.runLater(()->{
-			setText("numero giocatori corretto ");
+			setText("impostato numero giocatori");
+			setText("in attesa di altri giocatori ");
 			gc.cleanTextInput();});
 		}).start();
 	}
@@ -296,6 +284,7 @@ public class Controller extends  Application implements ClientController{
 			return;
 		}
 		sendMessage(new ChoseCardResponse(cardID));
+		setText("hai scelto la carta "+cardID);
 	}
 	public ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException {
 		System.out.println("starting divinity selection");
@@ -304,9 +293,8 @@ public class Controller extends  Application implements ClientController{
 		AnchorPane an = (AnchorPane)loader.load();
 		Scene scene = new Scene(an,480,640);
 		Sstage.setScene(scene);
-		int numcard = cardlist.size();
 		ArrayList<Integer> array = null;
-		while (numcard!=i) {
+		while (array.size()!=i) {
 			Sstage.showAndWait();
 			array = ((SelectController)loader.getController()).getSelection();
 		}
@@ -316,30 +304,24 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public void execute(BooleanRequest request){
-		setText(request.getStr());
-		try {
-			boolChoice(request.getStr());
-		} catch (IOException e) {
-			System.out.println("start impossibile richiedere scelta");
-			e.printStackTrace();
-			System.out.println("end impossibile richiedere scelta");
-		}
-	}		
-	public void boolChoice(String string) throws IOException {
+		setText(request.getStr());		
 		System.out.println("starting bool choice");
-		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/scelta.fxml"));
+		try {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/fxml/scelta.fxml"));
 		AnchorPane an = loader.load();
 		Scene scene = new Scene(an,220,100);
-		Sstage.initModality(Modality.APPLICATION_MODAL);
-		Sstage.setResizable(false);
-		((BooleanController) loader.getController()).setText(string);
+		((BooleanController) loader.getController()).setText(request.getStr());
 		Sstage.setScene(scene);
 		Sstage.showAndWait();
 		boolean choice = ((BooleanController) loader.getController()).getChoice();
 		sendMessage(new BooleanResponse(choice));
-		
-		System.out.println("message bool choice sent");
+		System.out.println("selected "+choice);
+	} catch (IOException e) {
+		System.out.println("start impossibile richiedere scelta");
+		e.printStackTrace();
+		System.out.println("end impossibile richiedere scelta");
+	}
 	}
 	
 	public void handle(Message message) {
@@ -349,7 +331,6 @@ public class Controller extends  Application implements ClientController{
 		else if (message instanceof MessageSystem) {
 			((MessageSystem)message).accept(this);
 		}
-		
 	}
 	
 	public void sendMessage(Message message) {
@@ -364,25 +345,23 @@ public class Controller extends  Application implements ClientController{
 	public class Listener implements Runnable{
 		ObjectInputStream input;
 		Message message;
-		
-		
+	
 		Listener(Socket socket,Controller controller){
 			try {
 				input=new ObjectInputStream(socket.getInputStream());
 			} catch (IOException e) {
+				System.out.println("start error socket input creation ");
 				e.printStackTrace();
+				System.out.println("end error socket input creation ");
 			}
 		}
-		
 		@Override
 		public void  run() {
 			Thread.currentThread().setName("listener");
 			try {
 			while(true) {
 				try {
-					
 					message = (Message) input.readObject();
-					
 					Platform.runLater(()->{
 					handle(message);
 					});
@@ -391,23 +370,19 @@ public class Controller extends  Application implements ClientController{
 					e.printStackTrace();
 					System.out.println(" end message cast error ");
 				}
-				
 			}
-			
-		
 			}catch(IOException e) {
-				System.out.println(" start socket error ");
+				System.out.println("start socket error ");
 				e.printStackTrace();
-				System.out.println(" end socket error ");
+				System.out.println("end socket error ");
 			} finally {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					System.out.println(" socket close error ");
+					System.out.println("socket close error ");
 				}
 			}
+			return;
 		}
-
 	}
-
 }
