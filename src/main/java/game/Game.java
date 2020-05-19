@@ -27,11 +27,13 @@ public class Game implements Model {
 				playerList.add(new Player(participants.get(i).getUserID(), chosenCard, this));
 				selectedCards.remove(chosenCard);
 			}
+			playerList.add(0,new Player(participants.get(0).getUserID(), selectedCards.get(0), this));
 		}
 		for (Player x : playerList) {
 			currentPlayer=x;
 			x.getDivinity().setup();
 		}
+		currentPlayer= playerList.get(0);
 	}
 	
 	private Player rotation() {

@@ -30,8 +30,8 @@ package it.polimi.ingsw.pfIngSoft2020;
 		}
 	
 		public void sendresponse(Object message, ObjectOutputStream out) throws IOException {
-			if(message instanceof EffectRequest) {
-				out.writeObject(new EffectResponse(true));
+			if(message instanceof BooleanRequest) {
+				out.writeObject(new BooleanResponse(true));
 				out.flush();
 			}
 		}

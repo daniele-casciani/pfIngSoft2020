@@ -10,13 +10,14 @@ import java.util.Arrays;
 
 public class Lobby implements ServerController , Runnable {
 	private ArrayList<User> userlist;
+	Model game;
 	
 	public Lobby(ArrayList<User> userlist) {
 		this.userlist=userlist;
 	}
 	
 	void createGame() {
-		new Game(userlist, createDeck(), this);
+		game = new Game(userlist, createDeck(), this);
 	 }
 	
 	ArrayList<Integer> createDeck(){
@@ -316,9 +317,7 @@ public class Lobby implements ServerController , Runnable {
 		Thread.currentThread().setName(Thread.currentThread().getName()+ " lobby");
 		try {
 			createGame();
-			while(true) {
-				
-			}
+			game.startGame();
 		} finally {
 			close();
 		}
@@ -357,13 +356,13 @@ public class Lobby implements ServerController , Runnable {
 			if(user.equals(x.getUserID())) {
 				while(true) {
 					try {
-						input = new ObjectInputStream(x.getSocket().getInputStream());
-						output = new ObjectOutputStream(x.getSocket().getOutputStream());
+						input = x.getInput();
+						output = x.getOutput();
 							
-						output.writeObject(new EffectRequest(text));
+						output.writeObject(new BooleanRequest(text));
 						output.flush();
 							try {
-								response = ((EffectResponse)(MessageToServer)(Message)input.readObject()).getBool();
+								response = ((BooleanResponse)(MessageToServer)(Message)input.readObject()).getBool();
 								break;
 							}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
 							

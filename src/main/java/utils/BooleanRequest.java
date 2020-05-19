@@ -2,12 +2,12 @@ package utils;
 
 import client.Controller;
 
-public class EffectRequest implements MessageToClient {
+public class BooleanRequest implements MessageToClient {
 	
 	private String str;
 	private static final long serialVersionUID = 1L;
 	
-	public EffectRequest(String text){
+	public BooleanRequest(String text){
 		this.str=text;
 	}
 

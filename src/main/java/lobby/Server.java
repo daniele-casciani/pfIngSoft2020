@@ -111,6 +111,7 @@ public class Server {
 									
 									String message = ((UserNameResponse)(Message) input.readObject()).getName();
 									synUserList.add(new User(message,socket,input,output));
+									System.out.println("new user: "+message);
 									synchronized(obj) {obj.notify();}
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {

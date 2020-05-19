@@ -1,11 +1,11 @@
 package utils;
 
-public class EffectResponse implements MessageToServer{
+public class BooleanResponse implements MessageToServer{
 
 	private static final long serialVersionUID = 1L;
 	private boolean bool;
 	
-	public EffectResponse(boolean bool){
+	public BooleanResponse(boolean bool){
 		this.bool = bool;
 	}
 	

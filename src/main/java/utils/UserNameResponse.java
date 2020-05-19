@@ -12,7 +12,7 @@ public class UserNameResponse implements MessageSystem{
 	}
 	
 	public UserNameResponse(String username) {
-		username=name;
+		name=username;
 	}
 
 	@Override

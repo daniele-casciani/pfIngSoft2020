@@ -1,9 +1,11 @@
 package client;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import javafx.application.*;
 import javafx.fxml.FXMLLoader;
@@ -313,12 +315,14 @@ public class Controller extends  Application implements ClientController{
 
 	}
 
-	public void execute(EffectRequest request){
+	public void execute(BooleanRequest request){
 		setText(request.getStr());
 		try {
 			boolChoice(request.getStr());
 		} catch (IOException e) {
-			System.out.println("errore : impossibile richiedere scelta");
+			System.out.println("start impossibile richiedere scelta");
+			e.printStackTrace();
+			System.out.println("end impossibile richiedere scelta");
 		}
 	}		
 	public void boolChoice(String string) throws IOException {
@@ -333,7 +337,7 @@ public class Controller extends  Application implements ClientController{
 		Sstage.setScene(scene);
 		Sstage.showAndWait();
 		boolean choice = ((BooleanController) loader.getController()).getChoice();
-		sendMessage(new EffectResponse(choice));
+		sendMessage(new BooleanResponse(choice));
 		
 		System.out.println("message bool choice sent");
 	}
