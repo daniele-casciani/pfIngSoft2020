@@ -44,9 +44,10 @@ public class Controller extends  Application implements ClientController{
 			socket= new Socket("127.0.0.1", 51344);
 			output =new ObjectOutputStream(socket.getOutputStream());
 			} catch (IOException e) {
-				System.out.print(" start server unreachble ");
+				System.out.println("start server unreachble ");
 				e.printStackTrace();
-				System.out.print(" end server unreachble ");
+				System.out.println("end server unreachble ");
+				return;
 			}
 		listener = new Listener(socket,this);
 		listT= new Thread (listener);
@@ -309,7 +310,8 @@ public class Controller extends  Application implements ClientController{
 		try {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/fxml/scelta.fxml"));
-		AnchorPane an = loader.load();
+		AnchorPane an;
+		an = (AnchorPane)loader.load();
 		Scene scene = new Scene(an,220,100);
 		((BooleanController) loader.getController()).setText(request.getStr());
 		Sstage.setScene(scene);

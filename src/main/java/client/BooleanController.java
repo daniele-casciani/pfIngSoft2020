@@ -16,7 +16,7 @@ public class BooleanController {
     private Button butno;
 
     @FXML
-    void SetNo(ActionEvent event) {
+    void setNo(ActionEvent event) {
     	choice=false;
     	((Stage) butyes.getScene().getWindow()).close();
     }
