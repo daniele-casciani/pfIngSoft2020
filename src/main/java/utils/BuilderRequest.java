@@ -1,6 +1,4 @@
 package utils;
-
-import client.ClientLauncher;
 import client.Controller;
 
 public class BuilderRequest implements MessageToClient {

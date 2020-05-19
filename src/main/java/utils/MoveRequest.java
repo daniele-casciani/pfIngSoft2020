@@ -1,6 +1,5 @@
 package utils;
 
-import client.ClientLauncher;
 import client.Controller;
 
 public class MoveRequest implements MessageToClient{

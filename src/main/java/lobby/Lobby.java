@@ -20,7 +20,12 @@ public class Lobby implements ServerController , Runnable {
 	 }
 	
 	ArrayList<Integer> createDeck(){
-		ArrayList<Integer> deck = (ArrayList<Integer>) Arrays.asList(1, 2, 3, 4, 5, 6, 8, 9, 10);
+		boolean b;
+		ArrayList<Integer> deck= new ArrayList<Integer>();
+		b = askEffect(userlist.get(0).getUserID(), "usare divinità?");
+		if (b) {
+		 deck = (ArrayList<Integer>) Arrays.asList(1, 2, 3, 4, 5, 6, 8, 9, 10);
+		}
 		return deck;
 	 }
 	
@@ -62,22 +67,21 @@ public class Lobby implements ServerController , Runnable {
 		boolean state = false;
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		
 		ArrayList<Integer> selectedCards = null;
 		
 		while(state == false) {
 			try {
 				
-				input = new ObjectInputStream(player.getSocket().getInputStream());
-				output = new ObjectOutputStream(player.getSocket().getOutputStream());
+				input = new ObjectInputStream(player.getInput());
+				output = new ObjectOutputStream(player.getOutput());
 				
 				output.writeObject(new SelectCardRequest(deck,userlist.size()));
 				output.flush();
 				
-				selectedCards = ((SelectCardResponse)(MessageToServer)input).getCard();
+				selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
 				state = true;
 				
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				state = false;
 				invalidAction(player.getUserID(), "Please retry selection");
 			}
@@ -299,7 +303,7 @@ public class Lobby implements ServerController , Runnable {
 		            x.getSocket().close();
 		            break;
 		        } catch (IOException e) {
-		            e.printStackTrace();
+		        	System.out.println("socket closed "+x.getUserID());
 		        }
 			}			
 		 }
@@ -312,11 +316,9 @@ public class Lobby implements ServerController , Runnable {
 		Thread.currentThread().setName(Thread.currentThread().getName()+ " lobby");
 		try {
 			createGame();
-			
 			while(true) {
 				
 			}
-			
 		} finally {
 			close();
 		}
@@ -345,7 +347,7 @@ public class Lobby implements ServerController , Runnable {
 	}
 
 	@Override
-	public boolean askEffect(String user) {
+	public boolean askEffect(String user, String text) {
 		ObjectOutputStream output;
 		ObjectInputStream input;
 		
@@ -358,12 +360,12 @@ public class Lobby implements ServerController , Runnable {
 						input = new ObjectInputStream(x.getSocket().getInputStream());
 						output = new ObjectOutputStream(x.getSocket().getOutputStream());
 							
-						output.writeObject(new EffectRequest());
+						output.writeObject(new EffectRequest(text));
 						output.flush();
 							try {
-								response = ((EffectResponse)(MessageToServer)input).getBool();
+								response = ((EffectResponse)(MessageToServer)(Message)input.readObject()).getBool();
 								break;
-							}catch(ClassCastException ex) {invalidAction(user, "Please retry");};
+							}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
 							
 						} catch (IOException e) {
 						e.printStackTrace();

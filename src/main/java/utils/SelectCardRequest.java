@@ -1,8 +1,6 @@
 package utils;
 
 import java.util.ArrayList;
-
-import client.ClientLauncher;
 import client.Controller;
 
 //getCardlist return array of divinity ID

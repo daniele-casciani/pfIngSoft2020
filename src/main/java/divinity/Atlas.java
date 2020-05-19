@@ -32,7 +32,7 @@ public final class Atlas extends Divinity {
 			Level whereBuild = (Level)end;
 			BuilderAction nowbuild = new BuilderAction(game);
 			
-			if(game.getController().askEffect(game.getCurrentPlayer().getName())) {
+			if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) {
 				if(isPossibleBuild( builderCell, whereBuild ) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName()) ) {
 					
 					nowbuild.buildDome(whereBuild);

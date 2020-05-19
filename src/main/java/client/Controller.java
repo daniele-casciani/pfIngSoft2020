@@ -33,6 +33,10 @@ public class Controller extends  Application implements ClientController{
 	private Socket socket;
 	private ObjectOutputStream output;
 	
+	public static void main( String[] args ) {
+		Application.launch(Controller.class);
+	 }
+	
 	@Override
 	public void start(Stage stage) {
 
@@ -75,7 +79,6 @@ public class Controller extends  Application implements ClientController{
 	public void notify(InvalidAction message) {
 		setText(message.getError());
 	}
-	@Override
 	public void setText(String message) {
 		((GameController) ploader.getController()).setText(message);
 	}
@@ -83,7 +86,6 @@ public class Controller extends  Application implements ClientController{
 	public void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
 	}
-	@Override
 	public void addConstructor(int x, int y) {
 		GameController cont = ploader.getController();
 		ImageView node = new ImageView("/image/builder.png");
@@ -107,8 +109,7 @@ public class Controller extends  Application implements ClientController{
 	public void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 	}
-	@Override
-	public void construction(int x, int y, int z) {
+	private void construction(int x, int y, int z) {
 		GameController cont = ploader.getController();
 		cont.clearCell(x, y);
 		if (z>0|z<5) {
@@ -148,7 +149,6 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Loser loser) {
 		endLoser(loser);	
 	}
-	@Override
 	public void endLoser(Loser loser) {
 		System.out.println("start lose");
 		
@@ -168,7 +168,6 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Winner winner) {
 		endWinner(winner);	
 	}
-	@Override
 	public void endWinner(Winner winner) {
 		System.out.println("start win");
 		
@@ -195,7 +194,6 @@ public class Controller extends  Application implements ClientController{
 			System.out.println("end : impossibile aprire finestra login");
 		}
 	}
-	@Override
 	public void login() throws IOException {
 		System.out.println("starting login");
 		
@@ -213,34 +211,40 @@ public class Controller extends  Application implements ClientController{
 		System.out.println(user);
 		sendMessage(new UserNameResponse(user));
 		
-		System.out.print("username sent " + user);
+		System.out.println("username sent " + user);
 		setText("logged as "+ user );
 	}
 
 	public void execute(PlayerNumberRequest request) {
-		setText("digita numerogiocatori");
-		playerNumber();
-	}
-	@Override
-	public void playerNumber() {
 		System.out.println("starting player selection");
 		
+		new Thread(()->{
+			Platform.runLater(()->{
+				setText("digita numero giocatori");
+			});
 		GameController gc = ((GameController) ploader.getController());
 		int num = 0;
-		while (!(num>1|num<4)) {
-			try {
-			//	TODO aspetto inserimento input
-			num= Integer.parseInt(gc.getTextInput());
-			break;
+		while (!(num>1 && num<4)) {
+			try {	
+					String str = gc.getTextInput();
+					if(!str.isEmpty()) {
+					num= Integer.parseInt(str);
+					}
 			}catch(NumberFormatException e) {
-				num=0;
+				
+				Platform.runLater(()->{
 				gc.setText("numero non valido");
-				System.out.print("numero non valido");
+				System.out.println("numero non valido ");
+				});
+				num=0;
 			}
 		}
 		sendMessage(new PlayerNumberResponse(num));
-		System.out.print("number of player " + num);
-
+		System.out.println("number of player " + num);
+		Platform.runLater(()->{
+			setText("numero giocatori corretto ");
+			gc.cleanTextInput();});
+		}).start();
 	}
 
 	public void execute(BuildRequest message) {
@@ -251,7 +255,6 @@ public class Controller extends  Application implements ClientController{
 		setText("scegli dove muoverti");
 		catchDrag();
 	}
-	@Override
 	public void catchDrag() {
 		// TODO Auto-generated method stub
 		
@@ -261,7 +264,6 @@ public class Controller extends  Application implements ClientController{
 		setText("posiziona il costruttore");
 		catchPosition();
 	}
-	@Override
 	public void catchPosition() {
 		// TODO Auto-generated method stub
 		
@@ -293,7 +295,6 @@ public class Controller extends  Application implements ClientController{
 		}
 		sendMessage(new ChoseCardResponse(cardID));
 	}
-	@Override
 	public ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException {
 		System.out.println("starting divinity selection");
 		
@@ -313,14 +314,13 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public void execute(EffectRequest request){
-		setText("vuoi attivare il tuo potere?");
+		setText(request.getStr());
 		try {
-			boolChoice("attivare il potere?");
+			boolChoice(request.getStr());
 		} catch (IOException e) {
 			System.out.println("errore : impossibile richiedere scelta");
 		}
 	}		
-	@Override
 	public void boolChoice(String string) throws IOException {
 		System.out.println("starting bool choice");
 		
@@ -383,23 +383,23 @@ public class Controller extends  Application implements ClientController{
 					handle(message);
 					});
 				} catch (ClassNotFoundException e) {
-					System.out.print(" start message cast error ");
+					System.out.println(" start message cast error ");
 					e.printStackTrace();
-					System.out.print(" end message cast error ");
+					System.out.println(" end message cast error ");
 				}
 				
 			}
 			
 		
 			}catch(IOException e) {
-				System.out.print(" start socket error ");
+				System.out.println(" start socket error ");
 				e.printStackTrace();
-				System.out.print(" end socket error ");
+				System.out.println(" end socket error ");
 			} finally {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					System.out.print(" socket close error ");
+					System.out.println(" socket close error ");
 				}
 			}
 		}

@@ -49,7 +49,7 @@ public final class Hephaestus extends Divinity {
 					done = true;
 				}
 				// here done = true and i ask for the active power of the divinity
-				if(game.getController().askEffect(game.getCurrentPlayer().getName())) { // the activation of the effect does not imply a construction
+				if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) { // the activation of the effect does not imply a construction
 					if(whereBuild.getHeight()<3) {		// i can't add a dome, It is important to note that
 														// here whereBuild will have a height increased by 1 compared to the beginning
 						nowbuild.buildTower(whereBuild);

@@ -25,7 +25,7 @@ public class GameController {
     private Button okbutton;
     
     public void initialize(){
-    	textinput.clear();
+    	textinput.setText("");
     	text.getChildren().clear();
     	text.getChildren().add(new Label("in attesa del login"));
     	text.getChildren().add(new Text(System.lineSeparator()));
@@ -38,6 +38,10 @@ public class GameController {
 	}
     
 
+    public void cleanTextInput() {
+    	textinput.setText("");
+    }
+    
 	public String getTextInput() {
 		return textinput.getText();
 	}

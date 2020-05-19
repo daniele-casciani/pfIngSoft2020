@@ -1,6 +1,5 @@
 package utils;
 
-import client.ClientLauncher;
 import client.Controller;
 
 public interface MessageSystem extends Message{

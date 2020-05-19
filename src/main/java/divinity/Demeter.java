@@ -18,7 +18,7 @@ public final class Demeter extends Divinity {
 		
 		super.tryer(new Move());
 				
-		if(game.getController().askEffect(game.getCurrentPlayer().getName())) tryer(new Build());
+		if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) tryer(new Build());
 		else super.tryer(new Build());
 		
 		endRound();

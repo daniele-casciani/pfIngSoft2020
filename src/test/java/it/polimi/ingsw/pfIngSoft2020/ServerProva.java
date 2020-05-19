@@ -21,7 +21,7 @@ public class ServerProva extends Thread {
 					System.out.println("In attesa di Connessione.");
 					Socket client = Server.accept();
 					System.out.println("Connessione accettata da: "+ client.getInetAddress());
-					userlist.add(new User("clietprova", client));
+
 				}
 				catch(Exception e) {}
 		}

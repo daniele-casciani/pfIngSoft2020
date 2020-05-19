@@ -20,7 +20,7 @@ public interface ServerController {
 	
 	ArrayList<Integer> selectCard(ArrayList<Integer> deck, User player);
 	int choseCard(ArrayList<Integer> deck, User player);
-	boolean askEffect(String user);
+	boolean askEffect(String user, String text);
 	
 	
 	

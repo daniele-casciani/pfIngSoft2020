@@ -10,7 +10,7 @@ import java.util.List;
 import utils.*;
 
 public class Server {
-	ArrayList<Lobby> lobbyList =new ArrayList<Lobby>();
+	ArrayList<Thread> lobbyList =new ArrayList<Thread>();
 	ServerSocket serverSocket;
 	List<User> synUserList = Collections.synchronizedList(new ArrayList<User>());
 	Thread t = new LobbyT();
@@ -38,26 +38,29 @@ public class Server {
 											e.printStackTrace();
 											System.out.println("end lobby wait error");
 											}}}
-				if (synUserList.size()>0) {
-					int gameplayer;
-					ObjectOutputStream output= new ObjectOutputStream(synUserList.get(0).getSocket().getOutputStream());
-					ObjectInputStream input = new ObjectInputStream(synUserList.get(0).getSocket().getInputStream());
-					while (true) {
-						output.writeObject(new PlayerNumberRequest());
-						output.flush();
-						try {
-							gameplayer = ((PlayerNumberResponse)(MessageToServer) input).getNumber();
-							break;
-						}catch(ClassCastException ex) {output.writeObject(new InvalidAction("player number Expected"));};
-					}
+					if (synUserList.size()>0) {
+						int gameplayer;
+						ObjectOutputStream output= (synUserList.get(0).getOutput());
+						ObjectInputStream input = (synUserList.get(0).getInput());
+						while (true) {
+							output.writeObject(new PlayerNumberRequest());
+							output.flush();
+							System.out.println("player number request sent");
+							try {
+								gameplayer = ((PlayerNumberResponse)(MessageToServer)(Message) input.readObject()).getNumber();
+								break;
+							}catch(ClassCastException | ClassNotFoundException ex) {output.writeObject(new InvalidAction("player number Expected"));};
+						}
 					while (true) {
 						if (synUserList.size()>=gameplayer) {
 							ArrayList<User> userList =new ArrayList<User>();
 							for (int i=0; i<gameplayer;i++) {
 								userList.add(synUserList.remove(0));
 							}
-							Lobby lobby=new Lobby(userList);
-							lobbyList.add(lobby);
+							Thread t = new Thread(new Lobby(userList));
+							t.start();
+							lobbyList.add(t);
+							System.out.println("lobby created");
 							break;
 						}
 						else {synchronized(obj){try {obj.wait();} catch (InterruptedException e) {
@@ -70,6 +73,7 @@ public class Server {
 				} catch (IOException ex) {
 					System.out.println("start lobby creation error");
 					ex.printStackTrace();
+					synUserList.remove(0);
 					System.out.println("end lobby creation error");
 				}
 			}
@@ -106,8 +110,8 @@ public class Server {
 								try {//creating new user
 									
 									String message = ((UserNameResponse)(Message) input.readObject()).getName();
-									synUserList.add(new User(message,socket));
-									obj.notify();
+									synUserList.add(new User(message,socket,input,output));
+									synchronized(obj) {obj.notify();}
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {
 									System.out.println("Invalid name");

@@ -17,7 +17,7 @@ public final class Prometheus extends Divinity {
 	
 	@Override
 	public void round() {
-		if(game.getController().askEffect(game.getCurrentPlayer().getName())) {
+		if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) {
 			
 			startRound();
 			
