@@ -10,7 +10,7 @@ public class BuilderResponse implements MessageToServer {
 		return position;
 	}
 	
-	BuilderResponse(int[] position){
+	public BuilderResponse(int[] position){
 		this.position= position;
 	}
 }

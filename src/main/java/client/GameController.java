@@ -13,8 +13,9 @@ import javafx.scene.text.TextFlow;
 
 public class GameController {
 	
-	int x1; int y1; int x2; int y2;
-	
+	private int[] startCell = {-1,-1}; 
+	private int[] endCell = {-1,-1};	
+	private boolean changed;	
     @FXML
     private TextFlow text;
     @FXML
@@ -30,34 +31,58 @@ public class GameController {
     	text.getChildren().add(new Label("in attesa del login"));
     	text.getChildren().add(new Text(System.lineSeparator()));
     	grid.getChildren().clear();
+    	changed=false;
     }
-
-    public void setText(String message) {
-		text.getChildren().add(new Label(message));	
-		text.getChildren().add(new Text(System.lineSeparator()));
-	}
-    
-
+   
     public void cleanTextInput() {
     	textinput.setText("");
     }
-    
-	public String getTextInput() {
-		return textinput.getText();
-	}
-	
-	public void addElement(Node node,int x, int y) {
-		grid.add(node, x, y);
-	}
-	
-	public void clearCell(int x, int y) {
+    public void clearCell(int x, int y) {
 		for(Node nd : grid.getChildren()) {
 			if (GridPane.getRowIndex(nd)==y && GridPane.getColumnIndex(nd)==x) {
 				grid.getChildren().remove(nd);
 			}
 		}
 	}
+    public void clearInput() {
+    	startCell[0] = -1;
+    	startCell[1] = -1;
+    	endCell[0] = -1;
+    	endCell[1] = -1;
+    	changed=false;
+    }
     
+	public String getTextInput() {
+		return textinput.getText();
+	}
+	public boolean isChanged() {
+		return changed;
+	}
+	public boolean isStartValid() {
+		if(startCell[0]<0 | startCell[0]>5) {return false;}
+		if(startCell[1]<0 | startCell[1]>5) {return false;}
+		return true;
+	}
+	public boolean isEndValid() {
+		if(endCell[0]<0 | endCell[0]>5) {return false;}
+		if(endCell[1]<0 | endCell[1]>5) {return false;}
+		return true;
+	}
+	public int[] getStart() {
+		return startCell;
+	}
+	public int[] getEnd() {
+		return endCell;
+	}
+	
+	public void addElement(Node node,int x, int y) {
+		grid.add(node, x, y);
+	}
+	public void setText(String message) {
+		text.getChildren().add(new Label(message));	
+		text.getChildren().add(new Text(System.lineSeparator()));
+	}
+    	
     @FXML
     void dragEnd(DragEvent event) {
     	//TODO
@@ -68,12 +93,11 @@ public class GameController {
     }
     @FXML
     void passturn(ActionEvent event) {	
-    	//TODO
+    	changed=true;
     }
     @FXML
     void click(MouseEvent event) {
-    	//TODO
-    	x1 = (int)event.getX();
-    }
-    
+    	startCell[0] = (int)event.getX();
+    	startCell[1] = (int)event.getY();
+    } 
 }

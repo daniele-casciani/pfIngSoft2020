@@ -25,6 +25,7 @@ public class Controller extends  Application implements ClientController{
 	private Stage Pstage;
 	private Scene Pscene;
 	private FXMLLoader ploader;
+	private GameController gameCont ;
 	private StackPane game = null;
 	private Stage Sstage;
 	
@@ -60,6 +61,7 @@ public class Controller extends  Application implements ClientController{
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
 			game = (StackPane)ploader.load();
 			Pscene = new Scene(game,1280,720);
+			gameCont = ((GameController) ploader.getController());
 		} catch (IOException e1) {
 			System.out.println("start impossibile caricare game.fxml");
 			e1.printStackTrace();
@@ -81,18 +83,17 @@ public class Controller extends  Application implements ClientController{
 		setText(message.getError());
 	}
 	private void setText(String message) {
-		((GameController) ploader.getController()).setText(message);
+		gameCont.setText(message);
 	}
 
 	public void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
 	}
 	private void addConstructor(int x, int y) {
-		GameController cont = ploader.getController();
 		ImageView node = new ImageView("/image/builder.png");
 		node.setFitHeight(80);
 		node.setFitWidth(80);
-		cont.addElement(node, x, y);
+		gameCont.addElement(node, x, y);
 	}
 
 	public void notify(SwitchPositionUpdate update) {
@@ -111,8 +112,7 @@ public class Controller extends  Application implements ClientController{
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 	}
 	private void construction(int x, int y, int z) {
-		GameController cont = ploader.getController();
-		cont.clearCell(x, y);
+		gameCont.clearCell(x, y);
 		if (z>0|z<5) {
 			Rectangle lv1 = new Rectangle();
 			lv1.setWidth(90);
@@ -120,7 +120,7 @@ public class Controller extends  Application implements ClientController{
 			lv1.setArcHeight(5);
 			lv1.setArcWidth(5);
 			lv1.setFill(Color.rgb(160,160,160));
-			cont.addElement(lv1, x, y);
+			gameCont.addElement(lv1, x, y);
 			if(z>1) {
 				Rectangle lv2 = new Rectangle();
 				lv2.setWidth(70);
@@ -128,7 +128,7 @@ public class Controller extends  Application implements ClientController{
 				lv2.setArcHeight(5);
 				lv2.setArcWidth(5);
 				lv2.setFill(Color.rgb(210,210,210));
-				cont.addElement(lv2, x, y);
+				gameCont.addElement(lv2, x, y);
 				if(z>2) {
 					Rectangle lv3 = new Rectangle();
 					lv3.setWidth(50);
@@ -136,11 +136,11 @@ public class Controller extends  Application implements ClientController{
 					lv3.setArcHeight(5);
 					lv3.setArcWidth(5);
 					lv3.setFill(Color.rgb(240,240,240));
-					cont.addElement(lv3, x, y);
+					gameCont.addElement(lv3, x, y);
 					if(z==4) {
 						Circle dome = new Circle(20);
 						dome.setFill(Color.BLUE);
-						cont.addElement(dome, x, y);
+						gameCont.addElement(dome, x, y);
 					}		
 				}
 			}
@@ -212,19 +212,18 @@ public class Controller extends  Application implements ClientController{
 			Platform.runLater(()->{
 				setText("digita numero giocatori");
 			});
-		GameController gc = ((GameController) ploader.getController());
 		int num = 0;
 		while (!(num>1 && num<4)) {
 			try {	
-					String str = gc.getTextInput();
+					String str = gameCont.getTextInput();
 					if(!str.isEmpty()) {
 					num= Integer.parseInt(str);
 					}
 			}catch(NumberFormatException e) {
 				
 				Platform.runLater(()->{
-				gc.setText("numero non valido");
-				System.out.println("numero non valido ");
+				gameCont.setText("numero non valido");
+				System.out.println("player number not valid");
 				});
 				num=0;
 			}
@@ -234,7 +233,7 @@ public class Controller extends  Application implements ClientController{
 		Platform.runLater(()->{
 			setText("impostato numero giocatori");
 			setText("in attesa di altri giocatori ");
-			gc.cleanTextInput();});
+			gameCont.cleanTextInput();});
 		}).start();
 	}
 
@@ -252,12 +251,24 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public void execute(BuilderRequest message) {
-		setText("posiziona il costruttore");
+		setText("scegli dove posizionare il costruttore");
 		catchPosition();
+		
 	}
 	public void catchPosition() {
-		// TODO Auto-generated method stub
-		
+		new Thread(()->{
+			int[] position = null;
+			gameCont.clearInput();
+			while(!(gameCont.isChanged() & gameCont.isStartValid())) {
+				position = gameCont.getStart();
+			}
+			sendMessage(new BuilderResponse(position));
+			System.out.println("new builderResponse at "+position[0]+" "+position[1]);
+			gameCont.clearInput();
+			Platform.runLater(()->{
+				setText("posizionamento costruttore");
+			});
+		}).start();
 	}
 
 	public void execute(SelectCardRequest request) {

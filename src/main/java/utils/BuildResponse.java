@@ -1,23 +1,19 @@
 package utils;
 
-import java.util.ArrayList;
-
 //getBuilding return {x.builder,y.builder,x.bulding,y.building}
 public class BuildResponse implements MessageToServer {
 
 	private static final long serialVersionUID = 1L;
-	private  ArrayList<Integer> building;
+	private  int[] building;
 	
-	public ArrayList<Integer> getBuilding(){
+	public int[] getBuilding(){
 		return building;
 	}
 	
 	void buildResponse(int[] start, int[] end){
-		for(int i = 0; i<2; i++) {
-			building.add(start[i]);
-		}
-		for(int i = 0; i<2; i++) {
-			building.add(end[i]);
-		}	
+		building[0] = start[0];
+		building[1] = start[1];
+		building[2] = end[2];
+		building[3] = end[3];	
 	}
 }
