@@ -290,8 +290,9 @@ public class Lobby implements ServerController , Runnable {
 	@Override
 	public void updateBuild(int[] position, int position2) {
 		ObjectOutputStream output;
-		boolean state = false;
+		
 		for(User x: userlist) {
+			boolean state = false;
 			while(state == false){
 				try {
 					try {
@@ -316,8 +317,9 @@ public class Lobby implements ServerController , Runnable {
 	public void updateMovement(int[] position, int height1, int[] position2, int height2) {
 		
 		ObjectOutputStream output;
-		boolean state = false;
+		
 		for(User x: userlist) {
+			boolean state = false;
 			while(state == false) {	
 				try {
 					try {
@@ -340,8 +342,9 @@ public class Lobby implements ServerController , Runnable {
 	@Override
 	public void updateNewBuilder(int[] position) {
 		ObjectOutputStream output;
-		boolean state = false;
+		
 		for(User x: userlist) {
+			boolean state = false;
 			while(state == false){
 				try {
 					try {
@@ -395,8 +398,9 @@ public class Lobby implements ServerController , Runnable {
 	public void updateSwitcBuilder(int[] position,int height1, int[] position2, int height2) {
 		
 		ObjectOutputStream output;
-		boolean state = false;
+		
 		for(User x: userlist) {
+			boolean state = false;
 			while(state == false){
 				try {
 					try {
