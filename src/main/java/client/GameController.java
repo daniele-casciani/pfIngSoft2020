@@ -15,7 +15,8 @@ public class GameController {
 	
 	private int[] startCell = {-1,-1}; 
 	private int[] endCell = {-1,-1};	
-	private boolean changed;	
+	private boolean changed;
+	private boolean listening;
     @FXML
     private TextFlow text;
     @FXML
@@ -32,6 +33,7 @@ public class GameController {
     	text.getChildren().add(new Text(System.lineSeparator()));
     	grid.getChildren().clear();
     	changed=false;
+    	listening=false;
     }
    
     public void cleanTextInput() {
@@ -68,6 +70,9 @@ public class GameController {
 		if(endCell[1]<0 | endCell[1]>5) {return false;}
 		return true;
 	}
+	public boolean isListening() {
+		return listening;
+	}
 	public int[] getStart() {
 		return startCell;
 	}
@@ -82,7 +87,10 @@ public class GameController {
 		text.getChildren().add(new Label(message));	
 		text.getChildren().add(new Text(System.lineSeparator()));
 	}
-    	
+	public void setListening(boolean listening) {
+		this.listening = listening;
+	}
+	
     @FXML
     void dragEnd(DragEvent event) {
     	//TODO
@@ -93,11 +101,16 @@ public class GameController {
     }
     @FXML
     void passturn(ActionEvent event) {	
+    	if(isListening()) {
     	changed=true;
+    	}
+    	else {setText("non e il tuo turno");};
     }
     @FXML
     void click(MouseEvent event) {
-    	startCell[0] = (int)event.getX();
-    	startCell[1] = (int)event.getY();
+    	if(isListening()) {
+    		startCell[0] = (int)event.getX();
+    		startCell[1] = (int)event.getY();
+    	}
     } 
 }

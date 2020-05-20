@@ -94,6 +94,7 @@ public class Controller extends  Application implements ClientController{
 		node.setFitHeight(80);
 		node.setFitWidth(80);
 		gameCont.addElement(node, x, y);
+		gameCont.setText("aggiunto costruttore");
 	}
 
 	public void notify(SwitchPositionUpdate update) {
@@ -101,15 +102,17 @@ public class Controller extends  Application implements ClientController{
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
 		addConstructor(0, 1);
 		addConstructor(3, 4);
-		
+		gameCont.setText("scambio posizioni eseguito");
 		}
 	public void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(3, 4);
+		gameCont.setText("spostamento effettuato");
 	}
 	public void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
+		gameCont.setText("costruzione eseguita");
 	}
 	private void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
@@ -211,18 +214,20 @@ public class Controller extends  Application implements ClientController{
 		new Thread(()->{
 			Platform.runLater(()->{
 				setText("digita numero giocatori");
+				gameCont.cleanTextInput();
+				gameCont.setListening(true);
 			});
 		int num = 0;
-		while (!(num>1 && num<4)) {
+		while (!(num>1 && num<4 && gameCont.isChanged())) {
 			try {	
 					String str = gameCont.getTextInput();
 					if(!str.isEmpty()) {
 					num= Integer.parseInt(str);
 					}
-			}catch(NumberFormatException e) {
-				
+			}catch(NumberFormatException e) {				
 				Platform.runLater(()->{
 				gameCont.setText("numero non valido");
+				gameCont.setText("reinserire il numero");
 				System.out.println("player number not valid");
 				});
 				num=0;
@@ -231,25 +236,53 @@ public class Controller extends  Application implements ClientController{
 		sendMessage(new PlayerNumberResponse(num));
 		System.out.println("number of player " + num);
 		Platform.runLater(()->{
+			gameCont.setListening(false);
 			setText("impostato numero giocatori");
 			setText("in attesa di altri giocatori ");
 			gameCont.cleanTextInput();});
 		}).start();
 	}
 
-	public void execute(BuildRequest message) {
+	public void execute(BuildRequest request) {
 		setText("scegli dove costruire");
-		catchDrag();
+		catchDrag(request);
 	}
 	public void execute(MoveRequest request) {
 		setText("scegli dove muoverti");
-		catchDrag();
+		catchDrag(request);
 	}
-	public void catchDrag() {
-		// TODO Auto-generated method stub
-		
+	public void catchDrag(MessageToClient message) {
+		new Thread(()->{
+			gameCont.clearInput();
+			gameCont.setListening(true);
+			int[] start = null;
+			int[] end = null;
+			while(!(gameCont.isStartValid() && gameCont.isEndValid())) {
+				gameCont.clearInput();
+				gameCont.setText("trascina casella");
+				while(!gameCont.isChanged()) {
+					start = gameCont.getStart();
+					end = gameCont.getEnd();
+				}
+				gameCont.setText("valutazione mossa");
+			}
+			if (message instanceof MoveRequest) {
+				sendMessage(new MoveResponse(start, end));
+				System.out.println("inviata move "+ start+" " + end);
+			}
+			else if (message instanceof BuildRequest) {
+				sendMessage(new BuildResponse(start, end));
+				System.out.println("inviata build "+ start+" " + end);
+			}
+			else {
+				sendMessage(new InvalidAction("messaggio non riconosciuto"));
+				System.out.println("messagio non riconosciuto");
+			}
+			gameCont.setListening(false);
+			gameCont.clearInput();
+		}).start();
 	}
-
+	
 	public void execute(BuilderRequest message) {
 		setText("scegli dove posizionare il costruttore");
 		catchPosition();
@@ -257,8 +290,9 @@ public class Controller extends  Application implements ClientController{
 	}
 	public void catchPosition() {
 		new Thread(()->{
-			int[] position = null;
 			gameCont.clearInput();
+			gameCont.setListening(true);
+			int[] position = null;
 			while(!(gameCont.isChanged() & gameCont.isStartValid())) {
 				position = gameCont.getStart();
 			}
@@ -267,6 +301,8 @@ public class Controller extends  Application implements ClientController{
 			gameCont.clearInput();
 			Platform.runLater(()->{
 				setText("posizionamento costruttore");
+				gameCont.setListening(false);
+				gameCont.clearInput();				
 			});
 		}).start();
 	}
