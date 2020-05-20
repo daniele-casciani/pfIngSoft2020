@@ -38,6 +38,7 @@ public class GameController {
    
     public void cleanTextInput() {
     	textinput.setText("");
+    	changed=false;
     }
     public void clearCell(int x, int y) {
 		for(Node nd : grid.getChildren()) {
@@ -102,7 +103,7 @@ public class GameController {
     @FXML
     void passturn(ActionEvent event) {	
     	if(isListening()) {
-    	changed=true;
+    		changed=true;
     	}
     	else {setText("non e il tuo turno");};
     }

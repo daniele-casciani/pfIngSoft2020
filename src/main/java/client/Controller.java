@@ -218,20 +218,25 @@ public class Controller extends  Application implements ClientController{
 				gameCont.setListening(true);
 			});
 		int num = 0;
-		while (!(num>1 && num<4 && gameCont.isChanged())) {
-			try {	
-					String str = gameCont.getTextInput();
-					if(!str.isEmpty()) {
+		while (!(num>1 && num<4 )) {
+			Platform.runLater(()->{gameCont.setText("scegli tra 2 e 3");});
+			String str="";
+			while (!gameCont.isChanged()) {	
+				str= gameCont.getTextInput();
+			}
+			try {
+				if(!str.isEmpty()) {
 					num= Integer.parseInt(str);
-					}
+				}
 			}catch(NumberFormatException e) {				
 				Platform.runLater(()->{
-				gameCont.setText("numero non valido");
+				gameCont.setText("non è un numero");
 				gameCont.setText("reinserire il numero");
 				System.out.println("player number not valid");
 				});
 				num=0;
 			}
+			gameCont.cleanTextInput();
 		}
 		sendMessage(new PlayerNumberResponse(num));
 		System.out.println("number of player " + num);
