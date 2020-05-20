@@ -18,17 +18,16 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-
 <StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.GameController">
    <children>
-      <ImageView fitHeight="725.0" fitWidth="1288.0" onMouseClicked="#click" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="725.0" fitWidth="1288.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../image/SantoriniBoard.png" />
          </image>
       </ImageView>
       <AnchorPane prefHeight="647.0" prefWidth="1288.0">
          <children>
-            <ScrollPane layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1014.0" AnchorPane.topAnchor="5.0">
+            <ScrollPane layoutX="5.0" layoutY="5.0" mouseTransparent="true" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1014.0" AnchorPane.topAnchor="5.0">
                <content>
                   <TextFlow id="text" fx:id="text" lineSpacing="2.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="715.0" prefWidth="263.0">
                      <children>
@@ -166,13 +165,13 @@
                   <Circle fill="WHITE" radius="20.0" stroke="BLACK" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="725.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="textinput" alignment="CENTER" prefHeight="37.0" prefWidth="203.0" />
+                  <Button fx:id="okbutton" mnemonicParsing="false" onAction="#passturn" prefHeight="38.0" prefWidth="112.0" text="pass turn" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
-      <HBox alignment="BOTTOM_RIGHT" prefWidth="1288.0">
-         <children>
-            <TextField fx:id="textinput" alignment="CENTER" prefHeight="37.0" prefWidth="203.0" />
-            <Button fx:id="okbutton" mnemonicParsing="false" onAction="#passturn" prefHeight="38.0" prefWidth="112.0" text="pass turn" />
-         </children>
-      </HBox>
    </children>
 </StackPane>

@@ -1,13 +1,18 @@
 package client;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -32,6 +37,22 @@ public class GameController {
     	text.getChildren().add(new Label("in attesa del login"));
     	text.getChildren().add(new Text(System.lineSeparator()));
     	grid.getChildren().clear();
+    	for (int i = 0 ; i < 6 ; i++) {
+            for (int j = 0; j < 6; j++) {
+            	Pane pane = new Pane();
+            	pane.setOnMouseClicked(e->{
+            		System.out.println("pane clicked");
+            		click(pane);
+            	});
+            	grid.add(pane, i, j);
+            }    
+        }
+    	Button button = new Button("YEA");
+    	button.setOnMouseClicked(e->{
+    		setText("cliccato");
+    	});
+    	grid.add(button,0,0);
+    	grid.setGridLinesVisible(true);
     	changed=false;
     	listening=false;
     }
@@ -107,11 +128,12 @@ public class GameController {
     	}
     	else {setText("non e il tuo turno");};
     }
-    @FXML
-    void click(MouseEvent event) {
+
+    void click(Pane pane) {
     	if(isListening()) {
-    		startCell[0] = (int)event.getX();
-    		startCell[1] = (int)event.getY();
+    		startCell[0] = grid.getColumnIndex(pane);
+    		startCell[1] = grid.getRowIndex(pane);
+    	setText("scelta posizone "+startCell[0]+" "+startCell[1]);
     	}
     } 
 }

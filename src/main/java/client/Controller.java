@@ -297,9 +297,15 @@ public class Controller extends  Application implements ClientController{
 		new Thread(()->{
 			gameCont.clearInput();
 			gameCont.setListening(true);
+			System.out.println("listenig for position");
 			int[] position = null;
-			while(!(gameCont.isChanged() & gameCont.isStartValid())) {
-				position = gameCont.getStart();
+			while(!gameCont.isStartValid()) {
+				gameCont.clearInput();
+				Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
+				while(!gameCont.isChanged()) {
+					position = gameCont.getStart();
+				}
+				System.out.println("position"+position);
 			}
 			sendMessage(new BuilderResponse(position));
 			System.out.println("new builderResponse at "+position[0]+" "+position[1]);

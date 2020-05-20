@@ -12,7 +12,7 @@
    <children>
       <StackPane>
          <children>
-            <ImageView fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="480.0" fitWidth="640.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/copertina.jpg" />
                </image>
