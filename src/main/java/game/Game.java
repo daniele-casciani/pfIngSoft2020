@@ -26,7 +26,7 @@ public class Game implements Model {
 			for (int i=1; i<participants.size(); i++) {
 				chosenCard = serverController.choseCard(selectedCards, participants.get(i));
 				playerList.add(new Player(participants.get(i).getUserID(), chosenCard, this));
-				selectedCards.remove(chosenCard);
+				selectedCards.remove(chosenCard-1);
 			}
 			playerList.add(0,new Player(participants.get(0).getUserID(), selectedCards.get(0), this));
 		}

@@ -58,9 +58,9 @@
             <Insets left="375.0" top="100.0" />
          </StackPane.margin>
       </GridPane>
-      <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="640.0" minWidth="270.0" mouseTransparent="true" prefHeight="640.0" prefWidth="270.0" StackPane.alignment="TOP_LEFT">
+      <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="640.0" minWidth="270.0" mouseTransparent="false" prefHeight="640.0" prefWidth="270.0" StackPane.alignment="TOP_LEFT">
          <content>
-            <TextFlow id="text" fx:id="text" lineSpacing="2.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="715.0" prefWidth="263.0">
+            <TextFlow id="text" fx:id="text" lineSpacing="2.0" mouseTransparent="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="715.0" prefWidth="263.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="il tuo turno " />
                   <Separator prefHeight="9.0" prefWidth="266.0" />
