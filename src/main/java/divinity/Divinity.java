@@ -39,6 +39,7 @@ public class Divinity {
 				parameters = action.request();
 				try {
 				state = action.execute(parameters[0],parameters[1]);
+				state = true;
 				}
 				catch(ClassCastException e1){state=false;}
 			} catch (IOException e) {state=false;}
