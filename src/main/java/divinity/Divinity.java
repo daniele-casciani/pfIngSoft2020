@@ -2,8 +2,6 @@ package divinity;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
-
 import game.Game;
 import tower.BuilderAction;
 import tower.Level;
@@ -32,21 +30,22 @@ public class Divinity {
 	}
 	
 	 void tryer(Action action) {
-		boolean state= false;
-		while (state==false) {
+		while (true) {
 			Object[] parameters;
 			try {
 				parameters = action.request();
 				try {
-				state = action.execute(parameters[0],parameters[1]);
-				state = true;
+				if(action.execute(parameters[0],parameters[1])){
+					break;
 				}
-				catch(ClassCastException e1){state=false;}
-			} catch (IOException e) {state=false;}
+				}catch(ClassCastException e1){game.getController().invalidAction(game.getCurrentPlayer().getName(),"azione non valida");}
+			} catch (IOException e) {game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");}
 		}
 	}
 	
 	class Build implements Action {
+		
+		@Override
 		public boolean execute(Object start, Object end) {
 			Level builderCell = (Level)start;
 			Level whereBuild = (Level)end;
@@ -75,15 +74,17 @@ public class Divinity {
 		}
 
 		@Override
-		public Level[] request() {
+		public Object[] request() {
 			int[] client = game.getController().whereBuild(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
+			Object[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
 			return clientRequest;			
 		}
 		
 	}
 	
 	class Move implements Action {
+		
+		@Override
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
@@ -123,9 +124,9 @@ public class Divinity {
 		}
 
 		@Override
-		public Level[] request() {
+		public Object[] request() {
 			int[] client = game.getController().choseMovement(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
+			Object[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
 			return clientRequest;
 		}
 	}
@@ -188,6 +189,8 @@ public class Divinity {
 	}
 	
 	class Setup implements Action{
+		
+		@Override
 		public boolean execute(Object arg0, Object arg1) {
 			Level selectedLevel = (Level)arg0;
 			
@@ -196,14 +199,18 @@ public class Divinity {
 					newBuilder.newBuilder(selectedLevel,game.getCurrentPlayer().getName());
 					game.getController().updateNewBuilder(selectedLevel.getPosition());
 				}
-				else return false;
+				else {
+					game.getController().invalidAction(game.getCurrentPlayer().getName(),"posizione non valida");
+					System.out.println("selected constructor position invalid");
+					return false;
+				}
 			return true;
 		}
 
 		@Override
-		public Level[] request() throws IOException {
+		public Object[] request() throws IOException {
 			int[] client = game.getController().positionBuilder(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), null};
+			Object[] clientRequest = { game.getMap().getCell(client[0], client[1]), null};
 			return clientRequest;
 		}
 	}
