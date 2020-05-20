@@ -1,13 +1,9 @@
 package client;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
@@ -41,18 +37,11 @@ public class GameController {
             for (int j = 0; j < 6; j++) {
             	Pane pane = new Pane();
             	pane.setOnMouseClicked(e->{
-            		System.out.println("pane clicked");
             		click(pane);
             	});
             	grid.add(pane, i, j);
             }    
         }
-    	Button button = new Button("YEA");
-    	button.setOnMouseClicked(e->{
-    		setText("cliccato");
-    	});
-    	grid.add(button,0,0);
-    	grid.setGridLinesVisible(true);
     	changed=false;
     	listening=false;
     }
@@ -67,6 +56,11 @@ public class GameController {
 				grid.getChildren().remove(nd);
 			}
 		}
+		Pane pane = new Pane();
+    	pane.setOnMouseClicked(e->{
+    		click(pane);
+    	});
+    	grid.add(pane, x, y);
 	}
     public void clearInput() {
     	startCell[0] = -1;
@@ -114,6 +108,22 @@ public class GameController {
 	}
 	
     @FXML
+    void passturn(ActionEvent event) {	
+    	if(isListening()) {
+    		changed=true;
+    		System.out.println("validating action");
+    	}
+    	else {setText("non e il tuo turno");};
+    }
+
+    void click(Pane pane) {
+    	if(isListening()) {
+    		startCell[0] = GridPane.getColumnIndex(pane);
+    		startCell[1] = GridPane.getRowIndex(pane);
+    	setText("selezionata cella "+(startCell[0]+1)+" "+(startCell[1]+1));
+    	}
+    }
+    @FXML
     void dragEnd(DragEvent event) {
     	//TODO
     }
@@ -121,19 +131,4 @@ public class GameController {
     void dragStart(MouseEvent event) {
     	//TODO
     }
-    @FXML
-    void passturn(ActionEvent event) {	
-    	if(isListening()) {
-    		changed=true;
-    	}
-    	else {setText("non e il tuo turno");};
-    }
-
-    void click(Pane pane) {
-    	if(isListening()) {
-    		startCell[0] = grid.getColumnIndex(pane);
-    		startCell[1] = grid.getRowIndex(pane);
-    	setText("scelta posizone "+startCell[0]+" "+startCell[1]);
-    	}
-    } 
 }

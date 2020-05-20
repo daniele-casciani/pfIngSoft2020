@@ -123,6 +123,7 @@ public class Controller extends  Application implements ClientController{
 			lv1.setArcHeight(5);
 			lv1.setArcWidth(5);
 			lv1.setFill(Color.rgb(160,160,160));
+			lv1.setMouseTransparent(true);
 			gameCont.addElement(lv1, x, y);
 			if(z>1) {
 				Rectangle lv2 = new Rectangle();
@@ -131,6 +132,7 @@ public class Controller extends  Application implements ClientController{
 				lv2.setArcHeight(5);
 				lv2.setArcWidth(5);
 				lv2.setFill(Color.rgb(210,210,210));
+				lv2.setMouseTransparent(true);
 				gameCont.addElement(lv2, x, y);
 				if(z>2) {
 					Rectangle lv3 = new Rectangle();
@@ -139,10 +141,12 @@ public class Controller extends  Application implements ClientController{
 					lv3.setArcHeight(5);
 					lv3.setArcWidth(5);
 					lv3.setFill(Color.rgb(240,240,240));
+					lv3.setMouseTransparent(true);
 					gameCont.addElement(lv3, x, y);
 					if(z==4) {
 						Circle dome = new Circle(20);
 						dome.setFill(Color.BLUE);
+						dome.setMouseTransparent(true);
 						gameCont.addElement(dome, x, y);
 					}		
 				}
@@ -303,9 +307,9 @@ public class Controller extends  Application implements ClientController{
 				gameCont.clearInput();
 				Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
 				while(!gameCont.isChanged()) {
-					position = gameCont.getStart();
 				}
-				System.out.println("position"+position);
+				position = gameCont.getStart();
+				System.out.println("position"+position[0]);
 			}
 			sendMessage(new BuilderResponse(position));
 			System.out.println("new builderResponse at "+position[0]+" "+position[1]);
