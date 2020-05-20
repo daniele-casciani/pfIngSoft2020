@@ -22,12 +22,14 @@ public class Lobby implements ServerController , Runnable {
 	
 	ArrayList<Integer> createDeck(){
 		boolean b;
-		ArrayList<Integer> deck= new ArrayList<Integer>();
+		ArrayList<Integer> deck;
 		b = askEffect(userlist.get(0).getUserID(), "usare divinità?");
 		if (b) {
-		 deck = (ArrayList<Integer>) Arrays.asList(new Integer[]{1, 2, 3, 4, 5, 6, 8, 9, 10});
+			deck = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,8,9,10));
+			
+			return deck;	 
 		}
-		return deck;
+		else return deck = new ArrayList<Integer>();
 	 }
 	
 	@Override
