@@ -5,6 +5,7 @@ import divinity.*;
 import java.util.ArrayList;
 
 public class Game implements Model {
+	private boolean disconect = false;
 	private int round=0;
 	private Player currentPlayer;
 	private ArrayList<Player> playerList = new ArrayList<Player>();
@@ -87,5 +88,8 @@ public class Game implements Model {
 	}
 	public Map getMap() {
 		return map;
+	}
+	public void setDisconect() {
+		this.disconect = true;
 	}
 }

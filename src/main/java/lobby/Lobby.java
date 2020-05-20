@@ -5,6 +5,7 @@ import utils.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -44,16 +45,19 @@ public class Lobby implements ServerController , Runnable {
 		
 		while(state == false) {
 			try {
-				
-				output = player.getOutput();
-				input = player.getInput();
-				
-				output.writeObject(new ChoseCardRequest(deck));
-				output.flush();
-				
-				selectedCard = ((ChoseCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
-				state = true;
-				
+				try {
+					output = player.getOutput();
+					input = player.getInput();
+					
+					output.writeObject(new ChoseCardRequest(deck));
+					output.flush();
+					
+					selectedCard = ((ChoseCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
+					state = true;
+				}catch(SocketException e) {
+					System.out.println("SE chosecard");
+					break;
+				}
 			} catch (IOException | ClassNotFoundException e) {
 				state = false;
 				invalidAction(player.getUserID(), "please retry selection");
@@ -75,15 +79,19 @@ public class Lobby implements ServerController , Runnable {
 		while(state == false) {
 			try {
 				
-			
-				output = player.getOutput();
-				input = player.getInput();
-				
-				output.writeObject(new SelectCardRequest(deck,userlist.size()));
-				output.flush();
-				
-				selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
-				state = true;
+				try {
+					output = player.getOutput();
+					input = player.getInput();
+					
+					output.writeObject(new SelectCardRequest(deck,userlist.size()));
+					output.flush();
+					
+					selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
+					state = true;
+				}catch(SocketException e) {
+					System.out.println("SE aselectCard");
+					break;
+				}
 				
 			} catch (IOException | ClassNotFoundException e) {
 				state = false;
@@ -106,17 +114,21 @@ public class Lobby implements ServerController , Runnable {
 			if(player.equals(x.getUserID())) {
 				while(true) {
 					try {
-						
-						output =x.getOutput();
-						input = x.getInput();
-						//move request
-							
-						output.writeObject(new MoveRequest());
-						output.flush();
-							try {
-								response = ((MoveResponse)(MessageToServer)(Message)input.readObject()).getMovement();
-								break;
-							}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plase retry to move");};
+						try {
+							output =x.getOutput();
+							input = x.getInput();
+							//move request
+								
+							output.writeObject(new MoveRequest());
+							output.flush();
+								try {
+									response = ((MoveResponse)(MessageToServer)(Message)input.readObject()).getMovement();
+									break;
+								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plase retry to move");};
+						}catch(SocketException e) {
+							System.out.println("SE choseMove");
+							break;
+						}
 							
 						} catch (IOException e) {
 						e.printStackTrace();
@@ -139,17 +151,21 @@ public class Lobby implements ServerController , Runnable {
 			if(player.equals(x.getUserID())) {
 				while(true) {
 					try {
-						output = x.getOutput();
-						input = x.getInput();
-						//build request
-							
-						output.writeObject(new BuildRequest());
-						output.flush();
-							try {
-								response = ((BuildResponse)(MessageToServer)(Message)input.readObject()).getBuilding();
+						try {
+							output = x.getOutput();
+							input = x.getInput();
+							//build request
+								
+							output.writeObject(new BuildRequest());
+							output.flush();
+								try {
+									response = ((BuildResponse)(MessageToServer)(Message)input.readObject()).getBuilding();
+									break;
+								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plaese retry to build");};
+							}catch(SocketException e) {
+								System.out.println("SE whereBuild");
 								break;
-							}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plaese retry to build");};
-							
+							}
 						} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -168,10 +184,15 @@ public class Lobby implements ServerController , Runnable {
 			if(player.equals(x.getUserID())) {
 				while(true) {
 					try {
-						output = x.getOutput();
-						output.writeObject(new InvalidAction(message));
-						output.flush();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new InvalidAction(message));
+							output.flush();
+							break;
+						}catch(SocketException e) {
+							System.out.println("SE invalid Act");
+							break;
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -189,10 +210,15 @@ public class Lobby implements ServerController , Runnable {
 		for (User x : userlist) {
 			while(true) {			
 				try {
-					output = x.getOutput();
-					output.writeObject(new Loser());
-					output.flush();
-					break;
+					try {
+						output = x.getOutput();
+						output.writeObject(new Loser());
+						output.flush();
+						break;
+					}catch(SocketException e) {
+						System.out.println("SE lose");
+						break;
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -208,10 +234,15 @@ public class Lobby implements ServerController , Runnable {
 		for (User x : userlist) {
 			while(true) {
 				try {
-					output = x.getOutput();
-					output.writeObject(new Winner());
-					output.flush();
-					break;
+					try {
+						output = x.getOutput();
+						output.writeObject(new Winner());
+						output.flush();
+						break;
+					}catch(SocketException e) {
+						System.out.println("SE winner");
+						break;
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -230,18 +261,23 @@ public class Lobby implements ServerController , Runnable {
 			if(player.equals(x.getUserID())) {
 				while(true) {
 					try {
-						output = x.getOutput();
-						input = x.getInput();
-						
-						//builder request
+						try {
+							output = x.getOutput();
+							input = x.getInput();
 							
-						output.writeObject(new BuilderRequest());
-						output.flush();
-							try {
-								response = ((BuilderResponse)(MessageToServer)(Message)input.readObject()).getPosition();
-								break;
-							}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
-							
+							//builder request
+								
+							output.writeObject(new BuilderRequest());
+							output.flush();
+								try {
+									response = ((BuilderResponse)(MessageToServer)(Message)input.readObject()).getPosition();
+									break;
+								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
+						}catch(SocketException e) {
+							System.out.println("SE positionbuilder");
+							break;
+						}	
+								
 						} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -258,11 +294,16 @@ public class Lobby implements ServerController , Runnable {
 		for(User x: userlist) {
 			while(state == false){
 				try {
-					output = x.getOutput();
-					output.writeObject(new BuildUpdate(position, position2));
-					output.flush();
-					
-					state = true;
+					try {
+						output = x.getOutput();
+						output.writeObject(new BuildUpdate(position, position2));
+						output.flush();
+						
+						state = true;
+					}catch(SocketException e) {
+						System.out.println("SE ubuild");
+						break;
+					}
 				} catch (IOException e) {
 					state = false;
 				}
@@ -279,10 +320,15 @@ public class Lobby implements ServerController , Runnable {
 		for(User x: userlist) {
 			while(state == false) {	
 				try {
-					output = x.getOutput();
-					output.writeObject(new MoveUpdate(position,height1, position2, height2));
-					output.flush();
-					state = true;
+					try {
+						output = x.getOutput();
+						output.writeObject(new MoveUpdate(position,height1, position2, height2));
+						output.flush();
+						state = true;
+					}catch(SocketException e) {
+						System.out.println("SE uMove");
+						break;
+					}
 				} catch (IOException e) {
 					state = false;
 				}
@@ -298,11 +344,16 @@ public class Lobby implements ServerController , Runnable {
 		for(User x: userlist) {
 			while(state == false){
 				try {
-					output = x.getOutput();
-					output.writeObject(new NewBuilderUpdate(position));
-					output.flush();
-					
-					state = true;
+					try {
+						output = x.getOutput();
+						output.writeObject(new NewBuilderUpdate(position));
+						output.flush();
+						
+						state = true;
+					}catch(SocketException e) {
+						System.out.println("SE uNewBuild");
+						break;
+					}
 				} catch (IOException e) {
 					state = false;
 				}
@@ -315,8 +366,8 @@ public class Lobby implements ServerController , Runnable {
 		 for(User x : userlist) {
 			while(true) { 
 		        try {
-		            x.getSocket().close();
-		            break;
+			            x.getSocket().close();
+			            break;
 		        } catch (IOException e) {
 		        	System.out.println("socket closed "+x.getUserID());
 		        }
@@ -348,11 +399,16 @@ public class Lobby implements ServerController , Runnable {
 		for(User x: userlist) {
 			while(state == false){
 				try {
-					output = x.getOutput();
-					output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
-					output.flush();
-					
-					state = true;
+					try {
+						output = x.getOutput();
+						output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
+						output.flush();
+						
+						state = true;
+					}catch(SocketException e) {
+						System.out.println("SE u switch");
+						break;
+					}
 				} catch (IOException e) {
 					state = false;
 				}
@@ -372,17 +428,21 @@ public class Lobby implements ServerController , Runnable {
 			if(user.equals(x.getUserID())) {
 				while(true) {
 					try {
-						input = x.getInput();
-						output = x.getOutput();
-							
-						output.writeObject(new BooleanRequest(text));
-						output.flush();
-							try {
-								response = ((BooleanResponse)(MessageToServer)(Message)input.readObject()).getBool();
-								break;
-							}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
-							
-						} catch (IOException e) {
+						try {
+							input = x.getInput();
+							output = x.getOutput();
+								
+							output.writeObject(new BooleanRequest(text));
+							output.flush();
+								try {
+									response = ((BooleanResponse)(MessageToServer)(Message)input.readObject()).getBool();
+									break;
+								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
+						}catch(SocketException e) {
+							System.out.println("SE askBool");
+							break;
+						}
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
