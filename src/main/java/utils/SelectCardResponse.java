@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SelectCardResponse implements MessageToServer {
 
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Integer> cards;
+	private ArrayList<Integer> cards = new ArrayList<Integer>();
 	
 	public ArrayList<Integer> getCard() {
 		return cards;

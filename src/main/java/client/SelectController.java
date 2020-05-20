@@ -1,11 +1,14 @@
 package client;
 import java.util.ArrayList;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 
 public class SelectController {
 	
@@ -14,7 +17,9 @@ public class SelectController {
     private TilePane imagepane;
     @FXML
     private TilePane checkpane;
-    
+    @FXML
+    private Button okbutton;
+
     public void setCard(ArrayList<Integer> cardlist) {
     	card=cardlist;
     	for(Integer x : card) {
@@ -24,7 +29,7 @@ public class SelectController {
     		image.setPreserveRatio(true);
     		imagepane.getChildren().add(image);
     		CheckBox c = new CheckBox();
-    		c.setPadding(new Insets(4,4,4,4));
+    		c.setPadding(new Insets(4,4,4,2));
     		c.setSelected(false);
     		checkpane.getChildren().add(c);
     	}
@@ -44,5 +49,9 @@ public class SelectController {
     	}
 		return retcard;
     	
+    }
+    @FXML
+    void setselection(ActionEvent event) {
+    	((Stage) checkpane.getScene().getWindow()).close();
     }
 }
