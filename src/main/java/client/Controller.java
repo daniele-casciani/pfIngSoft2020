@@ -307,9 +307,13 @@ public class Controller extends  Application implements ClientController{
 				gameCont.clearInput();
 				Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
 				while(!gameCont.isChanged()) {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 				position = gameCont.getStart();
-				System.out.println("position"+position[0]);
 			}
 			sendMessage(new BuilderResponse(position));
 			System.out.println("new builderResponse at "+position[0]+" "+position[1]);
@@ -447,7 +451,9 @@ public class Controller extends  Application implements ClientController{
 					System.out.println("socket close error ");
 				}
 			}
+			Platform.runLater(()->{
 			return;
+			});
 		}
 	}
 }
