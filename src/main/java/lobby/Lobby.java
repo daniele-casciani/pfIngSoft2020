@@ -94,11 +94,11 @@ public class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public ArrayList<Integer> choseMovement(String player) {
+	public int[] choseMovement(String player) {
 		
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		ArrayList<Integer> response = null;
+		int[] response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {
@@ -126,12 +126,12 @@ public class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public ArrayList<Integer> whereBuild(String player) {
+	public int[] whereBuild(String player) {
 		
 
 		ObjectInputStream input;
 		ObjectOutputStream output;
-		ArrayList<Integer> response = null;
+		int[] response = null;
 		
 		for (User x : userlist) {
 			if(player.equals(x.getUserID())) {

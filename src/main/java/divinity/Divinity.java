@@ -75,8 +75,8 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			ArrayList<Integer> client = game.getController().whereBuild(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client.get(0), client.get(1)), game.getMap().getCell(client.get(2), client.get(3))};
+			int[] client = game.getController().whereBuild(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
 			return clientRequest;			
 		}
 		
@@ -123,8 +123,8 @@ public class Divinity {
 
 		@Override
 		public Level[] request() {
-			ArrayList<Integer> client = game.getController().choseMovement(game.getCurrentPlayer().getName());
-			Level[] clientRequest = { game.getMap().getCell(client.get(0), client.get(1)), game.getMap().getCell(client.get(2), client.get(3))};
+			int[] client = game.getController().choseMovement(game.getCurrentPlayer().getName());
+			Level[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
 			return clientRequest;
 		}
 	}

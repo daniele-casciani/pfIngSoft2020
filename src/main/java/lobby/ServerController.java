@@ -9,8 +9,8 @@ public interface ServerController {
 	void loser(Player player);
 	void winner(Player player);
 	int[] positionBuilder(String player);
-	ArrayList<Integer> choseMovement(String player);
-	ArrayList<Integer> whereBuild(String player);
+	int[] choseMovement(String player);
+	int[] whereBuild(String player);
 	void invalidAction(String player, String message);
 	
 	void updateBuild(int[] position, int height);

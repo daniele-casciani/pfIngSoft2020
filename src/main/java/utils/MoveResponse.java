@@ -13,7 +13,7 @@ public class MoveResponse implements MessageToServer{
 	void movementResponse(int[] start, int[] end){
 		movement[0] = start[0];
 		movement[1] = start[1];
-		movement[2] = end[2];
-		movement[3] = end[3];
+		movement[2] = end[0];
+		movement[3] = end[1];
 	}
 }

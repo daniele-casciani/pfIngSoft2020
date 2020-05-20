@@ -13,7 +13,7 @@ public class BuildResponse implements MessageToServer {
 	void buildResponse(int[] start, int[] end){
 		building[0] = start[0];
 		building[1] = start[1];
-		building[2] = end[2];
-		building[3] = end[3];	
+		building[2] = end[0];
+		building[3] = end[1];	
 	}
 }
