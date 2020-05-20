@@ -172,7 +172,7 @@
       <HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="350.0" prefHeight="100.0" prefWidth="350.0" StackPane.alignment="BOTTOM_RIGHT">
          <children>
             <TextField fx:id="textinput" alignment="CENTER" prefHeight="37.0" prefWidth="203.0" />
-            <Button fx:id="okbutton" mnemonicParsing="false" onAction="#passturn" prefHeight="38.0" prefWidth="112.0" text="pass turn" />
+            <Button fx:id="okbutton" mnemonicParsing="false" onAction="#validateAction" prefHeight="38.0" prefWidth="112.0" text="validate" />
          </children>
       </HBox>
    </children>

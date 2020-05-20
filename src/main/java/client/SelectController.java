@@ -15,15 +15,10 @@ public class SelectController {
     @FXML
     private TilePane checkpane;
     
-    public SelectController(ArrayList<Integer> card){
-    	this.card=card;
-    }
-    
-    public void initialize() {
-    	imagepane.getChildren().clear();
-    	checkpane.getChildren().clear();
+    public void setCard(ArrayList<Integer> cardlist) {
+    	card=cardlist;
     	for(Integer x : card) {
-    		ImageView image = new ImageView("resources/"+x+".png");
+    		ImageView image = new ImageView("image/"+x+".png");
     		image.setFitHeight(150);
     		image.setFitWidth(200);
     		image.setPreserveRatio(true);
@@ -35,10 +30,15 @@ public class SelectController {
     	}
     }
     
+    public void initialize(){
+    	imagepane.getChildren().clear();
+    	checkpane.getChildren().clear();	
+    }
+    
     ArrayList<Integer> getSelection(){
     	ArrayList<Integer> retcard = new ArrayList<Integer>();
     	for(int x=0;x<=card.size()-1;x++) {
-    		if (((CheckBox) imagepane.getChildren().get(x)).isSelected()) {
+    		if (((CheckBox) checkpane.getChildren().get(x)).isSelected()) {
     			retcard.add(card.get(x));
     		}
     	}

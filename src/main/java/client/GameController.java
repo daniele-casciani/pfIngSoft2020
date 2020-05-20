@@ -108,7 +108,7 @@ public class GameController {
 	}
 	
     @FXML
-    void passturn(ActionEvent event) {	
+    void validateAction(ActionEvent event) {	
     	if(isListening()) {
     		changed=true;
     		System.out.println("validating action");

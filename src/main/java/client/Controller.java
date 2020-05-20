@@ -356,15 +356,17 @@ public class Controller extends  Application implements ClientController{
 	public ArrayList<Integer> catchSelection(ArrayList<Integer> cardlist, int i) throws IOException {
 		System.out.println("starting divinity selection");
 		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/select card.fxml"));
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/fxml/select card.fxml"));
 		AnchorPane an = (AnchorPane)loader.load();
-		Scene scene = new Scene(an,480,640);
+		((SelectController)loader.getController()).setCard(cardlist);
+		Scene scene = new Scene(an,640,480);
 		Sstage.setScene(scene);
 		ArrayList<Integer> array = null;
-		while (array.size()!=i) {
+		 do{
 			Sstage.showAndWait();
 			array = ((SelectController)loader.getController()).getSelection();
-		}
+		}while (array.size()!=i);
 		System.out.println("returned selected divinity");
 		return array;
 
