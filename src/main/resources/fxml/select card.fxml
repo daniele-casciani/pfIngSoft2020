@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.SelectController">
    <children>
-      <ImageView fitHeight="485.0" fitWidth="640.0" pickOnBounds="true">
+      <ImageView fitHeight="485.0" fitWidth="640.0" mouseTransparent="true" pickOnBounds="true">
          <image>
             <Image url="@../../resources/image/SantoriniBoard.png" />
          </image>
@@ -21,7 +21,7 @@
       </ImageView>
       <StackPane prefHeight="480.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TilePane fx:id="imagepane" hgap="5.0" prefHeight="543.0" prefWidth="640.0" vgap="5.0">
+            <TilePane fx:id="imagepane" hgap="5.0" mouseTransparent="true" prefHeight="543.0" prefWidth="640.0" vgap="5.0">
                <children>
                   <ImageView accessibleRole="CHECK_BOX" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
