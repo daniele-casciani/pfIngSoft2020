@@ -40,13 +40,23 @@ public class GameController {
             	
             	Pane pane = new Pane();
             	pane.setOnMouseClicked(e->{click(pane);});
-            	pane.setOnDragDropped(e->{dragDrop(pane);});
+            	pane.setOnDragDropped(new EventHandler<DragEvent>() {
+            	    public void handle(DragEvent event) {
+            	    	boolean success=false;
+            	    	if(isListening()) {
+            	    		endCell[0] = GridPane.getColumnIndex(pane);
+            	    		endCell[1] = GridPane.getRowIndex(pane);
+            	    		((Pane)pane).setStyle("-fx-background-color: none");
+            	    		success=true;
+            	    	}
+            	    	event.setDropCompleted(success);	
+            	    }});
             	pane.setOnDragExited(e->{dragExit(pane);});
             	pane.setOnDragEntered(e->{dragEntered(pane);});
             	pane.setOnDragOver(new EventHandler<DragEvent>() {
     			    public void handle(DragEvent event) {
     			    	event.acceptTransferModes(TransferMode.NONE); 
-    			    }});
+    			    	}});
             	grid.add(pane, i, j);
             }    
         }
@@ -67,7 +77,16 @@ public class GameController {
 		}
 		Pane pane = new Pane();
     	pane.setOnMouseClicked(e->{click(pane);});
-    	pane.setOnDragDropped(e->{dragDrop(pane);});
+    	pane.setOnDragDropped(new EventHandler<DragEvent>() {
+    	    public void handle(DragEvent event) {
+    	    	boolean success=false;
+    	    	if(isListening()) {
+    	    		endCell[0] = GridPane.getColumnIndex(pane);
+    	    		endCell[1] = GridPane.getRowIndex(pane);
+    	    		((Pane)pane).setStyle("-fx-background-color: none");
+    	    		success=true;
+    	    	}
+    	    	event.setDropCompleted(success);}});
     	pane.setOnDragExited(e->{dragExit(pane);});
     	pane.setOnDragEntered(e->{dragEntered(pane);});
     	pane.setOnDragOver(new EventHandler<DragEvent>() {
@@ -139,6 +158,8 @@ public class GameController {
     }
 
     void dragStart(Node node) {
+    	node.startDragAndDrop(TransferMode.NONE);
+    	System.out.println("validate catch");
     	if(isListening()) {
     		startCell[0] = GridPane.getColumnIndex(node);
     		startCell[1] = GridPane.getRowIndex(node);
@@ -160,14 +181,6 @@ public class GameController {
     
     void dragExit(Node node) {
     	((Pane)node).setStyle("-fx-background-color: none");
-    }
-    
-    void dragDrop(Node node) {
-    	if(isListening()) {
-    		endCell[0] = GridPane.getColumnIndex(node);
-    		endCell[1] = GridPane.getRowIndex(node);
-    		((Pane)node).setStyle("-fx-background-color: none");
-    	}
     }
     
     void dragDone() {
