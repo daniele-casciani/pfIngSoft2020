@@ -6,8 +6,7 @@ import client.Controller;
 //devono esserci lo scambio tra due builder altrimenti è ambiguo
 public class SwitchPositionUpdate implements MessageSystem{
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -1100375534004296721L;
 	private int[] positions;
 	
 	public int[] getPositions(){

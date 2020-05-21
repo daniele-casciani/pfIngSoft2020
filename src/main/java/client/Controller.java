@@ -82,17 +82,17 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("Secondary stage created");
 	}
 
-	public synchronized void notify(InvalidAction message) {
+	public  void notify(InvalidAction message) {
 		setText(message.getError());
 	}
-	private synchronized void setText(String message) {
+	private void setText(String message) {
 		gameCont.setText(message);
 	}
 
-	public synchronized void notify(NewBuilderUpdate update) {
+	public  void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
 	}
-	private synchronized void addConstructor(int x, int y) {
+	private void addConstructor(int x, int y) {
 		ImageView node = new ImageView("/image/builder.png");
 		node.setFitHeight(80);
 		node.setFitWidth(80);
@@ -110,7 +110,7 @@ public class Controller extends  Application implements ClientController{
 		gameCont.setText("aggiunto costruttore");
 	}
 
-	public synchronized void notify(SwitchPositionUpdate update) {
+	public void notify(SwitchPositionUpdate update) {
 		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
 		addConstructor(0, 1);
@@ -118,19 +118,19 @@ public class Controller extends  Application implements ClientController{
 		gameCont.setText("scambio posizioni eseguito");
 		System.out.println("switched");
 	}
-	public synchronized void notify(MoveUpdate update) {
+	public void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(3, 4);
 		gameCont.setText("spostamento effettuato");
 		System.out.println("move update");
 	}
-	public synchronized void notify(BuildUpdate update) {
+	public void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
 		System.out.println("build update");
 	}
-	private synchronized void construction(int x, int y, int z) {
+	private void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
 		if (z>0|z<5) {
 			Rectangle lv1 = new Rectangle();
@@ -280,23 +280,27 @@ public class Controller extends  Application implements ClientController{
 	public void catchDrag(MessageToClient message) {
 		new Thread(()->{
 			System.out.println("start catch drag");
-			gameCont.clearInput();
-			gameCont.setListening(true);
 			int[] start = null;
 			int[] end = null;
-			while(!(gameCont.isStartValid() && gameCont.isEndValid())) {
+			synchronized(this){
 				gameCont.clearInput();
-				Platform.runLater(()->{gameCont.setText("trascina casella");});
-				while(!gameCont.isChanged()) {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+				gameCont.setListening(true);
+				while(!(gameCont.isStartValid() && gameCont.isEndValid())) {
+					gameCont.clearInput();
+					Platform.runLater(()->{gameCont.setText("trascina casella");});
+					while(!gameCont.isChanged()) {
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
+					start = gameCont.getStart();
+					end = gameCont.getEnd();
+					Platform.runLater(()->{gameCont.setText("valutazione mossa");});
 				}
-				start = gameCont.getStart();
-				end = gameCont.getEnd();
-				Platform.runLater(()->{gameCont.setText("valutazione mossa");});
+				gameCont.setListening(false);
+				gameCont.clearInput();
 			}
 			if (message instanceof MoveRequest) {
 				sendMessage(new MoveResponse(start, end));
@@ -310,8 +314,6 @@ public class Controller extends  Application implements ClientController{
 				sendMessage(new InvalidAction("messaggio non riconosciuto"));
 				System.out.println("messagio non riconosciuto");
 			}
-			gameCont.setListening(false);
-			gameCont.clearInput();
 			Thread.currentThread().interrupt();
 		}).start();
 	}
@@ -323,26 +325,28 @@ public class Controller extends  Application implements ClientController{
 	}
 	public void catchPosition() {
 		new Thread(()->{
-			gameCont.clearInput();
-			gameCont.setListening(true);
-			System.out.println("listenig for position");
-			int[] position = null;
-			while(!gameCont.isStartValid()) {
+			synchronized(this){
 				gameCont.clearInput();
-				Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
-				while(!gameCont.isChanged()) {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				gameCont.setListening(true);
+				System.out.println("listenig for position");
+				int[] position = null;
+				while(!gameCont.isStartValid()) {
+					gameCont.clearInput();
+					Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
+						while(!gameCont.isChanged()) {
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						position = gameCont.getStart();
 				}
-				position = gameCont.getStart();
+				sendMessage(new BuilderResponse(position));
+				System.out.println("builderResponse at "+position[0]+" "+position[1]);
+				gameCont.setListening(false);
+				gameCont.clearInput();
 			}
-			sendMessage(new BuilderResponse(position));
-			System.out.println("builderResponse at "+position[0]+" "+position[1]);
-			gameCont.setListening(false);
-			gameCont.clearInput();
 			Platform.runLater(()->{setText("validazione costruttore");});
 			Thread.currentThread().interrupt();;
 		}).start();
@@ -417,7 +421,7 @@ public class Controller extends  Application implements ClientController{
 	}
 	}
 	
-	public synchronized void handle(Message message) {
+	public void handle(Message message) {
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
 		}
@@ -453,6 +457,7 @@ public class Controller extends  Application implements ClientController{
 			Thread.currentThread().setName("listener");
 			try {
 			while(true) {
+				synchronized (this){
 				try {
 					message = (Message) input.readObject();
 					Platform.runLater(()->{
@@ -463,7 +468,7 @@ public class Controller extends  Application implements ClientController{
 					e.printStackTrace();
 					System.out.println(" end message cast error ");
 				}
-			}
+			}}
 			}catch(IOException e) {
 				System.out.println("start socket error ");
 				e.printStackTrace();

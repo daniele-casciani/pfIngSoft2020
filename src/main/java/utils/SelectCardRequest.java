@@ -6,7 +6,7 @@ import client.Controller;
 //getCardlist return array of divinity ID
 public class SelectCardRequest implements MessageToClient {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7217201408765538557L;
 	private ArrayList<Integer> cardlist;
 	private int number;
 	

@@ -4,8 +4,8 @@ import client.Controller;
 
 public class UserNameRequest implements MessageSystem{
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 6205892167326886800L;
+
 	@Override
 	public void accept(Controller clientLauncher) {
 		clientLauncher.execute(this);

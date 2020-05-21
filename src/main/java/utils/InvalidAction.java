@@ -3,8 +3,8 @@ package utils;
 import client.Controller;
 
 public class InvalidAction implements MessageSystem{
-	
-		private static final long serialVersionUID = 1L;
+
+		private static final long serialVersionUID = 774232641682688790L;
 		private String string;
 		
 		public String getError() {

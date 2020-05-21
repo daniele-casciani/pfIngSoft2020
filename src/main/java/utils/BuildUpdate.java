@@ -4,8 +4,7 @@ import client.Controller;
 
 public class BuildUpdate implements MessageToClient {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -1818718919740751126L;
 	private int[] building;
 	
 	public BuildUpdate(int[] whereBuild, int heigth) {

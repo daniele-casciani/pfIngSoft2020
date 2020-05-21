@@ -5,8 +5,7 @@ import client.Controller;
 // int [x,y], int z, int[x,y], int z, altezza senza builder altrimenti da errore
 public class MoveUpdate implements MessageToClient {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 5154450566211399609L;
 	private int[] movement;
 	
 	public MoveUpdate(int[] start,int height1, int[] end, int height2) {

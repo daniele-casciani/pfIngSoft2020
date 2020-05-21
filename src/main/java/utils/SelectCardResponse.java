@@ -5,7 +5,7 @@ import java.util.ArrayList;
 //getCard return selected divinity ID
 public class SelectCardResponse implements MessageToServer {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -987035773981020213L;
 	private ArrayList<Integer> cards = new ArrayList<Integer>();
 	
 	public ArrayList<Integer> getCard() {

@@ -3,9 +3,8 @@ package utils;
 import client.Controller;
 
 public class BooleanRequest implements MessageToClient {
-	
+	private static final long serialVersionUID = 2326625599851146546L;
 	private String str;
-	private static final long serialVersionUID = 1L;
 	
 	public BooleanRequest(String text){
 		this.str=text;
