@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -33,6 +35,7 @@ public class Controller extends  Application implements ClientController{
 	private Thread listT;
 	private Socket socket;
 	private ObjectOutputStream output;
+	private String playerName;
 	
 	public static void main( String[] args ) {
 		Application.launch(Controller.class);
@@ -93,6 +96,16 @@ public class Controller extends  Application implements ClientController{
 		ImageView node = new ImageView("/image/builder.png");
 		node.setFitHeight(80);
 		node.setFitWidth(80);
+	//	if(name.equals(playerName)) {
+			node.setOnDragDetected(e->gameCont.dragStart(node));
+			node.setOnDragDone(e->gameCont.dragDone());
+	//	}
+	//	else {
+	//		node.setMouseTransparent(true); 
+	//		Lighting ligh = new Lighting();
+	//		ligh.setLight(new Light.Distant(45, 45, Color.RED));
+	//		node.setEffect(ligh);  
+	//	}TODO  aggiungere nome a messaggio
 		gameCont.addElement(node, x, y);
 		gameCont.setText("aggiunto costruttore");
 	}
@@ -204,6 +217,7 @@ public class Controller extends  Application implements ClientController{
 			sendMessage(new UserNameResponse(user));
 			System.out.println("username sent " + user);
 			setText("logged as "+ user );
+			playerName=user;
 			
 		} catch (IOException e) {
 			System.out.println("start : impossibile aprire finestra login");
@@ -316,12 +330,11 @@ public class Controller extends  Application implements ClientController{
 				position = gameCont.getStart();
 			}
 			sendMessage(new BuilderResponse(position));
-			System.out.println("new builderResponse at "+position[0]+" "+position[1]);
+			System.out.println("builderResponse at "+position[0]+" "+position[1]);
+			gameCont.setListening(false);
 			gameCont.clearInput();
 			Platform.runLater(()->{
-				setText("posizionamento costruttore");
-				gameCont.setListening(false);
-				gameCont.clearInput();				
+				setText("validazione costruttore");					
 			});
 		}).start();
 	}

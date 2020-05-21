@@ -1,12 +1,14 @@
 package client;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -35,10 +37,16 @@ public class GameController {
     	grid.getChildren().clear();
     	for (int i = 0 ; i < 6 ; i++) {
             for (int j = 0; j < 6; j++) {
+            	
             	Pane pane = new Pane();
-            	pane.setOnMouseClicked(e->{
-            		click(pane);
-            	});
+            	pane.setOnMouseClicked(e->{click(pane);});
+            	pane.setOnDragDropped(e->{dragDrop(pane);});
+            	pane.setOnDragExited(e->{dragExit(pane);});
+            	pane.setOnDragEntered(e->{dragEntered(pane);});
+            	pane.setOnDragOver(new EventHandler<DragEvent>() {
+    			    public void handle(DragEvent event) {
+    			    	event.acceptTransferModes(TransferMode.NONE); 
+    			    }});
             	grid.add(pane, i, j);
             }    
         }
@@ -55,11 +63,17 @@ public class GameController {
 			if (GridPane.getRowIndex(nd)==y && GridPane.getColumnIndex(nd)==x) {
 				grid.getChildren().remove(nd);
 			}
+			
 		}
 		Pane pane = new Pane();
-    	pane.setOnMouseClicked(e->{
-    		click(pane);
-    	});
+    	pane.setOnMouseClicked(e->{click(pane);});
+    	pane.setOnDragDropped(e->{dragDrop(pane);});
+    	pane.setOnDragExited(e->{dragExit(pane);});
+    	pane.setOnDragEntered(e->{dragEntered(pane);});
+    	pane.setOnDragOver(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		    	event.acceptTransferModes(TransferMode.NONE); 
+		    }});
     	grid.add(pane, x, y);
 	}
     public void clearInput() {
@@ -123,12 +137,42 @@ public class GameController {
     	setText("selezionata cella "+(startCell[0]+1)+" "+(startCell[1]+1));
     	}
     }
-    @FXML
-    void dragEnd(DragEvent event) {
-    	//TODO
+
+    void dragStart(Node node) {
+    	if(isListening()) {
+    		startCell[0] = GridPane.getColumnIndex(node);
+    		startCell[1] = GridPane.getRowIndex(node);
+    	}
     }
-    @FXML
-    void dragStart(MouseEvent event) {
-    	//TODO
+
+    void dragEntered(Node node) {
+    	
+    	if(isListening()) {
+    		int x = GridPane.getColumnIndex(node);
+    		int y = GridPane.getRowIndex(node);
+    	
+    		if( Math.abs(startCell[0]-x)<2 && Math.abs(startCell[1]-y)<2)
+    			((Pane)node).setStyle("-fx-background-color: green");
+    		else ((Pane)node).setStyle("-fx-background-color: red");
+   
+    	}
+    }
+    
+    void dragExit(Node node) {
+    	((Pane)node).setStyle("-fx-background-color: none");
+    }
+    
+    void dragDrop(Node node) {
+    	if(isListening()) {
+    		endCell[0] = GridPane.getColumnIndex(node);
+    		endCell[1] = GridPane.getRowIndex(node);
+    		((Pane)node).setStyle("-fx-background-color: none");
+    	}
+    }
+    
+    void dragDone() {
+    	if(isListening()) {
+    		changed = true;
+    	}
     }
 }
