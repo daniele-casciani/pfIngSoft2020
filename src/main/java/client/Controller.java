@@ -322,7 +322,7 @@ public class Controller extends  Application implements ClientController{
 				Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
 				while(!gameCont.isChanged()) {
 					try {
-						Thread.sleep(500);
+						Thread.sleep(200);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -336,6 +336,7 @@ public class Controller extends  Application implements ClientController{
 			Platform.runLater(()->{
 				setText("validazione costruttore");					
 			});
+			Thread.currentThread().interrupt();;
 		}).start();
 	}
 
@@ -468,7 +469,7 @@ public class Controller extends  Application implements ClientController{
 				}
 			}
 			Platform.runLater(()->{
-			return;
+			Thread.currentThread().interrupt();
 			});
 		}
 	}
