@@ -13,9 +13,6 @@ public class Divinity {
 	Game game;
 	final private int cardID=0;
 	
-	
-
-	
 	public void round() {
 		
 		startRound();
@@ -30,18 +27,18 @@ public class Divinity {
 	}
 	
 	 void tryer(Action action) {
-			
 		 Object[] parameters;
+		 
 		 while (true) {
 			try {
 				parameters = action.request();
-				try {
 				if(action.execute(parameters[0],parameters[1])){
 					break;
 				}
-				}catch(ClassCastException e1){game.getController().invalidAction(game.getCurrentPlayer().getName(),"azione non valida");}
-			} catch (IOException e) {game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");}
-		}
+			} catch (IOException | NullPointerException e) {
+				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");}
+				System.out.println("(divinity-tryer)I.O.E. or NULL");
+		 }
 	}
 	
 	class Build implements Action {
@@ -52,17 +49,12 @@ public class Divinity {
 			Level whereBuild = (Level)end;
 			BuilderAction nowbuild = new BuilderAction(game);
 			
-			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
-				
+			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
 				if(whereBuild.getHeight()==3) {
-				
-					
 					nowbuild.buildDome(whereBuild);
 					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
 				}
-				
 				else {
-					
 					nowbuild.buildTower(whereBuild);
 					game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
 				}
@@ -80,7 +72,6 @@ public class Divinity {
 			Object[] clientRequest = { game.getMap().getCell(client[0], client[1]), game.getMap().getCell(client[2], client[3])};
 			return clientRequest;			
 		}
-		
 	}
 	
 	class Move implements Action {
@@ -187,6 +178,7 @@ public class Divinity {
 	public void setup(){
 		tryer(new Setup());
 		tryer(new Setup());
+		game.getController().invalidAction(game.getCurrentPlayer().getName(),"attesa avversari");
 	}
 	
 	class Setup implements Action{
@@ -202,7 +194,7 @@ public class Divinity {
 			}
 			else {
 				game.getController().invalidAction(game.getCurrentPlayer().getName(),"posizione non valida");
-				System.out.println("selected constructor position invalid");
+				System.out.println("(divinity-setup-ex) constructor position invalid");
 				return false;
 			}
 			return true;
@@ -218,8 +210,7 @@ public class Divinity {
 		
 	public boolean isNear(Level start, Level end) {
 		int xs, ys, xe, ye;
-		
-		
+
 		xs = start.getPosition()[0];
 		ys = start.getPosition()[1];
 		

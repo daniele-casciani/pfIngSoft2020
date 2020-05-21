@@ -190,11 +190,11 @@ public class Lobby implements ServerController , Runnable {
 							output.flush();
 							break;
 						}catch(SocketException e) {
-							System.out.println("SE invalid Act");
+							System.out.println("(lobby-invAct)S.E.");
 							break;
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						System.out.println("(lobby-invAct)I.O.E.");
 					}
 				}
 			}
@@ -216,11 +216,11 @@ public class Lobby implements ServerController , Runnable {
 						output.flush();
 						break;
 					}catch(SocketException e) {
-						System.out.println("SE lose");
+						System.out.println("(lobby-lose)S.E.");
 						break;
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("(lobby-lose)I.O.E.");
 				}
 			}
 		}
@@ -240,11 +240,11 @@ public class Lobby implements ServerController , Runnable {
 						output.flush();
 						break;
 					}catch(SocketException e) {
-						System.out.println("SE winner");
+						System.out.println("(lobby-winner)S.E.");
 						break;
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("(lobby-winner)I.O.E.");
 				}
 			}
 		}
@@ -274,12 +274,14 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
 						}catch(SocketException e) {
-							System.out.println("SE positionbuilder");
+							System.out.println("(lobby-posbuilder)start S.E.");
+							e.printStackTrace();
+							System.out.println("(lobby-posbuilder)end S.E.");
 							break;
 						}	
 								
 						} catch (IOException e) {
-						e.printStackTrace();
+							System.out.println("(lobby-posbuilder)I.O.E.");
 					}
 				}
 			}
@@ -301,14 +303,14 @@ public class Lobby implements ServerController , Runnable {
 						output.flush();
 						input.readObject();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException  e) {
 						System.out.println("S.E. build");
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
-					System.out.println("I.O.E. build");
+					System.out.println("(lobby-updbuild)I.O.E.");
 				}
 			}
 		}	
@@ -329,14 +331,14 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new MoveUpdate(position,height1, position2, height2));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
 						System.out.println("S.E. Move");
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
-					System.out.println("I.O.E. Move");
+					System.out.println("(lobby-updmove)I.O.E.");
 				}
 			}
 		}	
@@ -356,14 +358,16 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new NewBuilderUpdate(position));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());		
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
-						System.out.println("S.E. NewBuilder");
+						System.out.println("start S.E. NewBuilder");
+						e.printStackTrace();
+						System.out.println("end S.E. NewBuilder");
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
-					System.out.println("I.O.E. NewBuilder");
+					System.out.println("(lobby-updbuilder) I.O.E.");
 				}
 			}
 		}	
@@ -413,10 +417,10 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
-						System.out.println("SE switch");
+						System.out.println("S.E. switch");
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {

@@ -92,6 +92,7 @@ public class Controller extends  Application implements ClientController{
 	public  void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
 		System.out.println("new constructor");
+		sendMessage(new InvalidAction(""));
 	}
 	private void addConstructor(int x, int y) {
 		ImageView node = new ImageView("/image/builder.png");
@@ -117,6 +118,7 @@ public class Controller extends  Application implements ClientController{
 		addConstructor(3, 4);
 		gameCont.setText("scambio posizioni eseguito");
 		System.out.println("switched");
+		sendMessage(new InvalidAction(""));
 	}
 	public void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
@@ -124,11 +126,14 @@ public class Controller extends  Application implements ClientController{
 		addConstructor(3, 4);
 		gameCont.setText("spostamento effettuato");
 		System.out.println("move update");
+		sendMessage(new InvalidAction(""));
 	}
 	public void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
 		System.out.println("build update");
+		sendMessage(new InvalidAction(""));
+		
 	}
 	private void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
