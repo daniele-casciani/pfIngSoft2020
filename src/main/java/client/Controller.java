@@ -82,17 +82,17 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("Secondary stage created");
 	}
 
-	public void notify(InvalidAction message) {
+	public synchronized void notify(InvalidAction message) {
 		setText(message.getError());
 	}
-	private void setText(String message) {
+	private synchronized void setText(String message) {
 		gameCont.setText(message);
 	}
 
-	public void notify(NewBuilderUpdate update) {
+	public synchronized void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
 	}
-	private void addConstructor(int x, int y) {
+	private synchronized void addConstructor(int x, int y) {
 		ImageView node = new ImageView("/image/builder.png");
 		node.setFitHeight(80);
 		node.setFitWidth(80);
@@ -110,24 +110,24 @@ public class Controller extends  Application implements ClientController{
 		gameCont.setText("aggiunto costruttore");
 	}
 
-	public void notify(SwitchPositionUpdate update) {
+	public synchronized void notify(SwitchPositionUpdate update) {
 		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
 		addConstructor(0, 1);
 		addConstructor(3, 4);
 		gameCont.setText("scambio posizioni eseguito");
 		}
-	public void notify(MoveUpdate update) {
+	public synchronized void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(3, 4);
 		gameCont.setText("spostamento effettuato");
 	}
-	public void notify(BuildUpdate update) {
+	public synchronized void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
 	}
-	private void construction(int x, int y, int z) {
+	private synchronized void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
 		if (z>0|z<5) {
 			Rectangle lv1 = new Rectangle();
