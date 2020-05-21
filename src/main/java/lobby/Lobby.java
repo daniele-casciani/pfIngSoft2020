@@ -290,20 +290,24 @@ public class Lobby implements ServerController , Runnable {
 	@Override
 	public void updateBuild(int[] position, int position2) {
 		ObjectOutputStream output;
-		
+		ObjectInputStream input;
 		for(User x: userlist) {
 			while(true){
 				try {
 					try {
 						output = x.getOutput();
+						input = x.getInput();
 						output.writeObject(new BuildUpdate(position, position2));
 						output.flush();
+						input.readObject();
+						@SuppressWarnings("unused")
+						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());
 						break;
-					}catch(SocketException e) {
+					}catch(SocketException  e) {
 						System.out.println("S.E. build");
 						break;
 					}
-				} catch (IOException e) {
+				} catch (IOException | ClassNotFoundException e) {
 					System.out.println("I.O.E. build");
 				}
 			}
@@ -315,20 +319,23 @@ public class Lobby implements ServerController , Runnable {
 	public void updateMovement(int[] position, int height1, int[] position2, int height2) {
 		
 		ObjectOutputStream output;
-		
+		ObjectInputStream input;
 		for(User x: userlist) {
 			while(true) {	
 				try {
 					try {
 						output = x.getOutput();
+						input = x.getInput();
 						output.writeObject(new MoveUpdate(position,height1, position2, height2));
 						output.flush();
+						@SuppressWarnings("unused")
+						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
 						System.out.println("S.E. Move");
 						break;
 					}
-				} catch (IOException e) {
+				} catch (IOException | ClassNotFoundException e) {
 					System.out.println("I.O.E. Move");
 				}
 			}
@@ -339,20 +346,23 @@ public class Lobby implements ServerController , Runnable {
 	@Override
 	public void updateNewBuilder(int[] position) {
 		ObjectOutputStream output;
-		
+		ObjectInputStream input;
 		for(User x: userlist) {
 			while(true){
 				try {
 					try {
 						output = x.getOutput();
+						input = x.getInput();
 						output.writeObject(new NewBuilderUpdate(position));
 						output.flush();
+						@SuppressWarnings("unused")
+						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
 						System.out.println("S.E. NewBuilder");
 						break;
 					}
-				} catch (IOException e) {
+				} catch (IOException | ClassNotFoundException e) {
 					System.out.println("I.O.E. NewBuilder");
 				}
 			}
@@ -393,21 +403,23 @@ public class Lobby implements ServerController , Runnable {
 	public void updateSwitcBuilder(int[] position,int height1, int[] position2, int height2) {
 		
 		ObjectOutputStream output;
-		
+		ObjectInputStream input;
 		for(User x: userlist) {
 			while(true){
 				try {
 					try {
 						output = x.getOutput();
+						input = x.getInput();
 						output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
 						output.flush();
-						
+						@SuppressWarnings("unused")
+						Message message= ((InvalidAction)(MessageToServer)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
 						System.out.println("SE switch");
 						break;
 					}
-				} catch (IOException e) {
+				} catch (IOException | ClassNotFoundException e) {
 					System.out.println("I.O.E. switch");
 				}
 			}

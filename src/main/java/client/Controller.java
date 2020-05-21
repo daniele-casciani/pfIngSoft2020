@@ -91,6 +91,7 @@ public class Controller extends  Application implements ClientController{
 
 	public  void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
+		System.out.println("new constructor");
 	}
 	private void addConstructor(int x, int y) {
 		ImageView node = new ImageView("/image/builder.png");
@@ -107,7 +108,6 @@ public class Controller extends  Application implements ClientController{
 	//		node.setEffect(ligh);  
 	//	}TODO  aggiungere nome a messaggio
 		gameCont.addElement(node, x, y);
-		gameCont.setText("aggiunto costruttore");
 	}
 
 	public void notify(SwitchPositionUpdate update) {
