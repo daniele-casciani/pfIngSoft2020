@@ -53,7 +53,9 @@ public class Game implements Model {
 					}
 				break;
 			}
+			serverController.invalidAction(currentPlayer.getName(), "inizio del turno");
 			currentPlayer.getDivinity().round();
+			serverController.invalidAction(currentPlayer.getName(), "attesa degli avversari");
 			rotation();
 		}
 	}

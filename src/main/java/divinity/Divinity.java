@@ -30,8 +30,9 @@ public class Divinity {
 	}
 	
 	 void tryer(Action action) {
-		while (true) {
-			Object[] parameters;
+			
+		 Object[] parameters;
+		 while (true) {
 			try {
 				parameters = action.request();
 				try {
@@ -194,16 +195,16 @@ public class Divinity {
 		public boolean execute(Object arg0, Object arg1) {
 			Level selectedLevel = (Level)arg0;
 			
-				if(selectedLevel.getHeight()==0) {
-					BuilderAction newBuilder = new BuilderAction(game);
-					newBuilder.newBuilder(selectedLevel,game.getCurrentPlayer().getName());
-					game.getController().updateNewBuilder(selectedLevel.getPosition());
-				}
-				else {
-					game.getController().invalidAction(game.getCurrentPlayer().getName(),"posizione non valida");
-					System.out.println("selected constructor position invalid");
-					return false;
-				}
+			if(selectedLevel.getHeight()==0) {
+				BuilderAction newBuilder = new BuilderAction(game);
+				newBuilder.newBuilder(selectedLevel,game.getCurrentPlayer().getName());
+				game.getController().updateNewBuilder(selectedLevel.getPosition());
+			}
+			else {
+				game.getController().invalidAction(game.getCurrentPlayer().getName(),"posizione non valida");
+				System.out.println("selected constructor position invalid");
+				return false;
+			}
 			return true;
 		}
 

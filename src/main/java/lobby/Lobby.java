@@ -292,21 +292,19 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x: userlist) {
-			boolean state = false;
-			while(state == false){
+			while(true){
 				try {
 					try {
 						output = x.getOutput();
 						output.writeObject(new BuildUpdate(position, position2));
 						output.flush();
-						
-						state = true;
+						break;
 					}catch(SocketException e) {
-						System.out.println("SE ubuild");
+						System.out.println("S.E. build");
 						break;
 					}
 				} catch (IOException e) {
-					state = false;
+					System.out.println("I.O.E. build");
 				}
 			}
 		}	
@@ -319,20 +317,19 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x: userlist) {
-			boolean state = false;
-			while(state == false) {	
+			while(true) {	
 				try {
 					try {
 						output = x.getOutput();
 						output.writeObject(new MoveUpdate(position,height1, position2, height2));
 						output.flush();
-						state = true;
+						break;
 					}catch(SocketException e) {
-						System.out.println("SE uMove");
+						System.out.println("S.E. Move");
 						break;
 					}
 				} catch (IOException e) {
-					state = false;
+					System.out.println("I.O.E. Move");
 				}
 			}
 		}	
@@ -344,21 +341,19 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x: userlist) {
-			boolean state = false;
-			while(state == false){
+			while(true){
 				try {
 					try {
 						output = x.getOutput();
 						output.writeObject(new NewBuilderUpdate(position));
 						output.flush();
-						
-						state = true;
+						break;
 					}catch(SocketException e) {
-						System.out.println("SE uNewBuild");
+						System.out.println("S.E. NewBuilder");
 						break;
 					}
 				} catch (IOException e) {
-					state = false;
+					System.out.println("I.O.E. NewBuilder");
 				}
 			}
 		}	
@@ -400,21 +395,20 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x: userlist) {
-			boolean state = false;
-			while(state == false){
+			while(true){
 				try {
 					try {
 						output = x.getOutput();
 						output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
 						output.flush();
 						
-						state = true;
+						break;
 					}catch(SocketException e) {
-						System.out.println("SE u switch");
+						System.out.println("SE switch");
 						break;
 					}
 				} catch (IOException e) {
-					state = false;
+					System.out.println("I.O.E. switch");
 				}
 			}
 		}	
