@@ -282,12 +282,12 @@ public class Controller extends  Application implements ClientController{
 			int[] end = null;
 			while(!(gameCont.isStartValid() && gameCont.isEndValid())) {
 				gameCont.clearInput();
-				gameCont.setText("trascina casella");
+				Platform.runLater(()->{gameCont.setText("trascina casella");});
 				while(!gameCont.isChanged()) {
 					start = gameCont.getStart();
 					end = gameCont.getEnd();
 				}
-				gameCont.setText("valutazione mossa");
+				Platform.runLater(()->{gameCont.setText("valutazione mossa");});
 			}
 			if (message instanceof MoveRequest) {
 				sendMessage(new MoveResponse(start, end));
@@ -303,6 +303,7 @@ public class Controller extends  Application implements ClientController{
 			}
 			gameCont.setListening(false);
 			gameCont.clearInput();
+			Thread.currentThread().interrupt();
 		}).start();
 	}
 	
@@ -333,9 +334,7 @@ public class Controller extends  Application implements ClientController{
 			System.out.println("builderResponse at "+position[0]+" "+position[1]);
 			gameCont.setListening(false);
 			gameCont.clearInput();
-			Platform.runLater(()->{
-				setText("validazione costruttore");					
-			});
+			Platform.runLater(()->{setText("validazione costruttore");});
 			Thread.currentThread().interrupt();;
 		}).start();
 	}
@@ -469,7 +468,8 @@ public class Controller extends  Application implements ClientController{
 				}
 			}
 			Platform.runLater(()->{
-			Thread.currentThread().interrupt();
+				System.out.println("client closed");
+				Thread.currentThread().interrupt();
 			});
 		}
 	}
