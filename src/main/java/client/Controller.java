@@ -116,16 +116,19 @@ public class Controller extends  Application implements ClientController{
 		addConstructor(0, 1);
 		addConstructor(3, 4);
 		gameCont.setText("scambio posizioni eseguito");
-		}
+		System.out.println("switched");
+	}
 	public synchronized void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(3, 4);
 		gameCont.setText("spostamento effettuato");
+		System.out.println("move update");
 	}
 	public synchronized void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
+		System.out.println("build update");
 	}
 	private synchronized void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
@@ -276,6 +279,7 @@ public class Controller extends  Application implements ClientController{
 	}
 	public void catchDrag(MessageToClient message) {
 		new Thread(()->{
+			System.out.println("start catch drag");
 			gameCont.clearInput();
 			gameCont.setListening(true);
 			int[] start = null;
@@ -284,9 +288,14 @@ public class Controller extends  Application implements ClientController{
 				gameCont.clearInput();
 				Platform.runLater(()->{gameCont.setText("trascina casella");});
 				while(!gameCont.isChanged()) {
-					start = gameCont.getStart();
-					end = gameCont.getEnd();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
+				start = gameCont.getStart();
+				end = gameCont.getEnd();
 				Platform.runLater(()->{gameCont.setText("valutazione mossa");});
 			}
 			if (message instanceof MoveRequest) {
@@ -323,7 +332,7 @@ public class Controller extends  Application implements ClientController{
 				Platform.runLater(()->{gameCont.setText("inserisci posizione valida");});
 				while(!gameCont.isChanged()) {
 					try {
-						Thread.sleep(200);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -408,7 +417,7 @@ public class Controller extends  Application implements ClientController{
 	}
 	}
 	
-	public void handle(Message message) {
+	public synchronized void handle(Message message) {
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
 		}
@@ -417,7 +426,7 @@ public class Controller extends  Application implements ClientController{
 		}
 	}
 	
-	public void sendMessage(Message message) {
+	public synchronized void sendMessage(Message message) {
 		try {
 			output.writeObject(message);
 			output.flush();
