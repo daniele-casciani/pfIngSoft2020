@@ -15,12 +15,7 @@ public class SwitchPositionUpdate implements MessageSystem{
 	}
 	
 	public SwitchPositionUpdate(int[] p1,int height1, int[]p2,int height2) {
-		positions[0]=p1[0];
-		positions[1]=p1[1];
-		positions[2]=height1;
-		positions[3]=p2[0];
-		positions[4]=p2[1];
-		positions[5]=height2;
+		positions = new int[] {p1[0],p1[1], height1,p2[0],p2[1], height2};
 	}
 
 	@Override

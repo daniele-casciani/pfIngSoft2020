@@ -6,8 +6,8 @@ public class NewBuilderUpdate implements MessageSystem{
 	private static final long serialVersionUID = 1L;
 	private int[] position;
 	
-	 public NewBuilderUpdate(int[] position){
-			this.position=position;
+	 public NewBuilderUpdate(int[] pos){
+		 position=new int[]{pos[0],pos[1] };
 	 }
 	 
 	 public  int[] getPosition(){

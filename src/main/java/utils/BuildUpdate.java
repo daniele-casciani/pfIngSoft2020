@@ -9,9 +9,8 @@ public class BuildUpdate implements MessageToClient {
 	private int[] building;
 	
 	public BuildUpdate(int[] whereBuild, int heigth) {
-		building[0] = whereBuild[0]; //x
-		building[1] = whereBuild[1]; //y
-		building[2] = heigth;	//z= height of the new object
+	
+		building =new int[]{whereBuild[0],whereBuild[1], heigth};
 	}
 		
 	
