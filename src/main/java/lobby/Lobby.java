@@ -356,7 +356,7 @@ public class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public void updateNewBuilder(int[] position) {
+	public void updateNewBuilder(int[] position, String name) {
 		ObjectOutputStream output;
 		ObjectInputStream input;
 		for(User x: userlist) {
@@ -365,7 +365,7 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new NewBuilderUpdate(position, x.getUserID()));
+						output.writeObject(new NewBuilderUpdate(position, name));
 						output.flush();
 						@SuppressWarnings("unused")
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());		

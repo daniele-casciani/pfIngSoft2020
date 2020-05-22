@@ -14,7 +14,7 @@ public interface ServerController {
 	void invalidAction(String player, String message);
 	
 	void updateBuild(int[] position, int height);
-	void updateNewBuilder(int[] position);
+	void updateNewBuilder(int[] position, String name);
 	void updateMovement(int[] position, int height1, int[] position2, int height2, String name);
 	void updateSwitcBuilder(int[] position, int height1, String string, int[] is, int i, String name2);
 	
@@ -23,6 +23,7 @@ public interface ServerController {
 	boolean askEffect(String user, String text);
 	
 	public void sendDisconnection(String playerD);
+
 	
 	
 	
