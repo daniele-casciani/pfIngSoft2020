@@ -318,11 +318,11 @@ public class Controller extends  Application implements ClientController{
 			}
 			if (message instanceof MoveRequest) {
 				sendMessage(new MoveResponse(start, end));
-				System.out.println("(controller-drag)inviata move "+ start+" " + end);
+				System.out.println("(controller-drag)inviata move "+start[0]+start[1]+" "+end[0]+end[1]);
 			}
 			else if (message instanceof BuildRequest) {
 				sendMessage(new BuildResponse(start, end));
-				System.out.println("(controller-drag)inviata build "+ start+" " + end);
+				System.out.println("(controller-drag)inviata build "+start[0]+start[1]+" "+end[0]+end[1]);
 			}
 			else {
 				sendMessage(new InvalidAction("messaggio non riconosciuto"));
