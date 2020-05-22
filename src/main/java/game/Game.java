@@ -10,7 +10,7 @@ public class Game implements Model {
 	private Player currentPlayer;
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private Map map = new Map();
-	private ArrayList<ActivePower> effectList;
+	private ArrayList<ActivePower> effectList = new ArrayList<ActivePower>();
 	private ServerController serverController;
 	
 	public Game(ArrayList<User> participants, ArrayList<Integer> deck, ServerController serverController){
