@@ -7,7 +7,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -157,8 +159,9 @@ public class GameController {
     	}
     }
 
-    void dragStart(Node node) {
-    	node.startDragAndDrop(TransferMode.NONE);
+    void dragStart(ImageView node) {
+    	Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
+    	db.setDragView(node.getImage());
     	System.out.println("validate catch");
     	if(isListening()) {
     		startCell[0] = GridPane.getColumnIndex(node);
