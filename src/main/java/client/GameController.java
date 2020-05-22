@@ -54,14 +54,9 @@ public class GameController {
     	changed=false;
     }
     public void clearCell(int x, int y) {
-		for(Node nd : grid.getChildren()) {
-			if (GridPane.getRowIndex(nd)==y && GridPane.getColumnIndex(nd)==x) {
-				grid.getChildren().remove(nd);
-			}
-			
-		}
+    	grid.getChildren().removeIf(nd ->GridPane.getRowIndex(nd)==y && GridPane.getColumnIndex(nd)==x);			
 		Pane pane = new Pane();
-    	setPane( pane);
+    	setPane(pane);
     	grid.add(pane, x, y);
 	}
     public void clearInput() {
