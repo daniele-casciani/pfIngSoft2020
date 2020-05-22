@@ -28,12 +28,12 @@ public class Divinity {
 	
 	 void tryer(Action action) {
 		 Object[] parameters;
-		 
-		 while (true) {
+		 boolean recived = false;
+		 while (recived == false && game.getDisconnect() == false) {
 			try {
 				parameters = action.request();
 				if(action.execute(parameters[0],parameters[1])){
-					break;
+					recived = true;
 				}
 			} catch (IOException | NullPointerException e) {
 				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");}

@@ -22,6 +22,8 @@ public interface ServerController {
 	int choseCard(ArrayList<Integer> deck, User player);
 	boolean askEffect(String user, String text);
 	
+	public void sendDisconnection(String playerD);
+	
 	
 	
 	

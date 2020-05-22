@@ -46,17 +46,26 @@ public class Game implements Model {
 		}
 	
 	public void startGame() {
-		while (true) {
+		boolean endgame = false;
+		while (endgame == false) {
 			if (playerList.size()<=1) {
 				if (playerList.size()==1) {
 					serverController.winner(playerList.get(0));
 					}
-				break;
+				endgame = true;
 			}
 			serverController.invalidAction(currentPlayer.getName(), "inizio del turno");
 			currentPlayer.getDivinity().round();
-			serverController.invalidAction(currentPlayer.getName(), "attesa degli avversari");
-			rotation();
+			
+			if(disconect == true) {
+				System.out.println("player: " +getCurrentPlayer().getName()+" has quit ");
+				getController().sendDisconnection(getCurrentPlayer().getName());
+				endgame = true;				
+			}
+			else {
+				serverController.invalidAction(currentPlayer.getName(), "attesa degli avversari");
+				rotation();
+			}
 		}
 	}
 
@@ -91,7 +100,11 @@ public class Game implements Model {
 	public Map getMap() {
 		return map;
 	}
+	@Override	
 	public void setDisconect() {
 		this.disconect = true;
+	}
+	public boolean getDisconnect() {
+		return this.disconect;
 	}
 }
