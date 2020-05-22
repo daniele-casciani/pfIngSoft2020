@@ -312,21 +312,21 @@ public class Controller extends  Application implements ClientController{
 					start = gameCont.getStart();
 					end = gameCont.getEnd();
 					Platform.runLater(()->{gameCont.setText("valutazione mossa");});
+				}		
+				if (message instanceof MoveRequest) {
+					sendMessage(new MoveResponse(start, end));
+					System.out.println("(controller-drag)inviata move "+start[0]+start[1]+" "+end[0]+end[1]);
+				}
+				else if (message instanceof BuildRequest) {
+					sendMessage(new BuildResponse(start, end));
+					System.out.println("(controller-drag)inviata build "+start[0]+start[1]+" "+end[0]+end[1]);
+				}
+				else {
+					sendMessage(new InvalidAction("messaggio non riconosciuto"));
+					System.out.println("(controller-drag)messagio ricevuto non valido");
 				}
 				gameCont.setListening(false);
 				gameCont.clearInput();
-			}
-			if (message instanceof MoveRequest) {
-				sendMessage(new MoveResponse(start, end));
-				System.out.println("(controller-drag)inviata move "+start[0]+start[1]+" "+end[0]+end[1]);
-			}
-			else if (message instanceof BuildRequest) {
-				sendMessage(new BuildResponse(start, end));
-				System.out.println("(controller-drag)inviata build "+start[0]+start[1]+" "+end[0]+end[1]);
-			}
-			else {
-				sendMessage(new InvalidAction("messaggio non riconosciuto"));
-				System.out.println("(controller-drag)messagio ricevuto non valido");
 			}
 			Thread.currentThread().interrupt();
 		}).start();
