@@ -87,8 +87,10 @@ public class GameController {
     	    		endCell[1] = GridPane.getRowIndex(pane);
     	    		((Pane)pane).setStyle("-fx-background-color: none");
     	    		success=true;
+    	    		setText("cella arrivo "+(startCell[0]+1)+" "+(startCell[1]+1));
     	    	}
     	    	event.setDropCompleted(success);}});
+    	
     	pane.setOnDragExited(e->{dragExit(pane);});
     	pane.setOnDragEntered(e->{dragEntered(pane);});
     	pane.setOnDragOver(new EventHandler<DragEvent>() {
@@ -146,7 +148,6 @@ public class GameController {
     void validateAction(ActionEvent event) {	
     	if(isListening()) {
     		changed=true;
-    		System.out.println("validating action");
     	}
     	else {setText("non e il tuo turno");};
     }
@@ -162,11 +163,13 @@ public class GameController {
     void dragStart(ImageView node) {
     	Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
     	db.setDragView(node.getImage());
-    	System.out.println("validate catch");
+    	System.out.println("(gamecont-dragstart)validate catch");
     	if(isListening()) {
     		startCell[0] = GridPane.getColumnIndex(node);
     		startCell[1] = GridPane.getRowIndex(node);
+    		setText("cella partenza "+(startCell[0]+1)+" "+(startCell[1]+1));
     	}
+    	
     }
 
     void dragEntered(Node node) {

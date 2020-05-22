@@ -284,7 +284,7 @@ public class Controller extends  Application implements ClientController{
 	}
 	public void catchDrag(MessageToClient message) {
 		new Thread(()->{
-			System.out.println("start catch drag");
+			System.out.println("(controller-drag)start catch drag");
 			int[] start = null;
 			int[] end = null;
 			synchronized(this){
@@ -309,15 +309,15 @@ public class Controller extends  Application implements ClientController{
 			}
 			if (message instanceof MoveRequest) {
 				sendMessage(new MoveResponse(start, end));
-				System.out.println("inviata move "+ start+" " + end);
+				System.out.println("(controller-drag)inviata move "+ start+" " + end);
 			}
 			else if (message instanceof BuildRequest) {
 				sendMessage(new BuildResponse(start, end));
-				System.out.println("inviata build "+ start+" " + end);
+				System.out.println("(controller-drag)inviata build "+ start+" " + end);
 			}
 			else {
 				sendMessage(new InvalidAction("messaggio non riconosciuto"));
-				System.out.println("messagio non riconosciuto");
+				System.out.println("(controller-drag)messagio ricevuto non valido");
 			}
 			Thread.currentThread().interrupt();
 		}).start();
@@ -333,7 +333,7 @@ public class Controller extends  Application implements ClientController{
 			synchronized(this){
 				gameCont.clearInput();
 				gameCont.setListening(true);
-				System.out.println("listenig for position");
+				System.out.println("(controller-position)listenig for position");
 				int[] position = null;
 				while(!gameCont.isStartValid()) {
 					gameCont.clearInput();
@@ -348,7 +348,7 @@ public class Controller extends  Application implements ClientController{
 						position = gameCont.getStart();
 				}
 				sendMessage(new BuilderResponse(position));
-				System.out.println("builderResponse at "+position[0]+" "+position[1]);
+				System.out.println("(controller-position)builderResponse at "+position[0]+" "+position[1]);
 				gameCont.setListening(false);
 				gameCont.clearInput();
 			}
