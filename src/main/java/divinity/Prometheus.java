@@ -53,7 +53,7 @@ public final class Prometheus extends Divinity {
 								}
 							}
 						} 
-						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
 						if(end.getHeight()==3) {
 							nowmove.movement(start, end);
 							game.winGame();

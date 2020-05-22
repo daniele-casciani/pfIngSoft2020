@@ -51,7 +51,7 @@ public final class Athena extends Divinity {
 							}
 						}
 					} 
-					game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
+					game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
 					if(end.getHeight()==3) {
 						nowmove.movement(start, end);
 						game.winGame();
@@ -74,7 +74,7 @@ public final class Athena extends Divinity {
 						AthenaEffect active = new AthenaEffect();
 						game.getEffectList().add(active);
 						
-						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
 						if(end.getHeight()==3) {
 							nowmove.movement(start, end);
 							game.winGame();

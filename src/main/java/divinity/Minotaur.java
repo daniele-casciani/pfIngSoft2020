@@ -54,7 +54,7 @@ public final class Minotaur extends Divinity {
 									}
 								}
 							} 
-							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
+							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
 							if(end.getHeight()==3) {
 								nowmove.movement(start, end);
 								game.winGame();
@@ -70,9 +70,9 @@ public final class Minotaur extends Divinity {
 						Level nextCell = sameDirection(start, end);
 						if(nextCell.getHeight() != -1 && nextCell.getHeight() != 4) {
 							nowmove.movement(end, nextCell);
-							game.getController().updateMovement(end.getPosition(), nowmove.getLUnderB(end).getHeight(), nextCell.getPosition(), nextCell.getHeight());
+							game.getController().updateMovement(end.getPosition(), nowmove.getLUnderB(end).getHeight(), nextCell.getPosition(), nextCell.getHeight(), nowmove.builderName(end));
 							nowmove.movement(start, end);
-							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
+							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
 							return true;
 						}else {
 							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");

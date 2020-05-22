@@ -327,7 +327,7 @@ public class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public void updateMovement(int[] position, int height1, int[] position2, int height2) {
+	public void updateMovement(int[] position, int height1, int[] position2, int height2, String name) {
 		
 		ObjectOutputStream output;
 		ObjectInputStream input;
@@ -337,7 +337,7 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new MoveUpdate(position,height1, position2, height2));
+						output.writeObject(new MoveUpdate(position,height1, position2, height2, name));
 						output.flush();
 						@SuppressWarnings("unused")
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
@@ -365,7 +365,7 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new NewBuilderUpdate(position));
+						output.writeObject(new NewBuilderUpdate(position, x.getUserID()));
 						output.flush();
 						@SuppressWarnings("unused")
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());		
@@ -420,7 +420,7 @@ public class Lobby implements ServerController , Runnable {
 	}
 
 	@Override
-	public void updateSwitcBuilder(int[] position,int height1, int[] position2, int height2) {
+	public void updateSwitcBuilder(int[] position,int height1, String name1, int[] position2, int height2, String name2) {
 		
 		ObjectOutputStream output;
 		ObjectInputStream input;
@@ -430,7 +430,7 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new SwitchPositionUpdate(position,height1, position2, height2));
+						output.writeObject(new SwitchPositionUpdate(position,height1, name1, position2, height2, name2));
 						output.flush();
 						@SuppressWarnings("unused")
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());

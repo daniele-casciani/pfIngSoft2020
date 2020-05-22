@@ -43,7 +43,7 @@ public final class Pan extends Divinity {
 								}
 							}
 						} 
-						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight());
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
 						
 						if(end.getHeight()-nowmove.getLUnderB(start).getHeight() <= -2) {//pan effect
 							nowmove.movement(start, end);
