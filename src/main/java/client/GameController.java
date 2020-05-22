@@ -37,8 +37,7 @@ public class GameController {
     	listening=false;
     	textinput.setText("");
     	text.getChildren().clear();
-    	text.getChildren().add(new Label("in attesa del login"));
-    	text.getChildren().add(new Text(System.lineSeparator()));
+    	setText("in attesa del login");
     	grid.getChildren().clear();
     	for (int i = 0 ; i < 6 ; i++) {
             for (int j = 0; j < 6; j++) {
@@ -97,8 +96,8 @@ public class GameController {
 		grid.add(node, x, y);
 	}
 	public void setText(String message) {
-		text.getChildren().add(new Label(message));	
-		text.getChildren().add(new Text(System.lineSeparator()));
+		text.getChildren().add(0,new Label(message));	
+		text.getChildren().add(0,new Text(System.lineSeparator()));
 	}
 	public void setListening(boolean listening) {
 		this.listening = listening;
