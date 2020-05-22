@@ -120,8 +120,8 @@ public class Controller extends  Application implements ClientController{
 	public void notify(SwitchPositionUpdate update) {
 		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
-		addConstructor(0,1,update.getName1());
-		addConstructor(3,4,update.getName2());
+		addConstructor(update.getPositions()[0],update.getPositions()[1],update.getName1());
+		addConstructor(update.getPositions()[3],update.getPositions()[4],update.getName2());
 		gameCont.setText("scambio posizioni eseguito");
 		System.out.println("switched");
 		sendMessage(new InvalidAction(""));
@@ -182,7 +182,12 @@ public class Controller extends  Application implements ClientController{
 	}
 	
 public void notify(PlayerDisconnect playerDisconnect) {
-		// TODO Auto-generated method stub
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println(playerDisconnect.getPlayer()+"disconnected");
+			System.out.println("game closed");
+		}
 	}
 	
 	public void notify(Loser loser) {
@@ -445,7 +450,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		}
 	}
 	
-	public synchronized void sendMessage(Message message) {
+	public void sendMessage(Message message) {
 		try {
 			output.writeObject(message);
 			output.flush();

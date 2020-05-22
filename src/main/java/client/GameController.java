@@ -148,7 +148,7 @@ public class GameController {
     				endCell[1] = GridPane.getRowIndex(pane);
     				((Pane)pane).setStyle("-fx-background-color: none");
     				success=true;
-    				setText("cella arrivo "+(startCell[0]+1)+" "+(startCell[1]+1));
+    				setText("cella arrivo "+(endCell[0]+1)+" "+(endCell[1]+1));
     			}
     			event.setDropCompleted(success);
     			event.consume();
