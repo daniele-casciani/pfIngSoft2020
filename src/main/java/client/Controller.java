@@ -90,15 +90,15 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public  void notify(NewBuilderUpdate update) {
-		addConstructor(update.getPosition()[0],update.getPosition()[1]);	
+		addConstructor(update.getPosition()[0],update.getPosition()[1],update.getName());	
 		System.out.println("new constructor");
 		sendMessage(new InvalidAction(""));
 	}
-	private void addConstructor(int x, int y) {
+	private void addConstructor(int x, int y, String name) {
 		ImageView node = new ImageView("/image/builder.png");
 		node.setFitHeight(80);
 		node.setFitWidth(80);
-	//	if(name.equals(playerName)) {
+		if(name.equals(playerName)) {
 			node.setOnDragDetected(e->{
 				gameCont.dragStart(node);
 				e.consume();
@@ -107,21 +107,21 @@ public class Controller extends  Application implements ClientController{
 				gameCont.dragDone();
 				e.consume();
 			});
-	//	}
-	//	else {
-	//		node.setMouseTransparent(true); 
-	//		Lighting ligh = new Lighting();
-	//		ligh.setLight(new Light.Distant(45, 45, Color.RED));
-	//		node.setEffect(ligh);  
-	//	}TODO  aggiungere nome a messaggio
+		}
+		else {
+			node.setMouseTransparent(true); 
+			Lighting ligh = new Lighting();
+			ligh.setLight(new Light.Distant(45, 45, Color.RED));
+			node.setEffect(ligh); 
+		}
 		gameCont.addElement(node, x, y);
 	}
 
 	public void notify(SwitchPositionUpdate update) {
 		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
-		addConstructor(0, 1);
-		addConstructor(3, 4);
+		addConstructor(0,1,update.getName1());
+		addConstructor(3,4,update.getName2());
 		gameCont.setText("scambio posizioni eseguito");
 		System.out.println("switched");
 		sendMessage(new InvalidAction(""));
@@ -129,7 +129,7 @@ public class Controller extends  Application implements ClientController{
 	public void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
-		addConstructor(3, 4);
+		addConstructor(3, 4,update.getName());
 		gameCont.setText("spostamento effettuato");
 		System.out.println("move update");
 		sendMessage(new InvalidAction(""));
@@ -180,7 +180,8 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
-	public void notify(PlayerDisconnect playerDisconnect) {
+	
+public void notify(PlayerDisconnect playerDisconnect) {
 		// TODO Auto-generated method stub
 	}
 	

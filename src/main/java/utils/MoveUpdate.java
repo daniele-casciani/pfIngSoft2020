@@ -7,9 +7,10 @@ public class MoveUpdate implements MessageToClient {
 
 	private static final long serialVersionUID = 5154450566211399609L;
 	private int[] movement;
+	private String name;
 	
-	public MoveUpdate(int[] start,int height1, int[] end, int height2) {
-		
+	public MoveUpdate(int[] start,int height1, int[] end, int height2,String name) {
+		this.name=name;
 		movement = new int[] {start[0],start[1], height1, end[0],end[1], height2};
 	}
 	
@@ -20,5 +21,9 @@ public class MoveUpdate implements MessageToClient {
 	public void accept(Controller clientLauncher) {
 		clientLauncher.notify(this);
 		
+	}
+
+	public String getName() {
+		return name;
 	}
 }
