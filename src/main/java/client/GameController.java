@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -83,19 +84,23 @@ public class GameController {
     	    public void handle(DragEvent event) {
     	    	boolean success=false;
     	    	if(isListening()) {
+    	    		System.out.println("(gamecont-dragstart)endcell taken");
     	    		endCell[0] = GridPane.getColumnIndex(pane);
     	    		endCell[1] = GridPane.getRowIndex(pane);
     	    		((Pane)pane).setStyle("-fx-background-color: none");
     	    		success=true;
     	    		setText("cella arrivo "+(startCell[0]+1)+" "+(startCell[1]+1));
     	    	}
-    	    	event.setDropCompleted(success);}});
+    	    	event.setDropCompleted(success);
+    	    	event.consume();
+    	    	}});
     	
     	pane.setOnDragExited(e->{dragExit(pane);});
     	pane.setOnDragEntered(e->{dragEntered(pane);});
     	pane.setOnDragOver(new EventHandler<DragEvent>() {
 		    public void handle(DragEvent event) {
 		    	event.acceptTransferModes(TransferMode.NONE); 
+		    	event.consume();
 		    }});
     	grid.add(pane, x, y);
 	}
@@ -161,15 +166,17 @@ public class GameController {
     }
 
     void dragStart(ImageView node) {
-    	Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
-    	db.setDragView(node.getImage());
-    	System.out.println("(gamecont-dragstart)validate catch");
     	if(isListening()) {
+    	Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
+    	ClipboardContent content = new ClipboardContent();
+    	content.putImage(node.getImage());
+    	db.setDragView(node.getImage());
+    	db.setContent(content);
+    	System.out.println("(gamecont-dragstart)startcell taken");
     		startCell[0] = GridPane.getColumnIndex(node);
     		startCell[1] = GridPane.getRowIndex(node);
     		setText("cella partenza "+(startCell[0]+1)+" "+(startCell[1]+1));
     	}
-    	
     }
 
     void dragEntered(Node node) {

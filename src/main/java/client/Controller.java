@@ -99,8 +99,14 @@ public class Controller extends  Application implements ClientController{
 		node.setFitHeight(80);
 		node.setFitWidth(80);
 	//	if(name.equals(playerName)) {
-			node.setOnDragDetected(e->gameCont.dragStart(node));
-			node.setOnDragDone(e->gameCont.dragDone());
+			node.setOnDragDetected(e->{
+				gameCont.dragStart(node);
+				e.consume();
+				});
+			node.setOnDragDone(e->{
+				gameCont.dragDone();
+				e.consume();
+			});
 	//	}
 	//	else {
 	//		node.setMouseTransparent(true); 
