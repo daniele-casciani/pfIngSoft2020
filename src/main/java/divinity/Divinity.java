@@ -36,8 +36,9 @@ public class Divinity {
 					recived = true;
 				}
 			} catch (IOException | NullPointerException e) {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");}
+				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");
 				System.out.println("(divinity-tryer)I.O.E. or NULL");
+			}
 		 }
 	}
 	
@@ -99,6 +100,7 @@ public class Divinity {
 							}
 						} 
 							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(),nowmove.builderName(start));
+							System.out.println(" "+start.getPosition()[0]+start.getPosition()[1]+ " "+nowmove.getLUnderB(start).getHeight()+ " "+ end.getPosition()[0]+ end.getPosition()[1]+ " "+  end.getHeight()+ " "+ nowmove.builderName(start));
 							if(end.getHeight()==3) {
 								nowmove.movement(start, end);
 								game.winGame();

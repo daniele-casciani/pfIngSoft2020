@@ -143,7 +143,7 @@ public class Controller extends  Application implements ClientController{
 	}
 	private void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
-		if (z>0|z<5) {
+		if (z>0 && z<5) {
 			Rectangle lv1 = new Rectangle();
 			lv1.setWidth(90);
 			lv1.setHeight(90);
