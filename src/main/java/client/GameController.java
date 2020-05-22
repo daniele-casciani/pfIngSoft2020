@@ -33,6 +33,8 @@ public class GameController {
     private Button okbutton;
     
     public void initialize(){
+    	changed=false;
+    	listening=false;
     	textinput.setText("");
     	text.getChildren().clear();
     	text.getChildren().add(new Label("in attesa del login"));
@@ -40,31 +42,11 @@ public class GameController {
     	grid.getChildren().clear();
     	for (int i = 0 ; i < 6 ; i++) {
             for (int j = 0; j < 6; j++) {
-            	
             	Pane pane = new Pane();
-            	pane.setOnMouseClicked(e->{click(pane);});
-            	pane.setOnDragDropped(new EventHandler<DragEvent>() {
-            	    public void handle(DragEvent event) {
-            	    	boolean success=false;
-            	    	if(isListening()) {
-            	    		endCell[0] = GridPane.getColumnIndex(pane);
-            	    		endCell[1] = GridPane.getRowIndex(pane);
-            	    		((Pane)pane).setStyle("-fx-background-color: none");
-            	    		success=true;
-            	    	}
-            	    	event.setDropCompleted(success);	
-            	    }});
-            	pane.setOnDragExited(e->{dragExit(pane);});
-            	pane.setOnDragEntered(e->{dragEntered(pane);});
-            	pane.setOnDragOver(new EventHandler<DragEvent>() {
-    			    public void handle(DragEvent event) {
-    			    	event.acceptTransferModes(TransferMode.NONE); 
-    			    	}});
+            	setPane(pane);
             	grid.add(pane, i, j);
             }    
         }
-    	changed=false;
-    	listening=false;
     }
    
     public void cleanTextInput() {
@@ -79,38 +61,7 @@ public class GameController {
 			
 		}
 		Pane pane = new Pane();
-    	pane.setOnMouseClicked(e->{
-    		click(pane);
-    		e.consume();
-    		});
-    	pane.setOnDragDropped(new EventHandler<DragEvent>() {
-    	    public void handle(DragEvent event) {
-    	    	boolean success=false;
-    	    	if(isListening()) {
-    	    		System.out.println("(gamecont-dragstart)endcell taken");
-    	    		endCell[0] = GridPane.getColumnIndex(pane);
-    	    		endCell[1] = GridPane.getRowIndex(pane);
-    	    		((Pane)pane).setStyle("-fx-background-color: none");
-    	    		success=true;
-    	    		setText("cella arrivo "+(startCell[0]+1)+" "+(startCell[1]+1));
-    	    	}
-    	    	event.setDropCompleted(success);
-    	    	event.consume();
-    	    	}});
-    	
-    	pane.setOnDragExited(e->{
-    		dragExit(pane);
-    		e.consume();
-    	});
-    	pane.setOnDragEntered(e->{
-    		dragEntered(pane);
-    		e.consume();
-    	});
-    	pane.setOnDragOver(new EventHandler<DragEvent>() {
-		    public void handle(DragEvent event) {
-		    	event.acceptTransferModes(TransferMode.MOVE); 
-		    	event.consume();
-		    }});
+    	setPane( pane);
     	grid.add(pane, x, y);
 	}
     public void clearInput() {
@@ -166,14 +117,6 @@ public class GameController {
     	else {setText("non e il tuo turno");};
     }
 
-    void click(Pane pane) {
-    	if(isListening()) {
-    		startCell[0] = GridPane.getColumnIndex(pane);
-    		startCell[1] = GridPane.getRowIndex(pane);
-    	setText("selezionata cella "+(startCell[0]+1)+" "+(startCell[1]+1));
-    	}
-    }
-
     void dragStart(ImageView node) {
     	if(isListening()) {
     	Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
@@ -187,23 +130,62 @@ public class GameController {
     		setText("cella partenza "+(startCell[0]+1)+" "+(startCell[1]+1));
     	}
     }
-
-    void dragEntered(Node node) {
-    	if(isListening()) {
-    		int x = GridPane.getColumnIndex(node);
-    		int y = GridPane.getRowIndex(node);
-    	
-    		if( Math.abs(startCell[0]-x)<2 && Math.abs(startCell[1]-y)<2)
-    			((Pane)node).setStyle("-fx-background-color: green");
-    		else ((Pane)node).setStyle("-fx-background-color: red");
    
-    	}
-    }
+    void dragDone() {}
     
-    void dragExit(Node node) {
-    	((Pane)node).setStyle("-fx-background-color: none");
-    }
+    void setPane(Pane pane) {
+    	
+    	pane.setOnMouseClicked(e->{
+    		if(isListening()) {
+        		startCell[0] = GridPane.getColumnIndex(pane);
+        		startCell[1] = GridPane.getRowIndex(pane);
+        		setText("selezionata cella "+(startCell[0]+1)+" "+(startCell[1]+1));
+        	}
+    		e.consume();
+    		});
+    	
+    	pane.setOnDragDropped(new EventHandler<DragEvent>() {
+    		public void handle(DragEvent event) {
+    			boolean success=false;
+    			if(isListening()) {
+    				System.out.println("(gamecont-dragstart)endcell taken");
+    				endCell[0] = GridPane.getColumnIndex(pane);
+    				endCell[1] = GridPane.getRowIndex(pane);
+    				((Pane)pane).setStyle("-fx-background-color: none");
+    				success=true;
+    				setText("cella arrivo "+(startCell[0]+1)+" "+(startCell[1]+1));
+    			}
+    			event.setDropCompleted(success);
+    			event.consume();
+    		}});
+    	pane.setOnDragExited(new EventHandler<DragEvent>() {
+    		public void handle(DragEvent event) {
+    			pane.setStyle("-fx-background-color: none");
+    			event.consume();
+    		}});
+    	pane.setOnDragEntered(new EventHandler<DragEvent>() {
+    		public void handle(DragEvent event) {
+    			if(isListening()) {
+    	    		int x = GridPane.getColumnIndex(pane);
+    	    		int y = GridPane.getRowIndex(pane);
+    	    	
+    	    		if( Math.abs(startCell[0]-x)<2 && Math.abs(startCell[1]-y)<2)
+    	    			pane.setStyle("-fx-background-color: green");
+    	    		else pane.setStyle("-fx-background-color: red");
+    	    	}
+    			event.consume();
+    		}});
+    	pane.setOnDragOver(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		    	event.acceptTransferModes(TransferMode.MOVE); 
+		    	event.consume();
+		    }});
+    	
     
-    void dragDone() {
+    
+    
+    
+    
+    
     }
 }
