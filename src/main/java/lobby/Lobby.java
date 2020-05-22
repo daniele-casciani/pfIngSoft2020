@@ -55,7 +55,8 @@ public class Lobby implements ServerController , Runnable {
 					selectedCard = ((ChoseCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
 					state = true;
 				}catch(SocketException e) {
-					System.out.println("SE chosecard");
+					System.out.println("S.E. chosecard");
+					game.setDisconect();
 					break;
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -89,7 +90,8 @@ public class Lobby implements ServerController , Runnable {
 					selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
 					state = true;
 				}catch(SocketException e) {
-					System.out.println("SE aselectCard");
+					System.out.println("S.E selectCard");
+					game.setDisconect();
 					break;
 				}
 				
@@ -126,7 +128,12 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plase retry to move");};
 						}catch(SocketException e) {
-							System.out.println("SE choseMove");
+<<<<<<< HEAD
+							System.out.println("(lobby-chosemove)S.E.");
+=======
+							System.out.println("S.E choseMove");
+							game.setDisconect();
+>>>>>>> 54bf9939d3a4e639fd78f61a059ae514467086b8
 							break;
 						}
 							
@@ -163,7 +170,8 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plaese retry to build");};
 							}catch(SocketException e) {
-								System.out.println("SE whereBuild");
+								System.out.println("S.E whereBuild");
+								game.setDisconect();
 								break;
 							}
 						} catch (IOException e) {
@@ -191,6 +199,7 @@ public class Lobby implements ServerController , Runnable {
 							break;
 						}catch(SocketException e) {
 							System.out.println("(lobby-invAct)S.E.");
+							game.setDisconect();
 							break;
 						}
 					} catch (IOException e) {
@@ -217,6 +226,7 @@ public class Lobby implements ServerController , Runnable {
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-lose)S.E.");
+						game.setDisconect();
 						break;
 					}
 				} catch (IOException e) {
@@ -241,6 +251,7 @@ public class Lobby implements ServerController , Runnable {
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-winner)S.E.");
+						game.setDisconect();
 						break;
 					}
 				} catch (IOException e) {
@@ -276,6 +287,7 @@ public class Lobby implements ServerController , Runnable {
 						}catch(SocketException e) {
 							System.out.println("(lobby-posbuilder)start S.E.");
 							e.printStackTrace();
+							game.setDisconect();
 							System.out.println("(lobby-posbuilder)end S.E.");
 							break;
 						}	
@@ -307,6 +319,7 @@ public class Lobby implements ServerController , Runnable {
 						break;
 					}catch(SocketException  e) {
 						System.out.println("S.E. build");
+						game.setDisconect();
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
@@ -335,6 +348,7 @@ public class Lobby implements ServerController , Runnable {
 						break;
 					}catch(SocketException e) {
 						System.out.println("S.E. Move");
+						game.setDisconect();
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
@@ -363,6 +377,7 @@ public class Lobby implements ServerController , Runnable {
 					}catch(SocketException e) {
 						System.out.println("start S.E. NewBuilder");
 						e.printStackTrace();
+						game.setDisconect();
 						System.out.println("end S.E. NewBuilder");
 						break;
 					}
@@ -378,8 +393,13 @@ public class Lobby implements ServerController , Runnable {
 		 for(User x : userlist) {
 			while(true) { 
 		        try {
+		        	try {
 			            x.getSocket().close();
 			            break;
+		        	}catch(SocketException e) {
+		        		System.out.println("S.E close ");
+		        		break;
+		        	}
 		        } catch (IOException e) {
 		        	System.out.println("socket closed "+x.getUserID());
 		        }
@@ -400,7 +420,7 @@ public class Lobby implements ServerController , Runnable {
 			close();
 			System.out.println("lobby closed");
 		}
-
+		return;
 	}
 
 	@Override
@@ -421,6 +441,7 @@ public class Lobby implements ServerController , Runnable {
 						break;
 					}catch(SocketException e) {
 						System.out.println("S.E. switch");
+						game.setDisconect();
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
@@ -443,8 +464,9 @@ public class Lobby implements ServerController , Runnable {
 				while(true) {
 					try {
 						try {
-							input = x.getInput();
+							
 							output = x.getOutput();
+							input = x.getInput();
 								
 							output.writeObject(new BooleanRequest(text));
 							output.flush();
@@ -454,6 +476,7 @@ public class Lobby implements ServerController , Runnable {
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
 						}catch(SocketException e) {
 							System.out.println("SE askBool");
+							game.setDisconect();
 							break;
 						}
 					} catch (IOException e) {
@@ -465,5 +488,24 @@ public class Lobby implements ServerController , Runnable {
 		return response;
 		
 	}
-
+	
+	@Override
+	public void sendDisconnection(String playerD) {
+		ObjectOutputStream output;
+		
+		for(User x : userlist) {
+			if(!x.getUserID().equals(playerD)){ // playerD is already disconnected
+				try {
+					
+					output = x.getOutput();
+					
+					output.writeObject(new PlayerDisconnect(playerD));
+					output.flush();
+					
+				}catch(IOException e) {
+					System.out.println("I.O.E in sendDisconnect");
+				}
+			}
+		}
+	}
 }
