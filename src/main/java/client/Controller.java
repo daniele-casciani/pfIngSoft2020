@@ -180,6 +180,9 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
+	public void notify(PlayerDisconnect playerDisconnect) {
+		// TODO Auto-generated method stub
+	}
 	
 	public void notify(Loser loser) {
 		System.out.println("start lose");

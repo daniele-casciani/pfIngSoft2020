@@ -128,17 +128,8 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plase retry to move");};
 						}catch(SocketException e) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 							System.out.println("(lobby-chosemove)S.E.");
-=======
-							System.out.println("S.E choseMove");
 							game.setDisconect();
->>>>>>> 54bf9939d3a4e639fd78f61a059ae514467086b8
-=======
-							System.out.println("S.E choseMove");
-							game.setDisconect();
->>>>>>> 54bf9939d3a4e639fd78f61a059ae514467086b8
 							break;
 						}
 							

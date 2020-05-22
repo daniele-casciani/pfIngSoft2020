@@ -79,7 +79,10 @@ public class GameController {
 			
 		}
 		Pane pane = new Pane();
-    	pane.setOnMouseClicked(e->{click(pane);});
+    	pane.setOnMouseClicked(e->{
+    		click(pane);
+    		e.consume();
+    		});
     	pane.setOnDragDropped(new EventHandler<DragEvent>() {
     	    public void handle(DragEvent event) {
     	    	boolean success=false;
@@ -95,11 +98,17 @@ public class GameController {
     	    	event.consume();
     	    	}});
     	
-    	pane.setOnDragExited(e->{dragExit(pane);});
-    	pane.setOnDragEntered(e->{dragEntered(pane);});
+    	pane.setOnDragExited(e->{
+    		dragExit(pane);
+    		e.consume();
+    	});
+    	pane.setOnDragEntered(e->{
+    		dragEntered(pane);
+    		e.consume();
+    	});
     	pane.setOnDragOver(new EventHandler<DragEvent>() {
 		    public void handle(DragEvent event) {
-		    	event.acceptTransferModes(TransferMode.NONE); 
+		    	event.acceptTransferModes(TransferMode.MOVE); 
 		    	event.consume();
 		    }});
     	grid.add(pane, x, y);
@@ -180,7 +189,6 @@ public class GameController {
     }
 
     void dragEntered(Node node) {
-    	
     	if(isListening()) {
     		int x = GridPane.getColumnIndex(node);
     		int y = GridPane.getRowIndex(node);
@@ -197,8 +205,5 @@ public class GameController {
     }
     
     void dragDone() {
-    	if(isListening()) {
-    		changed = true;
-    	}
     }
 }
