@@ -129,7 +129,7 @@ public class Controller extends  Application implements ClientController{
 	public void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
-		addConstructor(3, 4,update.getName());
+		addConstructor(update.getMovement()[3], update.getMovement()[4],update.getName());
 		gameCont.setText("spostamento effettuato");
 		System.out.println("move update");
 		sendMessage(new InvalidAction(""));
