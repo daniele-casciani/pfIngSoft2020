@@ -82,6 +82,64 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("Secondary stage created");
 	}
 
+	public void notify(PlayerDisconnect playerDisconnect) {
+		System.out.println("start disconnect");
+		new Thread (()->{
+			Thread.currentThread().setName("disconnected");
+			AnchorPane an = new AnchorPane();
+			Label label = new Label();
+			label.setText(playerDisconnect.getPlayer()+" disconnected");
+			label.setAlignment(Pos.CENTER);
+			label.setFont(new Font(20));
+			an.getChildren().add(label);
+			Platform.runLater(()->{
+			Sstage.setScene(new Scene(an,300,100));
+			Sstage.showAndWait();
+			Thread.currentThread().interrupt();
+			});
+			try {
+				socket.close();
+			} catch (IOException e) {}
+			Thread.currentThread().interrupt();
+		}).start();
+		}
+	public void notify(Loser loser) {
+			System.out.println("start lose");
+			new Thread (()->{
+				Thread.currentThread().setName("loseGame");
+				AnchorPane an = new AnchorPane();
+				Label label = new Label();
+				label.setText("you win");
+				label.setAlignment(Pos.CENTER);
+				label.setFont(new Font(40));
+				an.getChildren().add(label);
+				Platform.runLater(()->{
+				Sstage.setScene(new Scene(an,300,100));
+				Sstage.showAndWait();
+				Thread.currentThread().interrupt();
+				});
+				Thread.currentThread().interrupt();
+			}).start();
+		}
+	public void notify(Winner winner) {
+			System.out.println("start win");
+			new Thread (()->{
+				Thread.currentThread().setName("winGame");
+				AnchorPane an = new AnchorPane();
+				Label label = new Label();
+				label.setText("you lose");
+				label.setAlignment(Pos.CENTER);
+				label.setFont(new Font(40));
+				an.getChildren().add(label);
+				Platform.runLater(()->{
+				Sstage.setScene(new Scene(an,300,100));
+				Sstage.showAndWait();
+				Thread.currentThread().interrupt();
+				});
+				Thread.currentThread().interrupt();
+			}).start();
+		}	
+	
 	public void notify(InvalidAction message) {
 		Platform.runLater(()->{
 		setText(message.getError());
@@ -182,58 +240,7 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
-	
-public void notify(PlayerDisconnect playerDisconnect) {
-	System.out.println("start disconnect");
-	new Thread (()->{
-		Thread.currentThread().setName("disconnected");
-		AnchorPane an = new AnchorPane();
-		Label label = new Label();
-		label.setText(playerDisconnect.getPlayer()+" disconnected");
-		label.setAlignment(Pos.CENTER);
-		label.setFont(new Font(20));
-		Platform.runLater(()->{
-		Sstage.setScene(new Scene(an));
-		Sstage.showAndWait();
-		});
-		Thread.currentThread().interrupt();
-	}).start();
-	}
-	
-	public void notify(Loser loser) {
-		System.out.println("start lose");
-		new Thread (()->{
-			Thread.currentThread().setName("loseGame");
-			AnchorPane an = new AnchorPane();
-			Label label = new Label();
-			label.setText("you win");
-			label.setAlignment(Pos.CENTER);
-			label.setFont(new Font(40));
-			Platform.runLater(()->{
-			Sstage.setScene(new Scene(an));
-			Sstage.showAndWait();
-			});
-			Thread.currentThread().interrupt();
-		}).start();
-	}
-
-	public void notify(Winner winner) {
-		System.out.println("start win");
-		new Thread (()->{
-			Thread.currentThread().setName("winGame");
-			AnchorPane an = new AnchorPane();
-			Label label = new Label();
-			label.setText("you lose");
-			label.setAlignment(Pos.CENTER);
-			label.setFont(new Font(40));
-			Platform.runLater(()->{
-			Sstage.setScene(new Scene(an));
-			Sstage.showAndWait();
-			});
-			Thread.currentThread().interrupt();
-		}).start();
-	}
-
+		
 	public void execute(UserNameRequest request) {
 		System.out.println("start login");
 		try {
@@ -301,6 +308,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		}).start();
 	}
 
+	
 	public void execute(BuildRequest request) {
 		setText("scegli dove costruire");
 		catchDrag(request);
@@ -386,6 +394,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		}).start();
 	}
 
+	
 	public void execute(SelectCardRequest request) {
 		setText("scegli le carte da usare");
 		ArrayList<Integer> array;
@@ -433,6 +442,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 
 	}
 
+	
 	public void execute(BooleanRequest request){
 		setText(request.getStr());		
 		System.out.println("starting bool choice");
@@ -449,9 +459,9 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		sendMessage(new BooleanResponse(choice));
 		System.out.println("selected "+choice);
 	} catch (IOException e) {
-		System.out.println("start impossibile richiedere scelta");
+		System.out.println("(controller-bool)start I.O.E");
 		e.printStackTrace();
-		System.out.println("end impossibile richiedere scelta");
+		System.out.println("(controller-bool)end I.O.E");
 	}
 	}
 	
@@ -464,6 +474,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		}
 	}
 
+	
 	public class Listener implements Runnable{
 		ObjectInputStream input;
 		Message message;
@@ -483,9 +494,9 @@ public void notify(PlayerDisconnect playerDisconnect) {
 			try {
 			while(true) {
 				synchronized (this){
-				try {
-					message = (Message) input.readObject();
-					if (message instanceof MessageToClient) {
+					try {
+						message = (Message) input.readObject();
+						if (message instanceof MessageToClient) {
 							Platform.runLater(()->{
 							((MessageToClient)message).accept(cont);
 							//long thread methods, send response
@@ -501,13 +512,15 @@ public void notify(PlayerDisconnect playerDisconnect) {
 							((MessageSystem)message).accept(cont);
 							//fast synchronized methods
 						}		
-				} catch (ClassNotFoundException e) {
-					System.out.println(" start message cast error ");
-					e.printStackTrace();
-					System.out.println(" end message cast error ");
+					} catch (ClassNotFoundException e) {
+						System.out.println(" start message cast error ");
+						e.printStackTrace();
+						System.out.println(" end message cast error ");
+					}
 				}
-			}}
-		}catch(IOException e) {
+			}
+			}catch(EOFException e) {
+			}catch(IOException e) {
 				System.out.println("start socket error ");
 				e.printStackTrace();
 				System.out.println("end socket error ");
