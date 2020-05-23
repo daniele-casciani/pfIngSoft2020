@@ -46,9 +46,13 @@ public class Divinity {
 		
 		@Override
 		public boolean execute(Object start, Object end) {
-			Level builderCell = (Level)start;
-			Level whereBuild = (Level)end;
+			Level builderCell = (Level) start;
+			Level whereBuild = (Level) end;
 			BuilderAction nowbuild = new BuilderAction(game);
+			System.out.println("WH: "+whereBuild.getHeight());
+			System.out.println("BH: "+nowbuild.getHeight(builderCell));
+			System.out.println("BN: "+nowbuild.builderName(builderCell));
+			System.out.println("BP: "+game.getCurrentPlayer().getName());
 			
 			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
 				if(whereBuild.getHeight()==3) {
