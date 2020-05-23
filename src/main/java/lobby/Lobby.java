@@ -410,7 +410,12 @@ public class Lobby implements ServerController , Runnable {
 			createGame();
 			game.startGame();
 			System.out.println("end game");
-		} finally {
+		} catch (Exception e) {
+			System.out.println("(lobbyrun) start error");
+			e.printStackTrace();
+			System.out.println("(lobbyrun) end error");
+		}
+		finally {
 			close();
 			System.out.println("lobby closed");
 		}
