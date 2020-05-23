@@ -1,5 +1,6 @@
 package client;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -183,13 +184,20 @@ public class Controller extends  Application implements ClientController{
 	}
 	
 public void notify(PlayerDisconnect playerDisconnect) {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			System.out.println(playerDisconnect.getPlayer()+"disconnected");
-			System.out.println("game closed");
-			Thread.currentThread().interrupt();
-		}
+	System.out.println("start disconnect");
+	new Thread (()->{
+		Thread.currentThread().setName("disconnected");
+		AnchorPane an = new AnchorPane();
+		Label label = new Label();
+		label.setText(playerDisconnect.getPlayer()+" disconnected");
+		label.setAlignment(Pos.CENTER);
+		label.setFont(new Font(20));
+		Platform.runLater(()->{
+		Sstage.setScene(new Scene(an));
+		Sstage.showAndWait();
+		});
+		Thread.currentThread().interrupt();
+	}).start();
 	}
 	
 	public void notify(Loser loser) {
@@ -201,8 +209,8 @@ public void notify(PlayerDisconnect playerDisconnect) {
 			label.setText("you win");
 			label.setAlignment(Pos.CENTER);
 			label.setFont(new Font(40));
-			Sstage.setScene(new Scene(an));
 			Platform.runLater(()->{
+			Sstage.setScene(new Scene(an));
 			Sstage.showAndWait();
 			});
 			Thread.currentThread().interrupt();
@@ -218,8 +226,8 @@ public void notify(PlayerDisconnect playerDisconnect) {
 			label.setText("you lose");
 			label.setAlignment(Pos.CENTER);
 			label.setFont(new Font(40));
-			Sstage.setScene(new Scene(an));
 			Platform.runLater(()->{
+			Sstage.setScene(new Scene(an));
 			Sstage.showAndWait();
 			});
 			Thread.currentThread().interrupt();
@@ -499,7 +507,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 					System.out.println(" end message cast error ");
 				}
 			}}
-			}catch(IOException e) {
+		}catch(IOException e) {
 				System.out.println("start socket error ");
 				e.printStackTrace();
 				System.out.println("end socket error ");
@@ -512,7 +520,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 				}
 			}
 			Platform.runLater(()->{
-				System.out.println("client closed");
+				System.out.println("listener closed");
 				Thread.currentThread().interrupt();
 			});
 		}
