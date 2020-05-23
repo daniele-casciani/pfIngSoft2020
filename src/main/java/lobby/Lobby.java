@@ -213,20 +213,22 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			while(true) {			
-				try {
+			if(x.getUserID().equals(player.getName())) {
+				while(true) {			
 					try {
-						output = x.getOutput();
-						output.writeObject(new Loser());
-						output.flush();
-						break;
-					}catch(SocketException e) {
-						System.out.println("(lobby-lose)S.E.");
-						game.setDisconect();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new Loser());
+							output.flush();
+							break;
+						}catch(SocketException e) {
+							System.out.println("(lobby-lose)S.E.");
+							game.setDisconect();
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-lose)I.O.E.");
 					}
-				} catch (IOException e) {
-					System.out.println("(lobby-lose)I.O.E.");
 				}
 			}
 		}
@@ -238,20 +240,22 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			while(true) {
-				try {
+			if(x.getUserID().equals(player.getName())){
+				while(true) {
 					try {
-						output = x.getOutput();
-						output.writeObject(new Winner());
-						output.flush();
-						break;
-					}catch(SocketException e) {
-						System.out.println("(lobby-winner)S.E.");
-						game.setDisconect();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new Winner());
+							output.flush();
+							break;
+						}catch(SocketException e) {
+							System.out.println("(lobby-winner)S.E.");
+							game.setDisconect();
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-winner)I.O.E.");
 					}
-				} catch (IOException e) {
-					System.out.println("(lobby-winner)I.O.E.");
 				}
 			}
 		}

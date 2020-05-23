@@ -78,10 +78,9 @@ public class Game implements Model {
 		serverController.winner(currentPlayer);
 		playerList.remove(currentPlayer);
 		for (Player x : playerList) {
-			serverController.loser(x);
-		playerList.clear();
-		
+			serverController.loser(x);		
 		}
+		playerList.clear();
 	}
 
 	public int getRound() {
