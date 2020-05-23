@@ -31,7 +31,7 @@ public final class Demeter extends Divinity {
 		Object[] parameters;
 		Object p1 = false;
 		
-		while (done1 == false) {
+		while (done1 == false && game.getDisconnect() == false) {
 				try {
 					parameters = action.request();
 					p1 = parameters[1];
@@ -41,7 +41,7 @@ public final class Demeter extends Divinity {
 					catch(ClassCastException e1){done1=false;}
 				} catch (IOException e) {done1=false;}
 			}
-		while (done2 == false) {
+		while (done2 == false && game.getDisconnect() == false) {
 			try {
 				parameters = action.request();
 				if(p1 != parameters[1]) {

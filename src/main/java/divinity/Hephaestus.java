@@ -39,21 +39,26 @@ public final class Hephaestus extends Divinity {
 				
 				if(whereBuild.getHeight()==3) {
 					nowbuild.buildDome(whereBuild);
-					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					game.getController().updateBuild( newCell.getPosition(),newCell.getHeight());
 					done = true;
 				}
 				
 				else {
 					nowbuild.buildTower(whereBuild);
-					game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					game.getController().updateBuild( newCell.getPosition(),newCell.getHeight());
 					done = true;
 				}
 				// here done = true and i ask for the active power of the divinity
 				if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) { // the activation of the effect does not imply a construction
-					if(whereBuild.getHeight()<3) {		// i can't add a dome, It is important to note that
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					
+					if(newCell.getHeight()<3) {		// i can't add a dome, It is important to note that
 														// here whereBuild will have a height increased by 1 compared to the beginning
-						nowbuild.buildTower(whereBuild);
-						game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
+						nowbuild.buildTower(newCell);
+						Level newCell2 = game.getMap().getCell(newCell.getPosition()[0], newCell.getPosition()[1]);
+						game.getController().updateBuild(newCell2.getPosition(), newCell2.getHeight());
 					}
 				}				
 				return done; 

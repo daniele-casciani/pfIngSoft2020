@@ -34,7 +34,7 @@ public final class Artemis extends Divinity {
 		Object[] parameters;
 		Object p0 = false;
 		
-		while (done1 == false) {
+		while (done1 == false && game.getDisconnect() == false) {
 				try {
 					parameters = action.request();
 					p0 = parameters[0];
@@ -44,7 +44,7 @@ public final class Artemis extends Divinity {
 					catch(ClassCastException e1){done1=false;}
 				} catch (IOException e) {done1=false;}
 			}
-		while (done2 == false) {
+		while (done2 == false && game.getDisconnect() == false) {
 			try {
 				parameters = action.request();
 				if(p0 != parameters[1]) {
