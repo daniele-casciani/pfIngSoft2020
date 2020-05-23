@@ -307,7 +307,6 @@ public class Lobby implements ServerController , Runnable {
 						input = x.getInput();
 						output.writeObject(new BuildUpdate(position,height));
 						output.flush();
-						input.readObject();
 						@SuppressWarnings("unused")
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
@@ -316,7 +315,8 @@ public class Lobby implements ServerController , Runnable {
 						game.setDisconect();
 						break;
 					}
-				} catch (IOException | ClassNotFoundException e) {
+					catch(ClassNotFoundException e) {}
+				} catch (IOException e) {
 					System.out.println("(lobby-updbuild)I.O.E.");
 				}
 			}
@@ -345,7 +345,8 @@ public class Lobby implements ServerController , Runnable {
 						game.setDisconect();
 						break;
 					}
-				} catch (IOException | ClassNotFoundException e) {
+					catch(ClassNotFoundException e) {}
+				} catch (IOException e) {
 					System.out.println("(lobby-updmove)I.O.E.");
 				}
 			}
@@ -373,7 +374,8 @@ public class Lobby implements ServerController , Runnable {
 						game.setDisconect();
 						break;
 					}
-				} catch (IOException | ClassNotFoundException e) {
+					catch(ClassNotFoundException e) {}
+				} catch (IOException e) {
 					System.out.println("(lobby-updbuilder) I.O.E.");
 				}
 			}
@@ -436,7 +438,8 @@ public class Lobby implements ServerController , Runnable {
 						game.setDisconect();
 						break;
 					}
-				} catch (IOException | ClassNotFoundException e) {
+					catch(ClassNotFoundException e) {}
+				} catch (IOException e) {
 					System.out.println("(lobby-upswitch)I.O.E.");
 				}
 			}
