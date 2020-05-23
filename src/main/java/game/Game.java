@@ -49,7 +49,7 @@ public class Game implements Model {
 		while (endgame == false) {
 			if (playerList.size()<=1) {
 				if (playerList.size()==1) {
-					serverController.winner(playerList.get(0));
+					winGame();
 					}
 				endgame = true;
 			}
@@ -81,6 +81,7 @@ public class Game implements Model {
 			serverController.loser(x);		
 		}
 		playerList.clear();
+		setDisconect();
 	}
 
 	public int getRound() {

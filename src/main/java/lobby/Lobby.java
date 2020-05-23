@@ -498,7 +498,7 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x : userlist) {
-			if(!x.getUserID().equals(playerD)){ // playerD is already disconnected
+			if(x.getUserID().equals(playerD) == false){ // playerD is already disconnected
 				try {
 					
 					output = x.getOutput();
