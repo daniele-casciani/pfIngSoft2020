@@ -166,12 +166,12 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "plaese retry to build");};
 							}catch(SocketException e) {
-								System.out.println("S.E whereBuild");
+								System.out.println("(lobby-wherebuild)S.E.");
 								game.setDisconect();
 								break;
 							}
 						} catch (IOException e) {
-						e.printStackTrace();
+							System.out.println("(lobby-wherebuild)I.O.E.");
 					}
 				}
 			}
@@ -281,10 +281,8 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
 						}catch(SocketException e) {
-							System.out.println("(lobby-posbuilder)start S.E.");
-							e.printStackTrace();
+							System.out.println("(lobby-posbuilder)S.E.");
 							game.setDisconect();
-							System.out.println("(lobby-posbuilder)end S.E.");
 							break;
 						}	
 								
@@ -298,7 +296,7 @@ public class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
-	public void updateBuild(int[] position, int position2) {
+	public void updateBuild(int[] position, int height) {
 		ObjectOutputStream output;
 		ObjectInputStream input;
 		for(User x: userlist) {
@@ -307,14 +305,14 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new BuildUpdate(position, position2));
+						output.writeObject(new BuildUpdate(position,height));
 						output.flush();
 						input.readObject();
 						@SuppressWarnings("unused")
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException  e) {
-						System.out.println("S.E. build");
+						System.out.println("(lobby-updbuild)S.E.");
 						game.setDisconect();
 						break;
 					}
@@ -343,7 +341,7 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
-						System.out.println("S.E. Move");
+						System.out.println("(lobby-updmove)S.E.");
 						game.setDisconect();
 						break;
 					}
@@ -371,10 +369,8 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
-						System.out.println("start S.E. NewBuilder");
-						e.printStackTrace();
+						System.out.println("(lobby-updbuilder)S.E.");
 						game.setDisconect();
-						System.out.println("end S.E. NewBuilder");
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
@@ -436,12 +432,12 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
-						System.out.println("S.E. switch");
+						System.out.println("(lobby-upswitch)S.E.");
 						game.setDisconect();
 						break;
 					}
 				} catch (IOException | ClassNotFoundException e) {
-					System.out.println("I.O.E. switch");
+					System.out.println("(lobby-upswitch)I.O.E.");
 				}
 			}
 		}	
@@ -471,12 +467,12 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
 						}catch(SocketException e) {
-							System.out.println("SE askBool");
+							System.out.println("(lobby-askbool)S.E.");
 							game.setDisconect();
 							break;
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						System.out.println("(lobby-askbool)I.O.E.");
 					}
 				}
 			}
