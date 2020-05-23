@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import utils.*;
 
 public class Controller extends  Application implements ClientController{
+	
 	private Stage Pstage;
 	private Scene Pscene;
 	private FXMLLoader ploader;
@@ -30,9 +31,10 @@ public class Controller extends  Application implements ClientController{
 	private StackPane game = null;
 	private Stage Sstage;
 	
+	private Socket socket;
 	private Listener listener;
 	private Thread listT;
-	private Socket socket;
+	
 	private ObjectOutputStream output;
 	private String playerName;
 	private Controller cont= this;
@@ -43,22 +45,30 @@ public class Controller extends  Application implements ClientController{
 	
 	@Override
 	public void start(Stage stage) {
-
+		
+		Thread.currentThread().setName("PrimaryStage");
+		Platform.setImplicitExit(true);
+		newConnection("127.0.0.1");
+		
+		newPstage(stage);		
+		newSstage();
+		Pstage.show();
+	}
+	private void newConnection(String ip) {
 		try {
-			socket= new Socket("127.0.0.1", 51344);
+			socket= new Socket(ip, 51344);
 			output =new ObjectOutputStream(socket.getOutputStream());
 			} catch (IOException e) {
-				System.out.println("start server unreachble ");
-				e.printStackTrace();
-				System.out.println("end server unreachble ");
+				System.out.println("server unreachable game closed");
 				return;
 			}
 		listener = new Listener(socket,this);
-		listT= new Thread (listener);
-		listT.start();
-		
+		listT= new Thread(listener);
+		listT.setDaemon(true);
+		listT.start();	
+	}
+	private void newPstage(Stage stage) {
 		Pstage= stage;
-		Thread.currentThread().setName("PrimaryStage");
 		try {
 			ploader = new FXMLLoader();
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
@@ -72,16 +82,17 @@ public class Controller extends  Application implements ClientController{
 		}	
 		Pstage.setResizable(false);
 		Pstage.setScene(Pscene);
-		Pstage.show();
-		System.out.println("Primary stage show");
-			
+		System.out.println("Primary stage created");
+	}
+	
+	private void newSstage() {
 		Sstage = new Stage();
 		Sstage.initOwner(Pstage);
 		Sstage.initModality(Modality.WINDOW_MODAL);
 		Sstage.setResizable(false);
 		System.out.println("Secondary stage created");
 	}
-
+	
 	public void notify(PlayerDisconnect playerDisconnect) {
 		System.out.println("start disconnect");
 		new Thread (()->{
@@ -483,9 +494,7 @@ public class Controller extends  Application implements ClientController{
 			try {
 				input=new ObjectInputStream(socket.getInputStream());
 			} catch (IOException e) {
-				System.out.println("start error socket input creation ");
-				e.printStackTrace();
-				System.out.println("end error socket input creation ");
+				System.out.println("(listener)IOException in creation ");
 			}
 		}
 		@Override
@@ -513,17 +522,13 @@ public class Controller extends  Application implements ClientController{
 							//fast synchronized methods
 						}		
 					} catch (ClassNotFoundException e) {
-						System.out.println(" start message cast error ");
-						e.printStackTrace();
-						System.out.println(" end message cast error ");
+						System.out.println("(listener) message not supported");
 					}
 				}
 			}
 			}catch(EOFException e) {
 			}catch(IOException e) {
-				System.out.println("start socket error ");
-				e.printStackTrace();
-				System.out.println("end socket error ");
+				System.out.println("(listener)IOException socket error ");
 			} finally {
 				try {
 					socket.close();
