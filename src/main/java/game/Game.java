@@ -77,9 +77,9 @@ public class Game implements Model {
 	public void winGame() {
 		serverController.winner(currentPlayer);
 		playerList.remove(currentPlayer);
-		for (Player x : playerList) {
-			serverController.loser(x);		
-		}
+			for (Player x : playerList) {
+				serverController.loser(x);		
+			}
 		playerList.clear();
 		setDisconect();
 	}
