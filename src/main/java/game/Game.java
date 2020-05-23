@@ -81,6 +81,7 @@ public class Game implements Model {
 		for (Player x : playerList) {
 			serverController.loser(x);
 		playerList.clear();
+		
 		}
 	}
 
