@@ -56,13 +56,14 @@ public class Divinity {
 			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
 				if(whereBuild.getHeight()==3) {
 					buildAction.buildDome(whereBuild);
-					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					game.getController().updateBuild( newCell.getPosition(),newCell.getHeight());
 					
 				}
 				else {
 					buildAction.buildTower(whereBuild);
-					game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
-					System.out.println(" "+ whereBuild.getPosition()[0]+" "+whereBuild.getPosition()[1]+" "+whereBuild.getHeight());
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					game.getController().updateBuild( newCell.getPosition(),newCell.getHeight());
 				}
 			}
 			else {
