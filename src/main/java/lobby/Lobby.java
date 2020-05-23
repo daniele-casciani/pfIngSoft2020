@@ -213,20 +213,22 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			while(true) {			
-				try {
+			if(x.getUserID().equals(player.getName())) {
+				while(true) {			
 					try {
-						output = x.getOutput();
-						output.writeObject(new Loser());
-						output.flush();
-						break;
-					}catch(SocketException e) {
-						System.out.println("(lobby-lose)S.E.");
-						game.setDisconect();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new Loser());
+							output.flush();
+							break;
+						}catch(SocketException e) {
+							System.out.println("(lobby-lose)S.E.");
+							game.setDisconect();
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-lose)I.O.E.");
 					}
-				} catch (IOException e) {
-					System.out.println("(lobby-lose)I.O.E.");
 				}
 			}
 		}
@@ -238,20 +240,22 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			while(true) {
-				try {
+			if(x.getUserID().equals(player.getName())){
+				while(true) {
 					try {
-						output = x.getOutput();
-						output.writeObject(new Winner());
-						output.flush();
-						break;
-					}catch(SocketException e) {
-						System.out.println("(lobby-winner)S.E.");
-						game.setDisconect();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new Winner());
+							output.flush();
+							break;
+						}catch(SocketException e) {
+							System.out.println("(lobby-winner)S.E.");
+							game.setDisconect();
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-winner)I.O.E.");
 					}
-				} catch (IOException e) {
-					System.out.println("(lobby-winner)I.O.E.");
 				}
 			}
 		}
@@ -308,7 +312,7 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new BuildUpdate(position,height));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
+						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException  e) {
 						System.out.println("(lobby-updbuild)S.E.");
@@ -338,7 +342,7 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new MoveUpdate(position,height1, position2, height2, name));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
+						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updmove)S.E.");
@@ -364,10 +368,10 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new NewBuilderUpdate(position, name));
+						output.writeObject(new BuilderUpdate(position, name));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());		
+						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updbuilder)S.E.");
@@ -410,7 +414,12 @@ public class Lobby implements ServerController , Runnable {
 			createGame();
 			game.startGame();
 			System.out.println("end game");
-		} finally {
+		} catch (Exception e) {
+			System.out.println("(lobbyrun) start error");
+			e.printStackTrace();
+			System.out.println("(lobbyrun) end error");
+		}
+		finally {
 			close();
 			System.out.println("lobby closed");
 		}
@@ -431,7 +440,7 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new SwitchPositionUpdate(position,height1, name1, position2, height2, name2));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
+						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-upswitch)S.E.");
@@ -489,7 +498,7 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x : userlist) {
-			if(!x.getUserID().equals(playerD)){ // playerD is already disconnected
+			if(x.getUserID().equals(playerD) == false){ // playerD is already disconnected
 				try {
 					
 					output = x.getOutput();

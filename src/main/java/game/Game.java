@@ -22,11 +22,10 @@ public class Game implements Model {
 		}
 		else {
 			ArrayList<Integer> selectedCards = serverController.selectCard(deck, participants.get(0));
-			int chosenCard;
 			for (int i=1; i<participants.size(); i++) {
-				chosenCard = serverController.choseCard(selectedCards, participants.get(i));
+				final int chosenCard = serverController.choseCard(selectedCards, participants.get(i));
 				playerList.add(new Player(participants.get(i).getUserID(), chosenCard, this));
-				selectedCards.remove(chosenCard-1);
+				selectedCards.removeIf(card-> card==chosenCard);
 			}
 			playerList.add(0,new Player(participants.get(0).getUserID(), selectedCards.get(0), this));
 		}
@@ -50,7 +49,7 @@ public class Game implements Model {
 		while (endgame == false) {
 			if (playerList.size()<=1) {
 				if (playerList.size()==1) {
-					serverController.winner(playerList.get(0));
+					winGame();
 					}
 				endgame = true;
 			}
@@ -79,9 +78,10 @@ public class Game implements Model {
 		serverController.winner(currentPlayer);
 		playerList.remove(currentPlayer);
 		for (Player x : playerList) {
-			serverController.loser(x);
-		playerList.clear();
+			serverController.loser(x);		
 		}
+		playerList.clear();
+		setDisconect();
 	}
 
 	public int getRound() {

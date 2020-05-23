@@ -2,8 +2,9 @@ package divinity;
 
 import java.io.IOException;
 
-
+import divinity.Divinity.Setup;
 import game.Game;
+import tower.Level;
 
 public final class Artemis extends Divinity {
 	final private  int cardID=2;
@@ -27,17 +28,24 @@ public final class Artemis extends Divinity {
 		endRound();
 	}
 	
+	@Override
+	public void setup() {
+		super.tryer(new Setup());
+		super.tryer(new Setup());
+		game.getController().invalidAction(game.getCurrentPlayer().getName(),"attesa avversari");
+	}
+	
 	@Override 
 	void tryer(Action action) {
 		boolean done2 = false;
 		boolean done1 = false;
 		Object[] parameters;
-		Object p0 = false;
+		Level start = null;
 		
 		while (done1 == false && game.getDisconnect() == false) {
 				try {
 					parameters = action.request();
-					p0 = parameters[0];
+					start = (Level) parameters[0]; // store start point
 					try {
 						done1 = action.execute(parameters[0],parameters[1]);
 					}
@@ -47,7 +55,8 @@ public final class Artemis extends Divinity {
 		while (done2 == false && game.getDisconnect() == false) {
 			try {
 				parameters = action.request();
-				if(p0 != parameters[1]) {
+				Level secondEnd = (Level) parameters[1];
+				if(start.getPosition()[0] != secondEnd.getPosition()[0] || start.getPosition()[1] != secondEnd.getPosition()[1]) {
 					try {
 						done2 = action.execute(parameters[0],parameters[1]);
 					}
