@@ -29,10 +29,11 @@ public class Divinity {
 	 void tryer(Action action) {
 		 Object[] parameters;
 		 boolean recived = false;
+		 
 		 while (recived == false && game.getDisconnect() == false) {
 			try {
 				parameters = action.request();
-				if(action.execute(parameters[0],parameters[1])){
+				if(action.execute(parameters[0],parameters[1]) == true){
 					recived = true;
 				}
 			} catch (IOException | NullPointerException e) {

@@ -64,7 +64,7 @@ public class Game implements Model {
 			}
 			else {
 				serverController.invalidAction(currentPlayer.getName(), "attesa degli avversari");
-				rotation();
+				currentPlayer = rotation();
 			}
 		}
 	}
