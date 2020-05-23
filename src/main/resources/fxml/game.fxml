@@ -24,19 +24,19 @@
             <Image url="@../image/SantoriniBoard.png" />
          </image>
       </ImageView>
-      <GridPane fx:id="grid" prefHeight="595.0" prefWidth="907.0" StackPane.alignment="CENTER">
+      <GridPane fx:id="grid" prefHeight="625.0" prefWidth="913.0" StackPane.alignment="CENTER">
         <columnConstraints>
-            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="108.0" minWidth="108.0" prefWidth="108.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="107.0" minWidth="106.0" prefWidth="107.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="107.0" minWidth="107.0" prefWidth="107.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="108.0" minWidth="108.0" prefWidth="108.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="108.0" minWidth="106.0" prefWidth="107.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="113.0" minWidth="85.0" prefWidth="107.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="130.0" minWidth="102.0" prefWidth="107.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="114.0" minWidth="103.0" prefWidth="108.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="113.0" minWidth="103.0" prefWidth="106.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="112.0" minWidth="106.0" prefWidth="109.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints maxHeight="106.0" minHeight="106.0" prefHeight="106.0" valignment="CENTER" vgrow="NEVER" />
             <RowConstraints maxHeight="106.0" minHeight="106.0" prefHeight="106.0" valignment="CENTER" vgrow="NEVER" />
-          <RowConstraints maxHeight="108.0" minHeight="108.0" prefHeight="108.0" valignment="CENTER" vgrow="NEVER" />
-          <RowConstraints maxHeight="108.0" minHeight="108.0" prefHeight="108.0" valignment="CENTER" vgrow="NEVER" />
+          <RowConstraints maxHeight="115.0" minHeight="108.0" prefHeight="109.0" valignment="CENTER" vgrow="NEVER" />
+          <RowConstraints maxHeight="108.0" minHeight="101.0" prefHeight="107.0" valignment="CENTER" vgrow="NEVER" />
           <RowConstraints maxHeight="107.0" minHeight="107.0" prefHeight="107.0" valignment="CENTER" vgrow="NEVER" />
         </rowConstraints>
          <children>
@@ -55,7 +55,7 @@
             <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" />
          </children>
          <StackPane.margin>
-            <Insets left="375.0" top="100.0" />
+            <Insets left="380.0" top="100.0" />
          </StackPane.margin>
       </GridPane>
       <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="640.0" minWidth="270.0" mouseTransparent="false" prefHeight="640.0" prefWidth="270.0" StackPane.alignment="TOP_LEFT">

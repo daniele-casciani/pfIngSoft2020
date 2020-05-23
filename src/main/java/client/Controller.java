@@ -138,7 +138,7 @@ public class Controller extends  Application implements ClientController{
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
 		sendMessage(new InvalidAction(""));
-		System.out.println("build update"+update.getPosition()[0]+update.getPosition()[1]+update.getPosition()[2]);
+		System.out.println("build update "+update.getPosition()[0]+update.getPosition()[1]+update.getPosition()[2]);
 	}
 	private void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);
@@ -186,6 +186,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		} catch (IOException e) {
 			System.out.println(playerDisconnect.getPlayer()+"disconnected");
 			System.out.println("game closed");
+			Thread.currentThread().interrupt();
 		}
 	}
 	
