@@ -431,7 +431,7 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new SwitchPositionUpdate(position,height1, name1, position2, height2, name2));
 						output.flush();
 						@SuppressWarnings("unused")
-						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
+						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-upswitch)S.E.");

@@ -2,7 +2,9 @@ package divinity;
 
 import java.io.IOException;
 
+import divinity.Divinity.Setup;
 import game.Game;
+import utils.MessageSystem;
 
 public final class Demeter extends Divinity {
 	final private  int cardID=5;
@@ -22,6 +24,13 @@ public final class Demeter extends Divinity {
 		else super.tryer(new Build());
 		
 		endRound();
+	}
+	
+	@Override
+	public void setup() {
+		super.tryer(new Setup());
+		super.tryer(new Setup());
+		game.getController().invalidAction(game.getCurrentPlayer().getName(),"attesa avversari");
 	}
 	
 	@Override 
