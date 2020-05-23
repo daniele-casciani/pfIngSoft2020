@@ -48,16 +48,16 @@ public class Divinity {
 		public boolean execute(Object start, Object end) {
 			Level builderCell = (Level)start;
 			Level whereBuild = (Level)end;
-			BuilderAction nowbuild = new BuilderAction(game);
+			BuilderAction buildAction = new BuilderAction(game);
 			
-			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
+			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
 				if(whereBuild.getHeight()==3) {
-					nowbuild.buildDome(whereBuild);
+					buildAction.buildDome(whereBuild);
 					game.getController().updateBuild(whereBuild.getPosition(), whereBuild.getHeight());
 					
 				}
 				else {
-					nowbuild.buildTower(whereBuild);
+					buildAction.buildTower(whereBuild);
 					game.getController().updateBuild( whereBuild.getPosition(), whereBuild.getHeight());
 					System.out.println(" "+ whereBuild.getPosition()[0]+" "+whereBuild.getPosition()[1]+" "+whereBuild.getHeight());
 				}

@@ -299,6 +299,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 	}
 	public void catchDrag(MessageToClient message) {
 		new Thread(()->{
+			Thread.currentThread().setName("catchDrag");
 			System.out.println("(controller-drag)start catch drag");
 			int[] start = null;
 			int[] end = null;
@@ -329,7 +330,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 				}
 				else {
 					sendMessage(new InvalidAction("messaggio non riconosciuto"));
-					System.out.println("(controller-drag)messagio ricevuto non valido");
+					System.out.println("(controller-drag)message not supported");
 				}
 				gameCont.setListening(false);
 				gameCont.clearInput();
@@ -345,6 +346,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 	}
 	public void catchPosition() {
 		new Thread(()->{
+			Thread.currentThread().setName("catchPos");
 			synchronized(this){
 				gameCont.clearInput();
 				gameCont.setListening(true);
