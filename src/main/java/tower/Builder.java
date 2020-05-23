@@ -12,9 +12,9 @@ final class Builder extends Floor {
 		return name;
 	}
 	
-	//prende la nuova casella e restituisce la vecchia
+	//never use actually
 	 Level move(Level level) {
-		Level oldlevel=this.level;
+		Level oldlevel = this.level;
 		this.level=level;
 		return oldlevel;
 	}

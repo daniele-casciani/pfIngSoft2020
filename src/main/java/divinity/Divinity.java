@@ -46,9 +46,11 @@ public class Divinity {
 		
 		@Override
 		public boolean execute(Object start, Object end) {
+
 			Level builderCell = (Level)start;
 			Level whereBuild = (Level)end;
 			BuilderAction buildAction = new BuilderAction(game);
+
 			
 			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
 				if(whereBuild.getHeight()==3) {
