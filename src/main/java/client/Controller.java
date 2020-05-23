@@ -24,6 +24,8 @@ import utils.*;
 
 public class Controller extends  Application implements ClientController{
 	
+	private String ip;
+	
 	private Stage Pstage;
 	private Scene Pscene;
 	private GameController gameCont ;
@@ -47,7 +49,8 @@ public class Controller extends  Application implements ClientController{
 		
 		Thread.currentThread().setName("PrimaryStage");
 		Platform.setImplicitExit(true);
-		newConnection("127.0.0.1");
+		ip = "127.0.0.1";
+		newConnection(ip);
 		
 		newPstage(stage);		
 		newSstage();
@@ -89,6 +92,21 @@ public class Controller extends  Application implements ClientController{
 		Sstage.setResizable(false);
 		System.out.println("Secondary stage created");
 	}
+	private void reStart() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("errore chiusura socket");
+		}
+		gameCont.cleanTextInput();
+		gameCont.clearInput();
+		for(int i=0;i<5;i++) {
+			for(int j=0;j<5;j++) {
+				gameCont.clearCell(i, j);
+			}
+		}
+		newConnection(ip);
+	}
 	
 	public void notify(PlayerDisconnect playerDisconnect) {
 		System.out.println("start disconnect");
@@ -100,9 +118,9 @@ public class Controller extends  Application implements ClientController{
 			label.setFont(new Font(20));
 			an.getChildren().add(label);
 			Platform.runLater(()->{
-			Sstage.setScene(new Scene(an,300,100));
-			Sstage.showAndWait();
-			Thread.currentThread().interrupt();
+				Sstage.setScene(new Scene(an,300,100));
+				Sstage.showAndWait();
+				reStart();
 			});
 			try {
 				socket.close();
@@ -123,9 +141,9 @@ public class Controller extends  Application implements ClientController{
 				label.setFont(new Font(40));
 				an.getChildren().add(label);
 				Platform.runLater(()->{
-				Sstage.setScene(new Scene(an,300,100));
-				Sstage.showAndWait();
-				Thread.currentThread().interrupt();
+					Sstage.setScene(new Scene(an,300,100));
+					Sstage.showAndWait();
+					reStart();
 				});
 				Thread.currentThread().interrupt();
 			});
@@ -143,9 +161,9 @@ public class Controller extends  Application implements ClientController{
 				label.setFont(new Font(40));
 				an.getChildren().add(label);
 				Platform.runLater(()->{
-				Sstage.setScene(new Scene(an,300,100));
-				Sstage.showAndWait();
-				Thread.currentThread().interrupt();
+					Sstage.setScene(new Scene(an,300,100));
+					Sstage.showAndWait();
+					reStart();
 				});
 				Thread.currentThread().interrupt();
 			});
