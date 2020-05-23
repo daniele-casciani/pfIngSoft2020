@@ -2,7 +2,7 @@ package utils;
 
 import client.Controller;
 
-public class BuildUpdate implements MessageUpdate {
+public class BuildUpdate implements MessageToClient {
 
 	private static final long serialVersionUID = -1818718919740751126L;
 	private int[] building;
@@ -20,7 +20,7 @@ public class BuildUpdate implements MessageUpdate {
 	
 	@Override
 	public void accept(Controller clientLauncher) {
-		clientLauncher.update(this);
+		clientLauncher.notify(this);
 		
 	}
 }

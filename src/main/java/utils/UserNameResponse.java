@@ -1,6 +1,8 @@
 package utils;
 
-public class UserNameResponse implements MessageToServer{
+import client.Controller;
+
+public class UserNameResponse implements MessageSystem{
 
 	private static final long serialVersionUID = -7655771874834669004L;
 	private String name;
@@ -12,4 +14,7 @@ public class UserNameResponse implements MessageToServer{
 	public UserNameResponse(String username) {
 		name=username;
 	}
+
+	@Override
+	public void accept(Controller clientLauncher) {}
 }

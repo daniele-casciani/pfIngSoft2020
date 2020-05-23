@@ -2,7 +2,7 @@ package utils;
 
 import client.Controller;
 
-public class UserNameRequest implements MessageToClient{
+public class UserNameRequest implements MessageSystem{
 
 	private static final long serialVersionUID = 6205892167326886800L;
 
