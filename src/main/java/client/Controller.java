@@ -26,18 +26,17 @@ public class Controller extends  Application implements ClientController{
 	
 	private Stage Pstage;
 	private Scene Pscene;
-	private FXMLLoader ploader;
 	private GameController gameCont ;
-	private StackPane game = null;
+
 	private Stage Sstage;
-	
-	private Socket socket;
-	private Listener listener;
-	private Thread listT;
+	private Thread stageT;
 	
 	private ObjectOutputStream output;
+	private Socket socket;
+	private Thread listT;
+	
 	private String playerName;
-	private Controller cont= this;
+	private Controller cont=this;
 	
 	public static void main( String[] args ) {
 		Application.launch(Controller.class);
@@ -62,18 +61,17 @@ public class Controller extends  Application implements ClientController{
 				System.out.println("server unreachable game closed");
 				return;
 			}
-		listener = new Listener(socket,this);
-		listT= new Thread(listener);
+		listT= new Thread(new Listener(socket));
 		listT.setDaemon(true);
+		listT.setName("listener");
 		listT.start();	
 	}
 	private void newPstage(Stage stage) {
 		Pstage= stage;
 		try {
-			ploader = new FXMLLoader();
+			FXMLLoader ploader = new FXMLLoader();
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
-			game = (StackPane)ploader.load();
-			Pscene = new Scene(game,1280,720);
+			Pscene = new Scene((StackPane)ploader.load(),1280,720);
 			gameCont = ((GameController) ploader.getController());
 		} catch (IOException e1) {
 			System.out.println("start impossibile caricare game.fxml");
@@ -83,8 +81,7 @@ public class Controller extends  Application implements ClientController{
 		Pstage.setResizable(false);
 		Pstage.setScene(Pscene);
 		System.out.println("Primary stage created");
-	}
-	
+	}	
 	private void newSstage() {
 		Sstage = new Stage();
 		Sstage.initOwner(Pstage);
@@ -95,8 +92,7 @@ public class Controller extends  Application implements ClientController{
 	
 	public void notify(PlayerDisconnect playerDisconnect) {
 		System.out.println("start disconnect");
-		new Thread (()->{
-			Thread.currentThread().setName("disconnected");
+		stageT = new Thread (()->{
 			AnchorPane an = new AnchorPane();
 			Label label = new Label();
 			label.setText(playerDisconnect.getPlayer()+" disconnected");
@@ -112,12 +108,14 @@ public class Controller extends  Application implements ClientController{
 				socket.close();
 			} catch (IOException e) {}
 			Thread.currentThread().interrupt();
-		}).start();
+		});
+		stageT.setDaemon(true);
+		stageT.setName("disconnected");
+		stageT.start();
 		}
 	public void notify(Loser loser) {
 			System.out.println("start lose");
-			new Thread (()->{
-				Thread.currentThread().setName("loseGame");
+			stageT = new Thread (()->{
 				AnchorPane an = new AnchorPane();
 				Label label = new Label();
 				label.setText("you win");
@@ -130,12 +128,14 @@ public class Controller extends  Application implements ClientController{
 				Thread.currentThread().interrupt();
 				});
 				Thread.currentThread().interrupt();
-			}).start();
+			});
+			stageT.setDaemon(true);
+			stageT.setName("loseGame");
+			stageT.start();
 		}
 	public void notify(Winner winner) {
 			System.out.println("start win");
-			new Thread (()->{
-				Thread.currentThread().setName("winGame");
+			stageT = new Thread (()->{
 				AnchorPane an = new AnchorPane();
 				Label label = new Label();
 				label.setText("you lose");
@@ -148,7 +148,10 @@ public class Controller extends  Application implements ClientController{
 				Thread.currentThread().interrupt();
 				});
 				Thread.currentThread().interrupt();
-			}).start();
+			});
+			stageT.setDaemon(true);
+			stageT.setName("winGame");
+			stageT.start();
 		}	
 	
 	public void notify(InvalidAction message) {
@@ -282,41 +285,45 @@ public class Controller extends  Application implements ClientController{
 	public void execute(PlayerNumberRequest request) {
 		System.out.println("starting player selection");
 		
-		new Thread(()->{
+		stageT = new Thread(()->{
 			Platform.runLater(()->{
 				setText("digita numero giocatori");
 				gameCont.cleanTextInput();
 				gameCont.setListening(true);
 			});
-		int num = 0;
-		while (!(num>1 && num<4 )) {
-			Platform.runLater(()->{gameCont.setText("scegli tra 2 e 3");});
-			String str="";
-			while (!gameCont.isChanged()) {	
-				str= gameCont.getTextInput();
-			}
-			try {
-				if(!str.isEmpty()) {
-					num= Integer.parseInt(str);
+			int num = 0;
+			while (!(num>1 && num<4 )) {
+				Platform.runLater(()->{gameCont.setText("scegli tra 2 e 3");});
+				String str="";
+				while (!gameCont.isChanged()) {	
+					str= gameCont.getTextInput();
 				}
-			}catch(NumberFormatException e) {				
-				Platform.runLater(()->{
-				gameCont.setText("non è un numero");
-				gameCont.setText("reinserire il numero");
-				System.out.println("player number not valid");
-				});
-				num=0;
+				try {
+					if(!str.isEmpty()) {
+						num= Integer.parseInt(str);
+					}
+				}catch(NumberFormatException e) {				
+					Platform.runLater(()->{
+						gameCont.setText("non è un numero");
+						gameCont.setText("reinserire il numero");
+						System.out.println("player number not valid");
+					});
+					num=0;
+				}
+				gameCont.cleanTextInput();
 			}
-			gameCont.cleanTextInput();
-		}
-		sendMessage(new PlayerNumberResponse(num));
-		System.out.println("number of player " + num);
-		Platform.runLater(()->{
-			gameCont.setListening(false);
-			setText("impostato numero giocatori");
-			setText("in attesa di altri giocatori ");
-			gameCont.cleanTextInput();});
-		}).start();
+			sendMessage(new PlayerNumberResponse(num));
+			System.out.println("number of player " + num);
+			Platform.runLater(()->{
+				gameCont.setListening(false);
+				setText("impostato numero giocatori");
+				setText("in attesa di altri giocatori ");
+				gameCont.cleanTextInput();
+			});
+		});
+		stageT.setDaemon(true);
+		stageT.setName("player number");
+		stageT.start();
 	}
 
 	
@@ -329,8 +336,7 @@ public class Controller extends  Application implements ClientController{
 		catchDrag(request);
 	}
 	public void catchDrag(MessageToClient message) {
-		new Thread(()->{
-			Thread.currentThread().setName("catchDrag");
+		stageT = new Thread(()->{
 			System.out.println("(controller-drag)start catch drag");
 			int[] start = null;
 			int[] end = null;
@@ -367,7 +373,10 @@ public class Controller extends  Application implements ClientController{
 				gameCont.clearInput();
 			}
 			Thread.currentThread().interrupt();
-		}).start();
+		});
+		stageT.setDaemon(true);
+		stageT.setName("catchDrag");
+		stageT.start();
 	}
 	
 	public void execute(BuilderRequest message) {
@@ -376,8 +385,7 @@ public class Controller extends  Application implements ClientController{
 		
 	}
 	public void catchPosition() {
-		new Thread(()->{
-			Thread.currentThread().setName("catchPos");
+		stageT =new Thread(()->{
 			synchronized(this){
 				gameCont.clearInput();
 				gameCont.setListening(true);
@@ -402,7 +410,10 @@ public class Controller extends  Application implements ClientController{
 			}
 			Platform.runLater(()->{setText("validazione costruttore");});
 			Thread.currentThread().interrupt();;
-		}).start();
+		});
+		stageT.setDaemon(true);
+		stageT.setName("catchPos");
+		stageT.start();
 	}
 
 	
@@ -490,7 +501,7 @@ public class Controller extends  Application implements ClientController{
 		ObjectInputStream input;
 		Message message;
 	
-		Listener(Socket socket,Controller controller){
+		Listener(Socket socket){
 			try {
 				input=new ObjectInputStream(socket.getInputStream());
 			} catch (IOException e) {
@@ -499,7 +510,6 @@ public class Controller extends  Application implements ClientController{
 		}
 		@Override
 		public void  run() {
-			Thread.currentThread().setName("listener");
 			try {
 			while(true) {
 				synchronized (this){
