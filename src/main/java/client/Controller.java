@@ -82,7 +82,7 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("Secondary stage created");
 	}
 
-	public  void notify(InvalidAction message) {
+	public  synchronized void notify(InvalidAction message) {
 		setText(message.getError());
 	}
 	private void setText(String message) {
