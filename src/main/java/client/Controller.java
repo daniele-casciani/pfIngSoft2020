@@ -10,8 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -95,24 +93,25 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("new constructor");
 	}
 	private void addConstructor(int x, int y, String name) {
-		ImageView node = new ImageView("/image/builder.png");
-		node.setFitHeight(80);
-		node.setFitWidth(80);
+		ImageView node;
 		if(name.equals(playerName)) {
+			node = new ImageView("/image/MyBuilder.png");
+			node.setFitHeight(80);
+			node.setFitWidth(80);
 			node.setOnDragDetected(e->{
 				gameCont.dragStart(node);
 				e.consume();
-				});
+			});
 			node.setOnDragDone(e->{
 				gameCont.dragDone();
 				e.consume();
 			});
 		}
 		else {
+			node = new ImageView("/image/EnemyBuilder.png");
+			node.setFitHeight(80);
+			node.setFitWidth(80);
 			node.setMouseTransparent(true); 
-			Lighting ligh = new Lighting();
-			ligh.setLight(new Light.Distant(45, 45, Color.RED));
-			node.setEffect(ligh); 
 		}
 		gameCont.addElement(node, x, y);
 	}
