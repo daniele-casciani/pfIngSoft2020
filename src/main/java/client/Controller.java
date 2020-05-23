@@ -91,8 +91,8 @@ public class Controller extends  Application implements ClientController{
 
 	public  void notify(NewBuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1],update.getName());	
-		System.out.println("new constructor");
 		sendMessage(new InvalidAction(""));
+		System.out.println("new constructor");
 	}
 	private void addConstructor(int x, int y, String name) {
 		ImageView node = new ImageView("/image/builder.png");
@@ -123,23 +123,22 @@ public class Controller extends  Application implements ClientController{
 		addConstructor(update.getPositions()[0],update.getPositions()[1],update.getName1());
 		addConstructor(update.getPositions()[3],update.getPositions()[4],update.getName2());
 		gameCont.setText("scambio posizioni eseguito");
-		System.out.println("switched");
 		sendMessage(new InvalidAction(""));
+		System.out.println("switched");
 	}
 	public void notify(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(update.getMovement()[3], update.getMovement()[4],update.getName());
 		gameCont.setText("spostamento effettuato");
-		System.out.println("move update");
 		sendMessage(new InvalidAction(""));
+		System.out.println("move update");
 	}
 	public void notify(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
-		System.out.println("build update");
 		sendMessage(new InvalidAction(""));
-		
+		System.out.println("build update"+update.getPosition()[0]+update.getPosition()[1]+update.getPosition()[2]);
 	}
 	private void construction(int x, int y, int z) {
 		gameCont.clearCell(x, y);

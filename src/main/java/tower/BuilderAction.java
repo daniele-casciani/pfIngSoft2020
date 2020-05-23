@@ -10,9 +10,12 @@ import game.*;
 	
 	@Override
 	public void movement(Level builder, Level end) {
-		Level newStart=((Builder)((Floor) builder)).move(end);
-		game.getMap().setCell(newStart);
-		game.getMap().setCell(builder);
+		Level startNoB = getLUnderB(builder);
+		String Bname = builderName(builder);
+		
+		Builder endWithBuilder = new Builder(end, Bname);
+		game.getMap().setCell(startNoB);
+		game.getMap().setCell(endWithBuilder);
 		
 	}
 	
