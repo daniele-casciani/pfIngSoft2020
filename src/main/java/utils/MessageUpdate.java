@@ -2,6 +2,8 @@ package utils;
 
 import client.Controller;
 
-public interface MessageSystem extends Message{
+public interface MessageUpdate extends Message{
+
 	void accept(Controller controller);
+
 }

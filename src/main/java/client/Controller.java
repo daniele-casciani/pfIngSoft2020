@@ -87,9 +87,9 @@ public class Controller extends  Application implements ClientController{
 		gameCont.setText(message);
 	}
 
-	public  void notify(NewBuilderUpdate update) {
+	public  void update(BuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1],update.getName());	
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("new constructor");
 	}
 	private void addConstructor(int x, int y, String name) {
@@ -116,27 +116,27 @@ public class Controller extends  Application implements ClientController{
 		gameCont.addElement(node, x, y);
 	}
 
-	public void notify(SwitchPositionUpdate update) {
+	public void update(SwitchPositionUpdate update) {
 		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
 		addConstructor(update.getPositions()[0],update.getPositions()[1],update.getName1());
 		addConstructor(update.getPositions()[3],update.getPositions()[4],update.getName2());
 		gameCont.setText("scambio posizioni eseguito");
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("switched");
 	}
-	public void notify(MoveUpdate update) {
+	public void update(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(update.getMovement()[3], update.getMovement()[4],update.getName());
 		gameCont.setText("spostamento effettuato");
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("move update");
 	}
-	public void notify(BuildUpdate update) {
+	public void update(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("build update "+update.getPosition()[0]+update.getPosition()[1]+update.getPosition()[2]);
 	}
 	private void construction(int x, int y, int z) {
@@ -446,8 +446,8 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
 		}
-		else if (message instanceof MessageSystem) {
-			((MessageSystem)message).accept(this);
+		else if (message instanceof MessageUpdate) {
+			((MessageUpdate)message).accept(this);
 		}
 	}
 	
