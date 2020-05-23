@@ -82,7 +82,9 @@ public class Controller extends  Application implements ClientController{
 	}
 
 	public void notify(InvalidAction message) {
+		Platform.runLater(()->{
 		setText(message.getError());
+		});
 	}
 	private void setText(String message) {
 		gameCont.setText(message);
