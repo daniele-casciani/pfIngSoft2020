@@ -34,7 +34,6 @@ public class Controller extends  Application implements ClientController{
 	private Socket socket;
 	private ObjectOutputStream output;
 	private String playerName;
-	private Controller cont= this;
 	
 	public static void main( String[] args ) {
 		Application.launch(Controller.class);
@@ -81,7 +80,7 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("Secondary stage created");
 	}
 
-	public void notify(InvalidAction message) {
+	public  synchronized void notify(InvalidAction message) {
 		setText(message.getError());
 	}
 	private void setText(String message) {
@@ -192,36 +191,34 @@ public void notify(PlayerDisconnect playerDisconnect) {
 	
 	public void notify(Loser loser) {
 		System.out.println("start lose");
-		new Thread (()->{
-			Thread.currentThread().setName("loseGame");
-			AnchorPane an = new AnchorPane();
-			Label label = new Label();
-			label.setText("you win");
-			label.setAlignment(Pos.CENTER);
-			label.setFont(new Font(40));
-			Sstage.setScene(new Scene(an));
-			Platform.runLater(()->{
-			Sstage.showAndWait();
-			});
-			Thread.currentThread().interrupt();
-		}).start();
+		
+		AnchorPane an = new AnchorPane();
+		Label label = new Label();
+		label.setText("you win");
+		label.setAlignment(Pos.CENTER);
+		label.setFont(new Font(40));
+		Sstage.setScene(new Scene(an));
+		Sstage.showAndWait();
+		Thread.currentThread().interrupt();
+		
+		System.out.println("end lose");
+		return;
 	}
 
 	public void notify(Winner winner) {
 		System.out.println("start win");
-		new Thread (()->{
-			Thread.currentThread().setName("winGame");
-			AnchorPane an = new AnchorPane();
-			Label label = new Label();
-			label.setText("you lose");
-			label.setAlignment(Pos.CENTER);
-			label.setFont(new Font(40));
-			Sstage.setScene(new Scene(an));
-			Platform.runLater(()->{
-			Sstage.showAndWait();
-			});
-			Thread.currentThread().interrupt();
-		}).start();
+		
+		AnchorPane an = new AnchorPane();
+		Label label = new Label();
+		label.setText("you lose");
+		label.setAlignment(Pos.CENTER);
+		label.setFont(new Font(40));
+		Sstage.setScene(new Scene(an));
+		Sstage.showAndWait();
+		Thread.currentThread().interrupt();
+		
+		System.out.println("end win");
+		return;
 	}
 
 	public void execute(UserNameRequest request) {
@@ -445,6 +442,15 @@ public void notify(PlayerDisconnect playerDisconnect) {
 	}
 	}
 	
+	public void handle(Message message) {
+		if (message instanceof MessageToClient) {
+			((MessageToClient)message).accept(this);
+		}
+		else if (message instanceof MessageUpdate) {
+			((MessageUpdate)message).accept(this);
+		}
+	}
+	
 	public void sendMessage(Message message) {
 		try {
 			output.writeObject(message);
@@ -475,22 +481,9 @@ public void notify(PlayerDisconnect playerDisconnect) {
 				synchronized (this){
 				try {
 					message = (Message) input.readObject();
-					if (message instanceof MessageToClient) {
-							Platform.runLater(()->{
-							((MessageToClient)message).accept(cont);
-							//long thread methods, send response
-							});
-						}
-						else if (message instanceof MessageUpdate) {
-							Platform.runLater(()->{
-							((MessageUpdate)message).accept(cont);
-							//must send ack
-							});
-						}
-						else if (message instanceof MessageSystem) {
-							((MessageSystem)message).accept(cont);
-							//fast synchronized methods
-						}		
+					Platform.runLater(()->{
+					handle(message);
+					});
 				} catch (ClassNotFoundException e) {
 					System.out.println(" start message cast error ");
 					e.printStackTrace();
