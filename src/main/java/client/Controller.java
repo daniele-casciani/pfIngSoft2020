@@ -50,15 +50,16 @@ public class Controller extends  Application implements ClientController{
 		newPstage(stage);		
 		newSstage();
 		
-		int tryer=0;
-		while (true | tryer <3) {
+		int tryer=1;
+		while (tryer <=3) {
+			System.out.println("ip request "+tryer);
 			ip = setip();
 			if(newConnection(ip)) {
-				break;				
+				Pstage.show();
+				break;
 			}
 			else tryer++;
 		}
-		Pstage.show();
 	}
 	private boolean newConnection(String ip) {
 		try {
@@ -109,7 +110,6 @@ public class Controller extends  Application implements ClientController{
 		}
 	}
 	private String setip() {
-		System.out.println("ip request");
 		String user="127.0.0.1";
 		try {
 			FXMLLoader loader = new FXMLLoader();
