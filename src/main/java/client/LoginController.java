@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController{
-	private String username;
+	private String text;
 	
     @FXML
     private TextField usernametext;
@@ -17,16 +17,18 @@ public class LoginController{
 
     @FXML
     void saveusername(ActionEvent event) {
-    	username= usernametext.getText();
+    	text= usernametext.getText();
     	((Stage) okbutton.getScene().getWindow()).close();
     }
     @FXML
     public void initialize(){
     	usernametext.setText("");;
-    	username=usernametext.getText();
+    	text=usernametext.getText();
     }
-    String getusername(){
-    	return username;
+    String getText(){
+    	return text;
     }
-    
+    void  setText(String text){
+    	usernametext.setPromptText(text);
+    }
 }
