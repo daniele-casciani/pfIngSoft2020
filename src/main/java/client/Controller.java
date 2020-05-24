@@ -99,6 +99,7 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("Secondary stage created");
 	}
 	private void reStart() {
+		System.out.println("restarting");
 		try {
 			socket.close();
 		} catch (IOException e) {
@@ -107,6 +108,7 @@ public class Controller extends  Application implements ClientController{
 		gameCont.initialize();
 		if(!newConnection(ip)) {
 			Pstage.close();
+			System.out.println("reconnection error");
 		}
 	}
 	private String setip() {
@@ -145,7 +147,6 @@ public class Controller extends  Application implements ClientController{
 			Platform.runLater(()->{
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
-				reStart();
 			});
 			try {
 				socket.close();
@@ -154,7 +155,6 @@ public class Controller extends  Application implements ClientController{
 		});
 		stageT.setDaemon(true);
 		stageT.setName("disconnected");
-		stageT.start();
 		}
 	public void notify(Loser loser) {
 			System.out.println("start lose");
@@ -582,13 +582,6 @@ public class Controller extends  Application implements ClientController{
 			}catch(EOFException e) {
 			}catch(IOException e) {
 				System.out.println("(listener)IOException socket error ");
-			} finally {
-				try {
-					socket.close();
-					System.out.println("socket closed");
-				} catch (IOException e) {
-					System.out.println("socket close error ");
-				}
 			}
 			System.out.println("listener closed");
 		}
