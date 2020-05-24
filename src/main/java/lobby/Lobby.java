@@ -312,7 +312,11 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new BuildUpdate(position,height));
 						output.flush();
 						@SuppressWarnings("unused")
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
+=======
+						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
+>>>>>>> parent of d06656d... Revert "refactor messaggi"
 						break;
 					}catch(SocketException  e) {
 						System.out.println("(lobby-updbuild)S.E.");
@@ -342,7 +346,11 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new MoveUpdate(position,height1, position2, height2, name));
 						output.flush();
 						@SuppressWarnings("unused")
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
+=======
+						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
+>>>>>>> parent of d06656d... Revert "refactor messaggi"
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updmove)S.E.");
@@ -371,7 +379,11 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new BuilderUpdate(position, name));
 						output.flush();
 						@SuppressWarnings("unused")
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
+=======
+						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());		
+>>>>>>> parent of d06656d... Revert "refactor messaggi"
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updbuilder)S.E.");
@@ -440,7 +452,11 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new SwitchPositionUpdate(position,height1, name1, position2, height2, name2));
 						output.flush();
 						@SuppressWarnings("unused")
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
+=======
+						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
+>>>>>>> parent of d06656d... Revert "refactor messaggi"
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-upswitch)S.E.");

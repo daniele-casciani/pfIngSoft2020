@@ -4,7 +4,7 @@ import client.Controller;
 
 //int [x,y], int z, int[x,y], int z, altezza senza builder altrimenti da errore
 //devono esserci lo scambio tra due builder altrimenti è ambiguo
-public class SwitchPositionUpdate implements MessageSystem{
+public class SwitchPositionUpdate implements MessageUpdate{
 
 	private static final long serialVersionUID = -1100375534004296721L;
 	private int[] positions;
@@ -23,7 +23,7 @@ public class SwitchPositionUpdate implements MessageSystem{
 
 	@Override
 	public void accept(Controller clientLauncher) {
-		clientLauncher.notify(this);
+		clientLauncher.update(this);
 		
 	}
 

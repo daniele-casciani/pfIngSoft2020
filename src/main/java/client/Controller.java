@@ -474,6 +474,17 @@ public class Controller extends  Application implements ClientController{
 		e.printStackTrace();
 		System.out.println("(controller-bool)end I.O.E");
 	}
+<<<<<<< HEAD
+=======
+	
+	public void handle(Message message) {
+		if (message instanceof MessageToClient) {
+			((MessageToClient)message).accept(this);
+		}
+		else if (message instanceof MessageUpdate) {
+			((MessageUpdate)message).accept(this);
+		}
+>>>>>>> parent of d06656d... Revert "refactor messaggi"
 	}
 	
 	public void sendMessage(Message message) {
