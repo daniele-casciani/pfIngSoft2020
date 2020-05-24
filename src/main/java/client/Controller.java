@@ -140,22 +140,21 @@ public class Controller extends  Application implements ClientController{
 		stageT = new Thread (()->{
 			Pane an = new Pane();
 			Label label = new Label();
-			label.setText(playerDisconnect.getPlayer()+" disconnected");
 			label.setAlignment(Pos.CENTER);
 			label.setFont(new Font(20));
+
+			label.setText(playerDisconnect.getPlayer()+" disconnected");
 			an.getChildren().add(label);
 			Platform.runLater(()->{
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
 			});
-			try {
-				socket.close();
-			} catch (IOException e) {}
-			Thread.currentThread().interrupt();
 		});
 		stageT.setDaemon(true);
 		stageT.setName("disconnected");
+		stageT.start();
 		}
+	
 	public void notify(Loser loser) {
 			System.out.println("start lose");
 			stageT = new Thread (()->{
@@ -170,7 +169,6 @@ public class Controller extends  Application implements ClientController{
 					Sstage.showAndWait();
 					reStart();
 				});
-				Thread.currentThread().interrupt();
 			});
 			stageT.setDaemon(true);
 			stageT.setName("loseGame");
@@ -582,6 +580,8 @@ public class Controller extends  Application implements ClientController{
 			}catch(EOFException e) {
 			}catch(IOException e) {
 				System.out.println("(listener)IOException socket error ");
+				Platform.runLater(()->{
+				});
 			}
 			System.out.println("listener closed");
 		}
