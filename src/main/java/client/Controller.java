@@ -39,11 +39,7 @@ public class Controller extends  Application implements ClientController{
 	private Thread listT;
 	
 	private String playerName;
-	private Controller cont=this;
-	
-	public static void main( String[] args ) {
-		Application.launch(Controller.class);
-	 }
+	private Controller cont=this;	
 	
 	@Override
 	public void start(Stage stage){
@@ -54,11 +50,13 @@ public class Controller extends  Application implements ClientController{
 		newPstage(stage);		
 		newSstage();
 		
-		while (true) {
+		int tryer=0;
+		while (true | tryer <3) {
 			ip = setip();
 			if(newConnection(ip)) {
-				break;
+				break;				
 			}
+			else tryer++;
 		}
 		Pstage.show();
 	}
