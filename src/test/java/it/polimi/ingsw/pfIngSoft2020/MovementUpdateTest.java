@@ -1,5 +1,6 @@
 package it.polimi.ingsw.pfIngSoft2020;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class MovementUpdateTest {
 	@Test
 	public void testMU() {
 		int[] value ={start[0],start[1],height1,end[0],end[1],height2};
-		assertEquals(value,message.getMovement());
+		assertArrayEquals(value,message.getMovement());
 		assertEquals(name,message.getName());
 	}
 	
