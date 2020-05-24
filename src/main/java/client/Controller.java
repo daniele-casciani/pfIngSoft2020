@@ -590,11 +590,7 @@ public class Controller extends  Application implements ClientController{
 					System.out.println("socket close error ");
 				}
 			}
-			Platform.runLater(()->{
-				System.out.println("listener closed");
-				Thread.currentThread().interrupt();
-				reStart();
-			});
+			System.out.println("listener closed");
 		}
 	}
 }
