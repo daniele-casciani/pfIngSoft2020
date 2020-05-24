@@ -87,7 +87,7 @@ public class Controller extends  Application implements ClientController{
 		gameCont.setText(message);
 	}
 
-	public  void notify(NewBuilderUpdate update) {
+	public  void update(BuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1],update.getName());	
 		sendMessage(new InvalidAction(""));
 		System.out.println("new constructor");
@@ -116,7 +116,7 @@ public class Controller extends  Application implements ClientController{
 		gameCont.addElement(node, x, y);
 	}
 
-	public void notify(SwitchPositionUpdate update) {
+	public void update(SwitchPositionUpdate update) {
 		construction(update.getPositions()[0], update.getPositions()[1], update.getPositions()[2]);
 		construction(update.getPositions()[3], update.getPositions()[4], update.getPositions()[5]);
 		addConstructor(update.getPositions()[0],update.getPositions()[1],update.getName1());
@@ -125,7 +125,7 @@ public class Controller extends  Application implements ClientController{
 		sendMessage(new InvalidAction(""));
 		System.out.println("switched");
 	}
-	public void notify(MoveUpdate update) {
+	public void update(MoveUpdate update) {
 		construction(update.getMovement()[0], update.getMovement()[1], update.getMovement()[2]);
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(update.getMovement()[3], update.getMovement()[4],update.getName());
@@ -133,7 +133,7 @@ public class Controller extends  Application implements ClientController{
 		sendMessage(new InvalidAction(""));
 		System.out.println("move update");
 	}
-	public void notify(BuildUpdate update) {
+	public void update(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
 		sendMessage(new InvalidAction(""));
@@ -441,26 +441,17 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		System.out.println("end impossibile richiedere scelta");
 	}
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of 510c883... Merge branch 'controller-launcher-uniti'
 	
 	public void handle(Message message) {
 		if (message instanceof MessageToClient) {
 			((MessageToClient)message).accept(this);
 		}
-<<<<<<< HEAD
 		else if (message instanceof MessageUpdate) {
 			((MessageUpdate)message).accept(this);
 		}
->>>>>>> parent of d06656d... Revert "refactor messaggi"
-=======
 		else if (message instanceof MessageSystem) {
 			((MessageSystem)message).accept(this);
 		}
->>>>>>> parent of 510c883... Merge branch 'controller-launcher-uniti'
 	}
 	
 	public void sendMessage(Message message) {
