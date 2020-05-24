@@ -24,7 +24,7 @@ public class Lobby implements ServerController , Runnable {
 	ArrayList<Integer> createDeck(){
 		boolean b;
 		ArrayList<Integer> deck;
-		b = askEffect(userlist.get(0).getUserID(), "usare divinità?");
+		b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità?");
 		if (b) {
 			deck = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,8,9,10));
 			
@@ -56,7 +56,8 @@ public class Lobby implements ServerController , Runnable {
 					state = true;
 				}catch(SocketException e) {
 					System.out.println("S.E. chosecard");
-					game.setDisconect();
+					sendDisconnection(player.getUserID());
+					Thread.currentThread().interrupt();			
 					break;
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -90,8 +91,8 @@ public class Lobby implements ServerController , Runnable {
 					selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
 					state = true;
 				}catch(SocketException e) {
-					System.out.println("S.E selectCard");
-					game.setDisconect();
+					sendDisconnection(player.getUserID());
+					Thread.currentThread().interrupt();		
 					break;
 				}
 				
@@ -130,6 +131,7 @@ public class Lobby implements ServerController , Runnable {
 						}catch(SocketException e) {
 							System.out.println("(lobby-chosemove)S.E.");
 							game.setDisconect();
+							game.setDiscUser(player);
 							break;
 						}
 							
@@ -168,6 +170,7 @@ public class Lobby implements ServerController , Runnable {
 							}catch(SocketException e) {
 								System.out.println("(lobby-wherebuild)S.E.");
 								game.setDisconect();
+								game.setDiscUser(player);
 								break;
 							}
 						} catch (IOException e) {
@@ -193,13 +196,15 @@ public class Lobby implements ServerController , Runnable {
 							output.writeObject(new InvalidAction(message));
 							output.flush();
 							break;
-						}catch(SocketException e) {
-							System.out.println("(lobby-invAct)S.E.");
+						}catch (SocketException e) {
+							System.out.println("(lobby-invAct)S.E");
 							game.setDisconect();
+							game.setDiscUser(player);
 							break;
 						}
 					} catch (IOException e) {
 						System.out.println("(lobby-invAct)I.O.E.");
+						break;
 					}
 				}
 			}
@@ -224,6 +229,7 @@ public class Lobby implements ServerController , Runnable {
 						}catch(SocketException e) {
 							System.out.println("(lobby-lose)S.E.");
 							game.setDisconect();
+							game.setDiscUser(player.getName());
 							break;
 						}
 					} catch (IOException e) {
@@ -251,6 +257,7 @@ public class Lobby implements ServerController , Runnable {
 						}catch(SocketException e) {
 							System.out.println("(lobby-winner)S.E.");
 							game.setDisconect();
+							game.setDiscUser(player.getName());
 							break;
 						}
 					} catch (IOException e) {
@@ -285,8 +292,8 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
 						}catch(SocketException e) {
-							System.out.println("(lobby-posbuilder)S.E.");
-							game.setDisconect();
+							sendDisconnection(player);
+							Thread.currentThread().interrupt();		
 							break;
 						}	
 								
@@ -317,6 +324,7 @@ public class Lobby implements ServerController , Runnable {
 					}catch(SocketException  e) {
 						System.out.println("(lobby-updbuild)S.E.");
 						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -347,6 +355,7 @@ public class Lobby implements ServerController , Runnable {
 					}catch(SocketException e) {
 						System.out.println("(lobby-updmove)S.E.");
 						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -374,8 +383,8 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
-						System.out.println("(lobby-updbuilder)S.E.");
-						game.setDisconect();
+						sendDisconnection(name);
+						Thread.currentThread().interrupt();		
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -445,6 +454,7 @@ public class Lobby implements ServerController , Runnable {
 					}catch(SocketException e) {
 						System.out.println("(lobby-upswitch)S.E.");
 						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -480,7 +490,9 @@ public class Lobby implements ServerController , Runnable {
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
 						}catch(SocketException e) {
 							System.out.println("(lobby-askbool)S.E.");
-							game.setDisconect();
+							game.setDisconect() ;
+							game.setDiscUser(user);
+							sendDisconnection(user);
 							break;
 						}
 					} catch (IOException e) {
@@ -511,5 +523,43 @@ public class Lobby implements ServerController , Runnable {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean askDivinityMode(String user, String text) {
+		ObjectOutputStream output;
+		ObjectInputStream input;
+		
+		boolean response = false;
+		
+		for (User x : userlist) {
+			if(user.equals(x.getUserID())) {
+				while(true) {
+					try {
+						try {
+							
+							output = x.getOutput();
+							input = x.getInput();
+								
+							output.writeObject(new BooleanRequest(text));
+							output.flush();
+								try {
+									response = ((BooleanResponse)(MessageToServer)(Message)input.readObject()).getBool();
+									break;
+								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
+						}catch(SocketException e) {
+							System.out.println("(lobby-askDivinity)S.E.");
+							sendDisconnection(user);
+							Thread.currentThread().interrupt();		
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-askDivinity)I.O.E.");
+					}
+				}
+			}
+		}
+		return response;
+		
 	}
 }

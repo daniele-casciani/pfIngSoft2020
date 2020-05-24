@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Game implements Model {
 	private boolean disconect = false;
+	private String discUser = null;
 	private int round=0;
 	private Player currentPlayer;
 	private ArrayList<Player> playerList = new ArrayList<Player>();
@@ -29,11 +30,7 @@ public class Game implements Model {
 			}
 			playerList.add(0,new Player(participants.get(0).getUserID(), selectedCards.get(0), this));
 		}
-		for (Player x : playerList) {
-			currentPlayer=x;
-			x.getDivinity().setup();
-		}
-		currentPlayer= playerList.get(0);
+		
 	}
 	
 	private Player rotation() {
@@ -46,6 +43,12 @@ public class Game implements Model {
 	
 	public void startGame() {
 		boolean endgame = false;
+		
+		for (Player x : playerList) {
+			currentPlayer=x;
+			x.getDivinity().setup();
+		}
+		currentPlayer= playerList.get(0);
 		while (endgame == false) {
 			if (playerList.size()<=1) {
 				if (playerList.size()==1) {
@@ -57,8 +60,10 @@ public class Game implements Model {
 			currentPlayer.getDivinity().round();
 			
 			if(disconect == true) {
-				System.out.println("player: " +getCurrentPlayer().getName()+" has quit ");
-				getController().sendDisconnection(getCurrentPlayer().getName());
+				if(this.discUser != null) {
+					System.out.println("player: " +getCurrentPlayer().getName()+" has quit ");
+					getController().sendDisconnection(this.discUser);
+				}
 				endgame = true;				
 			}
 			else {
@@ -106,5 +111,9 @@ public class Game implements Model {
 	}
 	public boolean getDisconnect() {
 		return this.disconect;
+	}
+	@Override
+	public void setDiscUser(String username) {
+		this.discUser = username;		
 	}
 }
