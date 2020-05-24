@@ -128,7 +128,7 @@ public class Divinity {
 						} 
 							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(),nowmove.builderName(start));
 							
-							if(end.getHeight()==3) {
+							if(end.getHeight()==3 && win(nowmove,start,end)) {
 								nowmove.movement(start, end);
 								game.winGame();
 							}else nowmove.movement(start, end);
@@ -323,6 +323,16 @@ public class Divinity {
 	}
 	public Divinity(Game game) {
 		this.game = game;
+	}
+	private boolean win(BuilderAction nowmove, Level start, Level end) {								
+		if(game.getEffectList().isEmpty()==false) {
+			for (ActivePower x : game.getEffectList()) {
+				if (x.win()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {	
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
 
