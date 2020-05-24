@@ -46,8 +46,8 @@ public final class Apollo extends Divinity {
 						}
 					}
 					if(end.getHeight()==-1) {
-						game.getController().updateSwitcBuilder(start.getPosition(),nowmove.getLUnderB(start).getHeight(), nowmove.builderName(end),
-								end.getPosition(), nowmove.getLUnderB(end).getHeight(), nowmove.builderName(start));
+						game.getController().updateSwitcBuilder(start.getPosition(),nowmove.getLUnderB(start).getHeight(), nowmove.builderName(start),
+								end.getPosition(), nowmove.getLUnderB(end).getHeight(), nowmove.builderName(end));
 						
 						String nameBuilderend = nowmove.builderName(end);
 						nowmove.killBuilder(end);

@@ -213,22 +213,20 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			if(x.getUserID().equals(player.getName())) {
-				while(true) {			
+			while(true) {			
+				try {
 					try {
-						try {
-							output = x.getOutput();
-							output.writeObject(new Loser());
-							output.flush();
-							break;
-						}catch(SocketException e) {
-							System.out.println("(lobby-lose)S.E.");
-							game.setDisconect();
-							break;
-						}
-					} catch (IOException e) {
-						System.out.println("(lobby-lose)I.O.E.");
+						output = x.getOutput();
+						output.writeObject(new Loser());
+						output.flush();
+						break;
+					}catch(SocketException e) {
+						System.out.println("(lobby-lose)S.E.");
+						game.setDisconect();
+						break;
 					}
+				} catch (IOException e) {
+					System.out.println("(lobby-lose)I.O.E.");
 				}
 			}
 		}
@@ -240,22 +238,20 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			if(x.getUserID().equals(player.getName())){
-				while(true) {
+			while(true) {
+				try {
 					try {
-						try {
-							output = x.getOutput();
-							output.writeObject(new Winner());
-							output.flush();
-							break;
-						}catch(SocketException e) {
-							System.out.println("(lobby-winner)S.E.");
-							game.setDisconect();
-							break;
-						}
-					} catch (IOException e) {
-						System.out.println("(lobby-winner)I.O.E.");
+						output = x.getOutput();
+						output.writeObject(new Winner());
+						output.flush();
+						break;
+					}catch(SocketException e) {
+						System.out.println("(lobby-winner)S.E.");
+						game.setDisconect();
+						break;
 					}
+				} catch (IOException e) {
+					System.out.println("(lobby-winner)I.O.E.");
 				}
 			}
 		}
@@ -313,10 +309,14 @@ public class Lobby implements ServerController , Runnable {
 						output.flush();
 						@SuppressWarnings("unused")
 <<<<<<< HEAD
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 =======
 						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
 >>>>>>> parent of d06656d... Revert "refactor messaggi"
+=======
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
+>>>>>>> parent of 510c883... Merge branch 'controller-launcher-uniti'
 						break;
 					}catch(SocketException  e) {
 						System.out.println("(lobby-updbuild)S.E.");
@@ -347,10 +347,14 @@ public class Lobby implements ServerController , Runnable {
 						output.flush();
 						@SuppressWarnings("unused")
 <<<<<<< HEAD
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 =======
 						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
 >>>>>>> parent of d06656d... Revert "refactor messaggi"
+=======
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
+>>>>>>> parent of 510c883... Merge branch 'controller-launcher-uniti'
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updmove)S.E.");
@@ -376,14 +380,18 @@ public class Lobby implements ServerController , Runnable {
 					try {
 						output = x.getOutput();
 						input = x.getInput();
-						output.writeObject(new BuilderUpdate(position, name));
+						output.writeObject(new NewBuilderUpdate(position, name));
 						output.flush();
 						@SuppressWarnings("unused")
+<<<<<<< HEAD
 <<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
 =======
 						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());		
 >>>>>>> parent of d06656d... Revert "refactor messaggi"
+=======
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());		
+>>>>>>> parent of 510c883... Merge branch 'controller-launcher-uniti'
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updbuilder)S.E.");
@@ -426,12 +434,7 @@ public class Lobby implements ServerController , Runnable {
 			createGame();
 			game.startGame();
 			System.out.println("end game");
-		} catch (Exception e) {
-			System.out.println("(lobbyrun) start error");
-			e.printStackTrace();
-			System.out.println("(lobbyrun) end error");
-		}
-		finally {
+		} finally {
 			close();
 			System.out.println("lobby closed");
 		}
@@ -453,10 +456,14 @@ public class Lobby implements ServerController , Runnable {
 						output.flush();
 						@SuppressWarnings("unused")
 <<<<<<< HEAD
+<<<<<<< HEAD
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
 =======
 						Message message= ((InvalidAction)(MessageUpdate)(Message)input.readObject());
 >>>>>>> parent of d06656d... Revert "refactor messaggi"
+=======
+						Message message= ((InvalidAction)(MessageSystem)(Message)input.readObject());
+>>>>>>> parent of 510c883... Merge branch 'controller-launcher-uniti'
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-upswitch)S.E.");
@@ -514,7 +521,7 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x : userlist) {
-			if(x.getUserID().equals(playerD) == false){ // playerD is already disconnected
+			if(!x.getUserID().equals(playerD)){ // playerD is already disconnected
 				try {
 					
 					output = x.getOutput();
