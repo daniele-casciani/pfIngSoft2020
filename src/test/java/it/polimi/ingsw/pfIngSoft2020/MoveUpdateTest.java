@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import utils.*;
 
-public class MovementUpdateTest {
+public class MoveUpdateTest {
 
 	int[] start = {1,1};
 	int height1 = 3;
