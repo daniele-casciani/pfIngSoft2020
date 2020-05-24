@@ -38,7 +38,7 @@ public final class Pan extends Divinity {
 						if(game.getEffectList().isEmpty()==false) {
 							for (ActivePower x : game.getEffectList()) {
 								if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
-									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 									return false;
 								}
 							}
@@ -58,15 +58,15 @@ public final class Pan extends Divinity {
 						return true;
 					}
 					else {
-						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 						return false;
 						}
 				}else {
-					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+					game.getController().invalidAction(game.getCurrentPlayer().getName(),"Mossa non valida");
 					return false;
 				}
 			}
-			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 			return false;
 		}
 	}

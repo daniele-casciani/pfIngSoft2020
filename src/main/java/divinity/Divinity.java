@@ -53,7 +53,18 @@ public class Divinity {
 			BuilderAction buildAction = new BuilderAction(game);
 
 			
-			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
+			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
+				
+				if(game.getEffectList().isEmpty()==false) {
+					for (ActivePower x : game.getEffectList()) {
+						if (x.build()==true && x.actionLimitation(builderCell, whereBuild) == true) {
+							
+							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
+							return false;
+						}
+					}
+				} 
+				
 				if(whereBuild.getHeight()==3) {
 					buildAction.buildDome(whereBuild);
 					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
@@ -67,7 +78,7 @@ public class Divinity {
 				}
 			}
 			else {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Build");
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
 				return false;
 			}
 			return true;
@@ -100,7 +111,7 @@ public class Divinity {
 							for (ActivePower x : game.getEffectList()) {
 								if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
 									
-									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 									return false;
 								}
 							}
@@ -114,15 +125,15 @@ public class Divinity {
 							return true;
 					}
 					else {
-						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 						return false;
 						}
 				}else {
-					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 					return false;
 				}
 			}
-			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 			return false;
 		}
 
@@ -152,7 +163,7 @@ public class Divinity {
 											action.killBuilder(firstBuilder);
 											game.loseGame();
 										}
-										k=5;l=5;//trovati i due builder esco dalla ricerca
+										k=5;l=5;
 									}
 								}
 						}
@@ -179,11 +190,11 @@ public class Divinity {
 	}
 	
 	void endRound() {
-		// nel gioco base non fa nulla
+		//in basic game does nothing
 	}
 	
 	void startRound() {
-		// nel gioco base non fa nulla 
+		//in basic game does nothing 
 	}
 	
 	public void setup(){

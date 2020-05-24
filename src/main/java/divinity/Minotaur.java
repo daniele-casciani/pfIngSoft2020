@@ -50,7 +50,7 @@ public final class Minotaur extends Divinity {
 							if(game.getEffectList().isEmpty()==false) {
 								for (ActivePower x : game.getEffectList()) {
 									if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
-										game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+										game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 										return false;
 									}
 								}
@@ -64,12 +64,22 @@ public final class Minotaur extends Divinity {
 							return true;
 						}
 						else {
-							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 							return false;
 							}
 						
 					}else { // effect minotaur get.height == -1 NB no control on level and not control on effect because force movement is different to do a movement
 						if(nowmove.builderName(end).equals(game.getCurrentPlayer().getName())== false) {
+							
+							if(game.getEffectList().isEmpty()==false) {
+								for (ActivePower x : game.getEffectList()) {
+									if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), nowmove.getLUnderB(end)) ) {
+										game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
+										return false;
+									}
+								}
+							} 
+							
 							Level nextCell = sameDirection(start, end);
 							if(nextCell != null && nextCell.getHeight() != -1 && nextCell.getHeight() != 4) {
 								nowmove.movement(end, nextCell);
@@ -83,20 +93,20 @@ public final class Minotaur extends Divinity {
 								game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), newend.getPosition(), newend.getHeight(), nowmove.builderName(start));
 								return true;
 							}else {
-								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 								return false;
 							}
 						}else {
-							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 							return false;
 							}
 					}
 				}else {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 				return false;
 				}
 			}else {
-			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 			return false;
 			}
 		}

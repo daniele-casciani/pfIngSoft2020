@@ -35,11 +35,21 @@ public final class Atlas extends Divinity {
 			if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) {
 				if(isPossibleBuild( builderCell, whereBuild ) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName()) ) {
 					
+					if(game.getEffectList().isEmpty()==false) {
+						for (ActivePower x : game.getEffectList()) {
+							if (x.build()==true && x.actionLimitation(builderCell, whereBuild) == true) {
+								
+								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
+								return false;
+							}
+						}
+					} 
+					
 					nowbuild.buildDome(whereBuild);
 					game.getController().updateBuild(whereBuild.getPosition(), 4); 
 					return true;
 				}else {
-					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Build");
+					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
 					return false;
 				}
 			}

@@ -9,11 +9,9 @@ public class AthenaEffect implements ActivePower{
 
 	@Override
 	public boolean actionLimitation(Level start, Level end) {
-		if(start.getHeight()==0 && end.getHeight()==1) return true;
-		if(start.getHeight()==1 && end.getHeight()==2) return true;
-		if(start.getHeight()==2 && end.getHeight()==3) return true;
+		if(end.getHeight() - start.getHeight() == 1) return true;
 	
-		return false;
+		else return false;
 	}
 
 	@Override
