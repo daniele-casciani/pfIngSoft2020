@@ -217,7 +217,7 @@ public class Lobby implements ServerController , Runnable {
 	
 	@Override
 	public void loser(Player player) {
-		
+		User y = null;
 		
 		ObjectOutputStream output;
 		
@@ -229,12 +229,11 @@ public class Lobby implements ServerController , Runnable {
 							output = x.getOutput();
 							output.writeObject(new Loser());
 							output.flush();
+							y = x;
 							break;
 						}catch(SocketException e) {
 							System.out.println("(lobby-lose)S.E.");
-							game.setDisconect();
-							game.setDiscUser(player.getName());
-							break;
+							
 						}
 					} catch (IOException e) {
 						System.out.println("(lobby-lose)I.O.E.");
@@ -242,6 +241,7 @@ public class Lobby implements ServerController , Runnable {
 				}
 			}
 		}
+		userlist.remove(y);
 	}
 	
 	@Override
@@ -260,8 +260,6 @@ public class Lobby implements ServerController , Runnable {
 							break;
 						}catch(SocketException e) {
 							System.out.println("(lobby-winner)S.E.");
-							game.setDisconect();
-							game.setDiscUser(player.getName());
 							break;
 						}
 					} catch (IOException e) {
