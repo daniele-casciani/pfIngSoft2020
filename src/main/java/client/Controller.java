@@ -35,9 +35,7 @@ public class Controller extends  Application implements ClientController{
 	private ObjectOutputStream output;
 	private String playerName;
 	
-	public static void main( String[] args ) {
-		Application.launch(Controller.class);
-	 }
+
 	
 	@Override
 	public void start(Stage stage) {
