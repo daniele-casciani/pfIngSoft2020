@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -56,26 +55,26 @@ public class Controller extends  Application implements ClientController{
 		newSstage();
 		
 		while (true) {
-			try {
-				ip = setip();
-				newConnection(ip);
+			ip = setip();
+			if(newConnection(ip)) {
 				break;
-			} catch (IOException e) {System.out.println("ip not valid");}
+			}
 		}
 		Pstage.show();
 	}
-	private void newConnection(String ip) throws IOException {
+	private boolean newConnection(String ip) {
 		try {
-			socket= new Socket(ip, 51344);
-			output =new ObjectOutputStream(socket.getOutputStream());
+			socket = new Socket(ip, 51344);
+			output = new ObjectOutputStream(socket.getOutputStream());
 			} catch (IOException e) {
 				System.out.println("server unreachable game closed");
-				return;
+				return false;
 			}
 		listT= new Thread(new Listener(socket));
 		listT.setDaemon(true);
 		listT.setName("listener");
-		listT.start();	
+		listT.start();
+		return true;
 	}
 	private void newPstage(Stage stage) {
 		Pstage= stage;
@@ -107,10 +106,8 @@ public class Controller extends  Application implements ClientController{
 			System.out.println("errore chiusura socket");
 		}
 		gameCont.initialize();
-		try {
-			newConnection(ip);
-		} catch (IOException e) {
-			// alredy started
+		if(!newConnection(ip)) {
+			Pstage.close();
 		}
 	}
 	private String setip() {
@@ -126,6 +123,7 @@ public class Controller extends  Application implements ClientController{
 			Sstage.showAndWait();
 			
 			user = ((LoginController) loader.getController()).getText();
+			((LoginController) loader.getController()).initialize();
 			if(user.isEmpty()) {
 				user="127.0.0.1";
 			}
@@ -548,8 +546,12 @@ public class Controller extends  Application implements ClientController{
 		ObjectInputStream input;
 		Message message;
 	
-		Listener(Socket socket) throws IOException{
-				input=new ObjectInputStream(socket.getInputStream());
+		Listener(Socket socket){
+				try {
+					input=new ObjectInputStream(socket.getInputStream());
+				} catch (IOException e) {
+					System.out.println("error creating input socket");
+				}
 		}
 		@Override
 		public void  run() {
