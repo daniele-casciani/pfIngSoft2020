@@ -39,11 +39,7 @@ public class Controller extends  Application implements ClientController{
 	private Thread listT;
 	
 	private String playerName;
-	private Controller cont=this;
-	
-	public static void main( String[] args ) {
-		Application.launch(Controller.class);
-	 }
+	private Controller cont=this;	
 	
 	@Override
 	public void start(Stage stage){
@@ -54,13 +50,16 @@ public class Controller extends  Application implements ClientController{
 		newPstage(stage);		
 		newSstage();
 		
-		while (true) {
+		int tryer=1;
+		while (tryer <=3) {
+			System.out.println("ip request "+tryer);
 			ip = setip();
 			if(newConnection(ip)) {
+				Pstage.show();
 				break;
 			}
+			else tryer++;
 		}
-		Pstage.show();
 	}
 	private boolean newConnection(String ip) {
 		try {
@@ -111,7 +110,6 @@ public class Controller extends  Application implements ClientController{
 		}
 	}
 	private String setip() {
-		System.out.println("ip request");
 		String user="127.0.0.1";
 		try {
 			FXMLLoader loader = new FXMLLoader();
