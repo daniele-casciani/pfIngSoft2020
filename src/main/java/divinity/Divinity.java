@@ -163,16 +163,16 @@ public class Divinity {
 				Level firstBuilder = game.getMap().getCell(i, j);
 				if(firstBuilder.getHeight() == -1) {					
 					if(action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {
-						if(!canBuilderMove(firstBuilder)) {
+						if(canBuilderMove(firstBuilder) == false) {
 							for(int k=i;k<5;k++)
 								for(int l=0;l<5;l++) {
 									Level otherBuilder = game.getMap().getCell(k, l);
 									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
 										if(!canBuilderMove(otherBuilder)) {
 											action.killBuilder(otherBuilder);
-											game.getController().updateBuild(otherBuilder.getPosition(),otherBuilder.);
+											game.getController().updateBuild(otherBuilder.getPosition(),action.getLUnderB(otherBuilder).getHeight());
 											action.killBuilder(firstBuilder);
-											game.getController().updateBuild(otherBuilder.getPosition(),otherBuilder.);
+											game.getController().updateBuild(firstBuilder.getPosition(),action.getLUnderB(firstBuilder).getHeight());
 											return true;
 										}
 										k=5;l=5;
@@ -183,13 +183,14 @@ public class Divinity {
 					}
 				}
 			}
+		return false;
 	}
 	
 	private boolean canBuilderMove(Level builderCell) {
 		BuilderAction nowmove = new BuilderAction(game);
 		for(int i=0; i<5; i++)
 			for(int j=0; j<5;j++) {
-				if(isNear(builderCell, game.getMap().getCell(i, j))) {
+				if(isNear(builderCell, game.getMap().getCell(i, j)) && game.getMap().getCell(i, j).getHeight() != -1 && game.getMap().getCell(i, j).getHeight() != 4) {
 					if(isNextLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isPreviousLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isSameLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j))) {
 						
 						return true;
