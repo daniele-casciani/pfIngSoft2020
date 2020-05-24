@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import utils.*;
 
-public class Server {
+public class MainServer {
 	ArrayList<Thread> lobbyList =new ArrayList<Thread>();
 	ServerSocket serverSocket;
 	List<User> synUserList = Collections.synchronizedList(new ArrayList<User>());
@@ -18,7 +18,7 @@ public class Server {
 	Object obj = new Object();
 	
 	public static void main( String[] args ) {
-		 new Server().start();
+		 new MainServer().start();
 	}
 	
 	public void start() {

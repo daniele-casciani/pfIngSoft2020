@@ -2,12 +2,11 @@ package divinity;
 
 import java.io.IOException;
 
-import divinity.Divinity.Setup;
 import game.Game;
 import tower.Level;
 
 public final class Artemis extends Divinity {
-	final private  int cardID=2;
+	// final private  int cardID=2;
 	
 	public Artemis(Game game) {
 		super(game);

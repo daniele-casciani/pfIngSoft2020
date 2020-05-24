@@ -5,7 +5,7 @@ import tower.BuilderAction;
 import tower.Level;
 
 public final class Pan extends Divinity {
-	final private  int cardID=9;
+	//final private  int cardID=9;
 	
 	public Pan(Game game) {
 		super(game);

@@ -5,7 +5,7 @@ import tower.BuilderAction;
 import tower.Level;
 
 public final class Atlas extends Divinity {
-	final private  int cardID=4;
+	//final private  int cardID=4;
 	
 	public Atlas(Game game) {
 		super(game);

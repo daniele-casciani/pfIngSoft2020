@@ -5,7 +5,7 @@ import tower.BuilderAction;
 import tower.Level;
 
 public final class Apollo extends Divinity {
-	final private  int cardID=1; 
+	// final private  int cardID=1; 
 	
 	public Apollo(Game game) {
 		super(game);

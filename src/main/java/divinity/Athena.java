@@ -5,7 +5,7 @@ import tower.BuilderAction;
 import tower.Level;
 
 public final class Athena extends Divinity {
-	final private  int cardID=3;
+	// final private  int cardID=3;
 	
 	private boolean power = false;
 	

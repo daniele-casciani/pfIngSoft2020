@@ -2,13 +2,11 @@ package divinity;
 
 import java.io.IOException;
 
-import divinity.Divinity.Setup;
 import game.Game;
 import tower.Level;
-import utils.MessageSystem;
 
 public final class Demeter extends Divinity {
-	final private  int cardID=5;
+	//final private  int cardID=5;
 	public Demeter(Game game) {
 		super(game);
 	}
