@@ -11,6 +11,7 @@ public class Divinity {
 	final private boolean threeplayer = true;
 	final private boolean fourplayer = true;
 	Game game;
+	int[] buildselect = {-1,-1};
 	final private int cardID=0;
 	
 	public void round() {
@@ -36,9 +37,11 @@ public class Divinity {
 				if(action.execute(parameters[0],parameters[1]) == true){
 					recived = true;
 				}
-			} catch (IOException | NullPointerException e) {
+			} catch (IOException e) {
 				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");
-				System.out.println("(divinity-tryer)I.O.E. or NULL");
+				System.out.println("(divinity-tryer)I.O.E.");	
+			}catch(NullPointerException e) {
+				System.out.println("(divinity-tryer)NULL");	
 			}
 		 }
 	}
@@ -52,6 +55,11 @@ public class Divinity {
 			Level whereBuild = (Level)end;
 			BuilderAction buildAction = new BuilderAction(game);
 
+			if(!(builderCell.getPosition()[0]==buildselect[0] && builderCell.getPosition()[1]==buildselect[1])){
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "usa lo stesso builder");
+				return false;
+			}
+			
 			
 			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
 				
@@ -98,6 +106,8 @@ public class Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
+			buildselect[0]= end.getPosition()[0];
+			buildselect[1]=	end.getPosition()[1];
 			BuilderAction nowmove = new BuilderAction(game);
 			
 			

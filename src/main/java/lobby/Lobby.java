@@ -27,9 +27,13 @@ public class Lobby implements ServerController , Runnable {
 		b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità?");
 		if (b) {
 			deck = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,8,9,10));
-			
+			b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità avanzate?");
+			if(b) {
+				return deck;
+			}
 			return deck;	 
 		}
+		
 		else return deck = new ArrayList<Integer>();
 	 }
 	

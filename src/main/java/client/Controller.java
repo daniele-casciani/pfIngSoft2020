@@ -593,6 +593,7 @@ public class Controller extends  Application implements ClientController{
 			Platform.runLater(()->{
 				System.out.println("listener closed");
 				Thread.currentThread().interrupt();
+				reStart();
 			});
 		}
 	}
