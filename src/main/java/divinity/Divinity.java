@@ -18,13 +18,14 @@ public class Divinity {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new Move());
-		
-		tryer(new Build());
-		
-		endRound();
+		if (lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new Move());
+			tryer(new Build());
+			endRound();
+		}
 	}
 	
 	 void tryer(Action action) {
@@ -155,13 +156,12 @@ public class Divinity {
 		}
 	}
 	
-	void lose() {
-		
+	boolean lose() {
+		BuilderAction action = new BuilderAction(game);
 		for(int i = 0; i<5; i++)
 			for(int j=0; j<5; j++) {
 				Level firstBuilder = game.getMap().getCell(i, j);
-				if(firstBuilder.getHeight() == -1) {
-					BuilderAction action = new BuilderAction(game);
+				if(firstBuilder.getHeight() == -1) {					
 					if(action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {
 						if(!canBuilderMove(firstBuilder)) {
 							for(int k=i;k<5;k++)
@@ -170,8 +170,10 @@ public class Divinity {
 									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
 										if(!canBuilderMove(otherBuilder)) {
 											action.killBuilder(otherBuilder);
+											game.getController().updateBuild(otherBuilder.getPosition(),otherBuilder.);
 											action.killBuilder(firstBuilder);
-											game.loseGame();
+											game.getController().updateBuild(otherBuilder.getPosition(),otherBuilder.);
+											return true;
 										}
 										k=5;l=5;
 									}
