@@ -13,6 +13,7 @@ import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -45,29 +46,35 @@ public class Controller extends  Application implements ClientController{
 	 }
 	
 	@Override
-	public void start(Stage stage) {
+	public void start(Stage stage){
 		
 		Thread.currentThread().setName("PrimaryStage");
 		Platform.setImplicitExit(true);
-		ip = "127.0.0.1";
-		newConnection(ip);
 		
 		newPstage(stage);		
 		newSstage();
+		
+		while (true) {
+			ip = setip();
+			if(newConnection(ip)) {
+				break;
+			}
+		}
 		Pstage.show();
 	}
-	private void newConnection(String ip) {
+	private boolean newConnection(String ip) {
 		try {
-			socket= new Socket(ip, 51344);
-			output =new ObjectOutputStream(socket.getOutputStream());
+			socket = new Socket(ip, 51344);
+			output = new ObjectOutputStream(socket.getOutputStream());
 			} catch (IOException e) {
 				System.out.println("server unreachable game closed");
-				return;
+				return false;
 			}
 		listT= new Thread(new Listener(socket));
 		listT.setDaemon(true);
 		listT.setName("listener");
-		listT.start();	
+		listT.start();
+		return true;
 	}
 	private void newPstage(Stage stage) {
 		Pstage= stage;
@@ -98,20 +105,40 @@ public class Controller extends  Application implements ClientController{
 		} catch (IOException e) {
 			System.out.println("errore chiusura socket");
 		}
-		gameCont.cleanTextInput();
-		gameCont.clearInput();
-		for(int i=0;i<5;i++) {
-			for(int j=0;j<5;j++) {
-				gameCont.clearCell(i, j);
-			}
+		gameCont.initialize();
+		if(!newConnection(ip)) {
+			Pstage.close();
 		}
-		newConnection(ip);
+	}
+	private String setip() {
+		System.out.println("ip request");
+		String user="127.0.0.1";
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
+			AnchorPane an = (AnchorPane) loader.load();
+			Scene scene = new Scene(an,470,470);
+			((LoginController) loader.getController()).setText("ip address");
+			Sstage.setScene(scene);
+			Sstage.showAndWait();
+			
+			user = ((LoginController) loader.getController()).getText();
+			((LoginController) loader.getController()).initialize();
+			if(user.isEmpty()) {
+				user="127.0.0.1";
+			}
+		} catch (IOException e) {
+			System.out.println("start : impossibile aprire finestra login");
+			e.printStackTrace();
+			System.out.println("end : impossibile aprire finestra login");
+		}
+		return user;
 	}
 	
 	public void notify(PlayerDisconnect playerDisconnect) {
 		System.out.println("start disconnect");
 		stageT = new Thread (()->{
-			AnchorPane an = new AnchorPane();
+			Pane an = new Pane();
 			Label label = new Label();
 			label.setText(playerDisconnect.getPlayer()+" disconnected");
 			label.setAlignment(Pos.CENTER);
@@ -134,9 +161,9 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Loser loser) {
 			System.out.println("start lose");
 			stageT = new Thread (()->{
-				AnchorPane an = new AnchorPane();
+				Pane an = new Pane();
 				Label label = new Label();
-				label.setText("you win");
+				label.setText("you lose");
 				label.setAlignment(Pos.CENTER);
 				label.setFont(new Font(40));
 				an.getChildren().add(label);
@@ -154,9 +181,9 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Winner winner) {
 			System.out.println("start win");
 			stageT = new Thread (()->{
-				AnchorPane an = new AnchorPane();
+				Pane an = new Pane();
 				Label label = new Label();
-				label.setText("you lose");
+				label.setText("you win");
 				label.setAlignment(Pos.CENTER);
 				label.setFont(new Font(40));
 				an.getChildren().add(label);
@@ -284,7 +311,7 @@ public class Controller extends  Application implements ClientController{
 			Sstage.setScene(scene);
 			Sstage.showAndWait();
 			
-			String user = ((LoginController) loader.getController()).getusername();
+			String user = ((LoginController) loader.getController()).getText();
 			if(user.isEmpty()) {
 				user=("player" + (int)(Math.random()*1000));
 			}
@@ -520,11 +547,11 @@ public class Controller extends  Application implements ClientController{
 		Message message;
 	
 		Listener(Socket socket){
-			try {
-				input=new ObjectInputStream(socket.getInputStream());
-			} catch (IOException e) {
-				System.out.println("(listener)IOException in creation ");
-			}
+				try {
+					input=new ObjectInputStream(socket.getInputStream());
+				} catch (IOException e) {
+					System.out.println("error creating input socket");
+				}
 		}
 		@Override
 		public void  run() {
