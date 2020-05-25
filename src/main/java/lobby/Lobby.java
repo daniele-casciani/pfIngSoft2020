@@ -24,7 +24,10 @@ public class Lobby implements ServerController , Runnable {
 	ArrayList<Integer> createDeck(){
 		boolean b;
 		ArrayList<Integer> deck;
-		b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità?");
+		
+		if(userlist.size() == 2) b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità?");
+		else b = true;
+		
 		if (b) {
 			deck = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,8,9,10));
 			b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità avanzate?");
@@ -32,7 +35,7 @@ public class Lobby implements ServerController , Runnable {
 				deck.addAll(Arrays.asList(20,21,27,29,30));
 				return deck;
 			}
-			return deck;	 
+			else return deck;	 
 		}
 		
 		else return deck = new ArrayList<Integer>();
