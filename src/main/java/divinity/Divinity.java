@@ -38,11 +38,9 @@ public class Divinity {
 				if(action.execute(parameters[0],parameters[1]) == true){
 					recived = true;
 				}
-			} catch (IOException e) {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");
-				System.out.println("(divinity-tryer)I.O.E.");	
-			}catch(NullPointerException e) {
-				System.out.println("(divinity-tryer)NULL");	
+			} catch (IOException | NullPointerException e) {
+				if(e instanceof NullPointerException) System.out.println("(divinity-tryer) NULL");
+				else System.out.println("(divinity-tryer)I.O.E.");
 			}
 		 }
 	}

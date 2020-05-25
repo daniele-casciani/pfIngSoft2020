@@ -51,6 +51,7 @@ public class Game implements Model {
 			x.getDivinity().setup();
 		}
 		currentPlayer= playerList.get(0);
+		
 		while (endgame == false) {
 			if (playerList.size()<=1) {
 				if (playerList.size()==1) {
