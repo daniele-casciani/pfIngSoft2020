@@ -99,6 +99,7 @@ public class Lobby implements ServerController , Runnable {
 					selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
 					state = true;
 				}catch(SocketException e) {
+					System.out.println("S.E. lobby-selectcard");
 					sendDisconnection(player.getUserID());
 					Thread.currentThread().interrupt();		
 					break;
@@ -237,7 +238,7 @@ public class Lobby implements ServerController , Runnable {
 							break;
 						}catch(SocketException e) {
 							System.out.println("(lobby-lose)S.E.");
-							
+							break;							
 						}
 					} catch (IOException e) {
 						System.out.println("(lobby-lose)I.O.E.");
@@ -298,8 +299,8 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
 						}catch(SocketException e) {
-							sendDisconnection(player);
-							Thread.currentThread().interrupt();		
+							game.setDisconect();
+							game.setDiscUser(player);	
 							break;
 						}	
 								
@@ -328,7 +329,7 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
-						sendDisconnection(x.getUserID());
+						sendDisconnection(userID);
 						Thread.currentThread().interrupt();		
 						break;
 					}
@@ -417,8 +418,8 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
-						sendDisconnection(x.getUserID());
-						Thread.currentThread().interrupt();		
+						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -526,7 +527,6 @@ public class Lobby implements ServerController , Runnable {
 							System.out.println("(lobby-askbool)S.E.");
 							game.setDisconect() ;
 							game.setDiscUser(user);
-							sendDisconnection(user);
 							break;
 						}
 					} catch (IOException e) {
