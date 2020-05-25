@@ -164,6 +164,7 @@ public class Controller extends  Application implements ClientController{
 
 			label.setText(playerDisconnect.getPlayer()+" disconnected");			
 			Platform.runLater(()->{
+				Sstage.close();
 				an.getChildren().add(label);
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
@@ -186,6 +187,7 @@ public class Controller extends  Application implements ClientController{
 	    		image.setFitWidth(350);
 	    		image.setPreserveRatio(true);
 				Platform.runLater(()->{
+					Sstage.close();
 					Pane pane = new Pane(image);
 					Sstage.setScene(new Scene(pane,340,240));
 					Sstage.showAndWait();
@@ -207,6 +209,7 @@ public class Controller extends  Application implements ClientController{
 	    		image.setFitWidth(300);
 	    		image.setPreserveRatio(true);
 				Platform.runLater(()->{
+					Sstage.close();
 					Pane pane = new Pane(image);
 					Sstage.setScene(new Scene(pane,290,280));
 					Sstage.showAndWait();
