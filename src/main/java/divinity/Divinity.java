@@ -158,42 +158,56 @@ public class Divinity {
 	
 	boolean lose() {
 		BuilderAction action = new BuilderAction(game);
+		
 		for(int i = 0; i<5; i++)
 			for(int j=0; j<5; j++) {
+				
 				Level firstBuilder = game.getMap().getCell(i, j);
-				if(firstBuilder.getHeight() == -1) {					
-					if(action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {
-						if(canBuilderMove(firstBuilder) == false) {
+				
+				if(firstBuilder.getHeight() == -1 && action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {	// i found the first
+					
+						if(canBuilderMove(firstBuilder) == false) { //if hew doesn't have a move i search the second
+							
 							for(int k=i;k<5;k++)
 								for(int l=0;l<5;l++) {
+									
 									Level otherBuilder = game.getMap().getCell(k, l);
+									
 									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
-										if(!canBuilderMove(otherBuilder)) {
-											action.killBuilder(otherBuilder);
-											game.getController().updateBuild(otherBuilder.getPosition(),action.getLUnderB(otherBuilder).getHeight());
-											action.killBuilder(firstBuilder);
-											game.getController().updateBuild(firstBuilder.getPosition(),action.getLUnderB(firstBuilder).getHeight());
-											return true;
+										
+										if(firstBuilder != otherBuilder) {
+											
+											if(canBuilderMove(otherBuilder) == false ) {
+												
+												game.getController().updateBuild(otherBuilder.getPosition(), action.getLUnderB(otherBuilder).getHeight());
+												game.getController().updateBuild(firstBuilder.getPosition(), action.getLUnderB(firstBuilder).getHeight());
+												action.killBuilder(otherBuilder);
+												action.killBuilder(firstBuilder);
+												return true;
+												
+											} else return false; // because there aren't other builder
+											
 										}
-										k=5;l=5;
 									}
 								}
 						}
-						i=5;j=5;
 					}
-				}
 			}
 		return false;
 	}
 	
 	private boolean canBuilderMove(Level builderCell) {
+		
 		BuilderAction nowmove = new BuilderAction(game);
+		
 		for(int i=0; i<5; i++)
 			for(int j=0; j<5;j++) {
-				if(isNear(builderCell, game.getMap().getCell(i, j)) && game.getMap().getCell(i, j).getHeight() != -1 && game.getMap().getCell(i, j).getHeight() != 4) {
-					if(isNextLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isPreviousLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isSameLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j))) {
-						
-						return true;
+				Level cellij = game.getMap().getCell(i, j);
+				
+				if(isNear(builderCell, cellij) && cellij.getHeight() != -1 && cellij.getHeight() != 4) {
+					
+					if(isNextLevel(nowmove.getLUnderB(builderCell), cellij) || isPreviousLevel(nowmove.getLUnderB(builderCell), cellij) || isSameLevel(nowmove.getLUnderB(builderCell), cellij)) {
+						return true; // when is true del select builder has a movement or more
 					}
 					 	
 				}
