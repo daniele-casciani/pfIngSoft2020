@@ -143,9 +143,9 @@ public class Controller extends  Application implements ClientController{
 			label.setAlignment(Pos.CENTER);
 			label.setFont(new Font(20));
 
-			label.setText(playerDisconnect.getPlayer()+" disconnected");
-			an.getChildren().add(label);
+			label.setText(playerDisconnect.getPlayer()+" disconnected");			
 			Platform.runLater(()->{
+				an.getChildren().add(label);
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
 			});
@@ -162,9 +162,9 @@ public class Controller extends  Application implements ClientController{
 				Label label = new Label();
 				label.setText("you lose");
 				label.setAlignment(Pos.CENTER);
-				label.setFont(new Font(40));
-				an.getChildren().add(label);
+				label.setFont(new Font(40));				
 				Platform.runLater(()->{
+					an.getChildren().add(label);
 					Sstage.setScene(new Scene(an,300,100));
 					Sstage.showAndWait();
 					try {
@@ -184,9 +184,9 @@ public class Controller extends  Application implements ClientController{
 				Label label = new Label();
 				label.setText("you win");
 				label.setAlignment(Pos.CENTER);
-				label.setFont(new Font(40));
-				an.getChildren().add(label);
+				label.setFont(new Font(40));				
 				Platform.runLater(()->{
+					an.getChildren().add(label);
 					Sstage.setScene(new Scene(an,300,100));
 					Sstage.showAndWait();
 					try {

@@ -163,6 +163,7 @@ public class Divinity {
 			for(int j=0; j<5; j++) {
 				
 				Level firstBuilder = game.getMap().getCell(i, j);
+
 				
 				if(firstBuilder.getHeight() == -1 && action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {	// i found the first
 					
@@ -174,6 +175,7 @@ public class Divinity {
 									Level otherBuilder = game.getMap().getCell(k, l);
 									
 									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
+
 										
 										if(firstBuilder != otherBuilder) {
 											
@@ -191,9 +193,11 @@ public class Divinity {
 									}
 								}
 						}
+
+						else return false; //because the first builder can move
 					}
 			}
-		return false;
+		
 	}
 	
 	private boolean canBuilderMove(Level builderCell) {
