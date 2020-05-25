@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -105,11 +106,28 @@ public class Controller extends  Application implements ClientController{
 		} catch (IOException e) {
 			System.out.println("errore chiusura socket");
 		}
-		gameCont.initialize();
-		if(!newConnection(ip)) {
-			Pstage.close();
-			System.out.println("reconnection error");
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/fxml/scelta.fxml"));
+		AnchorPane an;
+		try {
+			an = (AnchorPane)loader.load();
+			Scene scene = new Scene(an,220,100);
+			((BooleanController) loader.getController()).setText("vuoi rigiocare?");
+			Sstage.setScene(scene);
+			Sstage.showAndWait();
+		} catch (IOException e) {
+			System.out.println("restart error");
+			Pstage.close();	
+		}		
+		boolean choice = ((BooleanController) loader.getController()).getChoice();
+		if(choice) {
+			gameCont.initialize();
+			if(!newConnection(ip)) {
+				System.out.println("reconnection error");
+				Pstage.close();	
+			}
 		}
+		else Pstage.close();
 	}
 	private String setip() {
 		String user="127.0.0.1";
@@ -149,9 +167,10 @@ public class Controller extends  Application implements ClientController{
 				an.getChildren().add(label);
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
-				if(socket.isClosed()) {
-					reStart();
-				}
+				try {
+					socket.close();
+				} catch (IOException e) {}
+				reStart();
 			});
 		});
 		stageT.setDaemon(true);
@@ -162,20 +181,18 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Loser loser) {
 			System.out.println("start lose");
 			stageT = new Thread (()->{
-				HBox an = new HBox();
-				an.setAlignment(Pos.CENTER);
-				Label label = new Label();
-				label.setText("you lose");
-				label.setAlignment(Pos.CENTER);
-				label.setFont(new Font(40));				
+				ImageView image = new ImageView("image/loser.jpeg");
+	    		image.setFitHeight(250);
+	    		image.setFitWidth(350);
+	    		image.setPreserveRatio(true);
 				Platform.runLater(()->{
-					an.getChildren().add(label);
-					Sstage.setScene(new Scene(an,300,100));
+					Pane pane = new Pane(image);
+					Sstage.setScene(new Scene(pane,340,240));
 					Sstage.showAndWait();
 					try {
 						socket.close();
-					} catch (IOException e) {
-					}
+					} catch (IOException e) {}
+					reStart();
 				});
 			});
 			stageT.setDaemon(true);
@@ -185,20 +202,18 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Winner winner) {
 			System.out.println("start win");
 			stageT = new Thread (()->{
-				HBox an = new HBox();
-				an.setAlignment(Pos.CENTER);
-				Label label = new Label();
-				label.setText("you win");
-				label.setAlignment(Pos.CENTER);
-				label.setFont(new Font(40));				
+				ImageView image = new ImageView("image/winner.jpg");
+	    		image.setFitHeight(300);
+	    		image.setFitWidth(300);
+	    		image.setPreserveRatio(true);
 				Platform.runLater(()->{
-					an.getChildren().add(label);
-					Sstage.setScene(new Scene(an,300,100));
+					Pane pane = new Pane(image);
+					Sstage.setScene(new Scene(pane,290,280));
 					Sstage.showAndWait();
 					try {
 						socket.close();
-					} catch (IOException e) {
-					}
+					} catch (IOException e) {}
+					reStart();
 				});
 			});
 			stageT.setDaemon(true);
@@ -306,7 +321,13 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
-		
+	
+	public void update(CardUpdate update) {
+			gameCont.addCard(update.getPlayer(),update.getCard());
+			setText(update.getPlayer()+" ha scelto la sua divinità");
+			sendMessage(new Ack());
+	}
+	
 	public void execute(UserNameRequest request) {
 		System.out.println("start login");
 		try {
@@ -593,9 +614,6 @@ public class Controller extends  Application implements ClientController{
 				System.out.println("(listener)IOException socket error ");
 			}
 			System.out.println("listener closed");
-			Platform.runLater(()->{
-				reStart();
-			});
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package divinity;
 
-import divinity.Divinity.Build;
-import divinity.Divinity.Move;
+
+
 import game.Game;
 import tower.BuilderAction;
 import tower.Level;

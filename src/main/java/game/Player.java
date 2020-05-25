@@ -29,6 +29,9 @@ public class Player {
 			case 6:
 				this.god = new Hephaestus(game);
 				break;
+			case 7:
+				System.out.println("Divinity 7 not supported");
+				Thread.currentThread().interrupt();	
 			case 8:
 				this.god = new Minotaur(game);
 				break;
@@ -38,6 +41,26 @@ public class Player {
 			case 10:
 				this.god = new Prometheus(game);
 				break;
+			// from 11 to 19 not supported
+			case 20:
+				this.god = new Hera(game);
+				break;	
+			case 21:
+				this.god = new Hestia(game);
+				break;
+			//from 22 to 26 not supported
+			case 27:
+				this.god = new Poseidon(game);
+				break;
+			case 28:
+				System.out.println("Divinity 28 not supported");
+				Thread.currentThread().interrupt();					
+			case 29:
+				this.god = new Triton(game);
+				break;
+			case 30:
+				this.god = new Zeus(game);
+				break;				
 		}
 	}
 	

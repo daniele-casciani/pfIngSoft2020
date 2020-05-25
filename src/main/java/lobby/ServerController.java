@@ -24,6 +24,7 @@ public interface ServerController {
 	
 	public void sendDisconnection(String playerD);
 	boolean askDivinityMode(String user, String text);
+	void updateCard(String userID, int chosenCard);
 
 	
 	

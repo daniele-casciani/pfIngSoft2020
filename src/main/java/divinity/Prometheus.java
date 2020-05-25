@@ -18,7 +18,7 @@ public final class Prometheus extends Divinity {
 			
 			startRound();
 			
-			tryer(new Build());
+			tryer(new BuildPrometheus());
 			
 			if(lose()) {
 				game.loseGame();
@@ -75,6 +75,46 @@ public final class Prometheus extends Divinity {
 			}
 			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 			return false;
+		}
+	}
+	class BuildPrometheus extends Build {
+		@Override
+		public boolean execute(Object start, Object end) {
+
+			Level builderCell = (Level)start;
+			Level whereBuild = (Level)end;
+			BuilderAction buildAction = new BuilderAction(game);
+			
+			
+			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
+				
+				if(game.getEffectList().isEmpty()==false) {
+					for (ActivePower x : game.getEffectList()) {
+						if (x.build()==true && x.actionLimitation(builderCell, whereBuild) == true) {
+							
+							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
+							return false;
+						}
+					}
+				} 
+				
+				if(whereBuild.getHeight()==3) {
+					buildAction.buildDome(whereBuild);
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					game.getController().updateBuild( newCell.getPosition(),newCell.getHeight());
+					
+				}
+				else {
+					buildAction.buildTower(whereBuild);
+					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
+					game.getController().updateBuild( newCell.getPosition(),newCell.getHeight());
+				}
+			}
+			else {
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
+				return false;
+			}
+			return true;
 		}
 	}
 }
