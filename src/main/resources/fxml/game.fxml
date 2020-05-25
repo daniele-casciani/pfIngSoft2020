@@ -60,7 +60,7 @@
             <Button fx:id="okbutton" mnemonicParsing="false" onAction="#validateAction" prefHeight="38.0" prefWidth="112.0" text="validate" />
          </children>
       </HBox>
-      <TilePane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="350.0" prefWidth="250.0" vgap="10.0" StackPane.alignment="CENTER_RIGHT">
+      <TilePane fx:id="cardPane" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="350.0" prefWidth="250.0" vgap="10.0" StackPane.alignment="CENTER_RIGHT">
          <children>
             <VBox>
                <children>

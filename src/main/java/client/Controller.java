@@ -306,7 +306,12 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
-		
+	
+	public void update(CardUpdate update) {
+			gameCont.addCard(update.getPlayer(),update.getCard());
+			setText(update.getPlayer()+" ha scelto la sua divinità");
+	}
+	
 	public void execute(UserNameRequest request) {
 		System.out.println("start login");
 		try {

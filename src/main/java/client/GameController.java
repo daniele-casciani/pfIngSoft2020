@@ -14,6 +14,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -31,6 +33,8 @@ public class GameController {
     private TextField textinput;
     @FXML
     private Button okbutton;
+    @FXML
+    private TilePane cardPane;
     
     public void initialize(){
     	changed=false;
@@ -38,6 +42,7 @@ public class GameController {
     	textinput.setText("");
     	text.getChildren().clear();
     	setText("in attesa del login");
+    	cardPane.getChildren().clear();
     	grid.getChildren().clear();
     	for (int i = 0 ; i < 6 ; i++) {
             for (int j = 0; j < 6; j++) {
@@ -174,12 +179,16 @@ public class GameController {
 		    	event.acceptTransferModes(TransferMode.MOVE); 
 		    	event.consume();
 		    }});
-    	
-    
-    
-    
-    
-    
-    
+    }
+    void addCard(String name, int cardID) {
+    	VBox box = new VBox();
+    	Label Pname = new Label(name);
+    	box.getChildren().add(Pname);
+    	ImageView image = new ImageView("image/"+cardID+".png");
+		image.setFitHeight(150);
+		image.setFitWidth(200);
+		image.setPreserveRatio(true);
+		box.getChildren().add(image);
+		cardPane.getChildren().add(box);
     }
 }
