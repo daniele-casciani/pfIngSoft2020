@@ -13,7 +13,7 @@ import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -138,7 +138,8 @@ public class Controller extends  Application implements ClientController{
 	public void notify(PlayerDisconnect playerDisconnect) {
 		System.out.println("start disconnect");
 		stageT = new Thread (()->{
-			Pane an = new Pane();
+			HBox an = new HBox();
+			an.setAlignment(Pos.CENTER);
 			Label label = new Label();
 			label.setAlignment(Pos.CENTER);
 			label.setFont(new Font(20));
@@ -148,6 +149,9 @@ public class Controller extends  Application implements ClientController{
 				an.getChildren().add(label);
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
+				if(socket.isClosed()) {
+					reStart();
+				}
 			});
 		});
 		stageT.setDaemon(true);
@@ -158,7 +162,8 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Loser loser) {
 			System.out.println("start lose");
 			stageT = new Thread (()->{
-				Pane an = new Pane();
+				HBox an = new HBox();
+				an.setAlignment(Pos.CENTER);
 				Label label = new Label();
 				label.setText("you lose");
 				label.setAlignment(Pos.CENTER);
@@ -180,7 +185,8 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Winner winner) {
 			System.out.println("start win");
 			stageT = new Thread (()->{
-				Pane an = new Pane();
+				HBox an = new HBox();
+				an.setAlignment(Pos.CENTER);
 				Label label = new Label();
 				label.setText("you win");
 				label.setAlignment(Pos.CENTER);
