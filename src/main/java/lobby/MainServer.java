@@ -48,9 +48,14 @@ public class MainServer {
 							output.writeObject(new PlayerNumberRequest());
 							output.flush();
 							System.out.println("player number request sent");
+							
 							try {
-								gameplayer = ((PlayerNumberResponse)(MessageToServer)(Message) input.readObject()).getNumber();
-								break;
+								try {
+									gameplayer = ((PlayerNumberResponse)(MessageToServer)(Message) input.readObject()).getNumber();
+									break;
+								}catch(SocketException e) {
+									System.out.println("Disconnect");
+								}
 							}catch(ClassCastException | ClassNotFoundException ex) {output.writeObject(new InvalidAction("player number Expected"));};
 						}
 					while (true) {
