@@ -309,6 +309,34 @@ public class Lobby implements ServerController , Runnable {
 	}
 	
 	@Override
+	public void updateCard(String userID, int chosenCard) {
+		ObjectOutputStream output;
+		ObjectInputStream input;
+		for(User x: userlist) {
+			while(true){
+				try {
+					try {
+						output = x.getOutput();
+						input = x.getInput();
+						output.writeObject(new CardUpdate(userID, chosenCard));
+						output.flush();
+						@SuppressWarnings("unused")
+						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
+						break;
+					}catch(SocketException e) {
+						sendDisconnection(x.getUserID());
+						Thread.currentThread().interrupt();		
+						break;
+					}
+					catch(ClassNotFoundException e) {}
+				} catch (IOException e) {
+					System.out.println("(lobby-updcard) I.O.E.");
+				}
+			}
+		}	
+	}
+	
+	@Override
 	public void updateBuild(int[] position, int height) {
 		ObjectOutputStream output;
 		ObjectInputStream input;
@@ -385,7 +413,7 @@ public class Lobby implements ServerController , Runnable {
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
 						break;
 					}catch(SocketException e) {
-						sendDisconnection(name);
+						sendDisconnection(x.getUserID());
 						Thread.currentThread().interrupt();		
 						break;
 					}

@@ -310,6 +310,7 @@ public class Controller extends  Application implements ClientController{
 	public void update(CardUpdate update) {
 			gameCont.addCard(update.getPlayer(),update.getCard());
 			setText(update.getPlayer()+" ha scelto la sua divinità");
+			sendMessage(new Ack());
 	}
 	
 	public void execute(UserNameRequest request) {

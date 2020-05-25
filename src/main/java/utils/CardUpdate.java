@@ -18,7 +18,7 @@ public class CardUpdate implements MessageUpdate{
 		controller.update(this);
 		
 	}
-	CardUpdate(String player,int card){
+	public CardUpdate(String player,int card){
 		this.player=player;
 		this.card=card;
 	}
