@@ -149,9 +149,10 @@ public class Controller extends  Application implements ClientController{
 				an.getChildren().add(label);
 				Sstage.setScene(new Scene(an,300,100));
 				Sstage.showAndWait();
-				if(socket.isClosed()) {
-					reStart();
-				}
+				try {
+					socket.close();
+				} catch (IOException e) {}
+				reStart();
 			});
 		});
 		stageT.setDaemon(true);
@@ -174,8 +175,8 @@ public class Controller extends  Application implements ClientController{
 					Sstage.showAndWait();
 					try {
 						socket.close();
-					} catch (IOException e) {
-					}
+					} catch (IOException e) {}
+					reStart();
 				});
 			});
 			stageT.setDaemon(true);
@@ -197,8 +198,8 @@ public class Controller extends  Application implements ClientController{
 					Sstage.showAndWait();
 					try {
 						socket.close();
-					} catch (IOException e) {
-					}
+					} catch (IOException e) {}
+					reStart();
 				});
 			});
 			stageT.setDaemon(true);
@@ -599,9 +600,6 @@ public class Controller extends  Application implements ClientController{
 				System.out.println("(listener)IOException socket error ");
 			}
 			System.out.println("listener closed");
-			Platform.runLater(()->{
-				reStart();
-			});
 		}
 	}
 }
