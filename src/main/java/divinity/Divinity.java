@@ -197,7 +197,7 @@ public class Divinity {
 						else return false; //because the first builder can move
 					}
 			}
-		
+		return false;
 	}
 	
 	private boolean canBuilderMove(Level builderCell) {
@@ -211,7 +211,7 @@ public class Divinity {
 				if(isNear(builderCell, cellij) && cellij.getHeight() != -1 && cellij.getHeight() != 4) {
 					
 					if(isNextLevel(nowmove.getLUnderB(builderCell), cellij) || isPreviousLevel(nowmove.getLUnderB(builderCell), cellij) || isSameLevel(nowmove.getLUnderB(builderCell), cellij)) {
-						return true; // when is true del select builder has a movement or more
+						return true; // when is true selected builder has a movement or more
 					}
 					 	
 				}
