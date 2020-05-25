@@ -27,11 +27,9 @@ public class Hera extends Divinity {
 	
 	@Override
 	void startRound() {
-			if(game.getEffectList().isEmpty()==false ) {
-				for(ActivePower x : game.getEffectList()) {
-					if(x instanceof HeraEffect) game.getEffectList().remove(x);
-				}
-			}
+		if(game.getEffectList().isEmpty()==false ) {
+			game.getEffectList().removeIf(x->x instanceof HeraEffect);
+		}
 
 	}
 

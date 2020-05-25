@@ -49,8 +49,7 @@ public final class Athena extends Divinity {
 	@Override
 	void startRound() {
 			if(game.getEffectList().isEmpty()==false && getBool() == true) {
-				for(ActivePower x : game.getEffectList()) {
-					if(x instanceof AthenaEffect) game.getEffectList().remove(x);
+				if(game.getEffectList().removeIf(x->x instanceof AthenaEffect)) {
 					setBool(false);
 				}
 			}
