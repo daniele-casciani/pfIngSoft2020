@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -23,62 +22,11 @@
       <StackPane prefHeight="480.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <TilePane fx:id="imagepane" hgap="5.0" mouseTransparent="true" prefHeight="543.0" prefWidth="640.0" vgap="5.0">
-               <children>
-                  <ImageView accessibleRole="CHECK_BOX" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@/image/1.png" />
-                     </image>
-                  </ImageView>
-               </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TilePane>
             <TilePane fx:id="checkpane" hgap="71.0" prefHeight="480.0" prefWidth="646.0" vgap="130.0">
-               <children>
-                  <CheckBox mnemonicParsing="false" />
-                  <CheckBox mnemonicParsing="false" />
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-                  <CheckBox mnemonicParsing="false">
-                     <padding>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </padding>
-                  </CheckBox>
-               </children>
                <StackPane.margin>
                   <Insets left="72.0" />
                </StackPane.margin>
