@@ -8,5 +8,5 @@ public interface ActivePower {
 	 boolean win();
 	
 	public boolean actionLimitation(Level param1, Level param2);
-	// Ritorna true se non effettuabile
+	// Return true if not feasible
 }

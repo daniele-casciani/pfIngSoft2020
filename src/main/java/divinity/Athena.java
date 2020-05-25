@@ -5,7 +5,17 @@ import tower.BuilderAction;
 import tower.Level;
 
 public final class Athena extends Divinity {
-	final private  int cardID=3;
+	// final private  int cardID=3;
+	
+	private boolean power = false;
+	
+	private void setBool(boolean bool) {
+		this.power = bool;
+	}
+	private boolean getBool() {
+		return this.power;
+	}
+
 	public Athena(Game game) {
 		super(game);
 	}
@@ -13,24 +23,38 @@ public final class Athena extends Divinity {
 	@Override
 	public void round() {
 		
+		
 		startRound();
 		
-		lose();
-
-		tryer(new Move());
-		
-		tryer(new Build());
-		
-		endRound();
+		if(lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new MoveAthena());
+			
+			tryer(new Build());
+			
+			endRound();
+		}
+	}
+	
+	@Override
+	void endRound() {
+		if(getBool() == true) {
+			AthenaEffect active = new AthenaEffect();
+			game.getEffectList().add(active);
+		}
 	}
 	
 	@Override
 	void startRound() {
-		if(game.getEffectList().isEmpty()==false) {
-			for(ActivePower x : game.getEffectList()) {
-				if(x instanceof AthenaEffect) game.getEffectList().remove(x);
+			if(game.getEffectList().isEmpty()==false && getBool() == true) {
+				for(ActivePower x : game.getEffectList()) {
+					if(x instanceof AthenaEffect) game.getEffectList().remove(x);
+					setBool(false);
+				}
 			}
-		}
+
 	}
 	
 	class MoveAthena extends Move {
@@ -38,6 +62,10 @@ public final class Athena extends Divinity {
 		public boolean execute(Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
+			
+			buildselect[0]= end.getPosition()[0];
+			buildselect[1]=	end.getPosition()[1];
+			
 			BuilderAction nowmove = new BuilderAction(game);
 			
 			if(isNear(start, end) && start.getHeight()==-1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) {
@@ -45,14 +73,14 @@ public final class Athena extends Divinity {
 					
 					if(game.getEffectList().isEmpty()==false) {
 						for (ActivePower x : game.getEffectList()) {
-							if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
-								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+							if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) == true ) {
+								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 								return false;
 							}
 						}
 					} 
 					game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
-					if(end.getHeight()==3) {
+					if(end.getHeight()==3 && win(nowmove,start,end)) {
 						nowmove.movement(start, end);
 						game.winGame();
 					}
@@ -63,19 +91,19 @@ public final class Athena extends Divinity {
 						
 						if(game.getEffectList().isEmpty()==false) {
 							for (ActivePower x : game.getEffectList()) {
-								if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
-									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+								if (x.move() == true && x.actionLimitation(nowmove.getLUnderB(start), end) == true) {
+									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 									return false;
 								}
 							}
 						}
 
 						// a different here where effect is active 
-						AthenaEffect active = new AthenaEffect();
-						game.getEffectList().add(active);
+						setBool(true);
 						
-						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
-						if(end.getHeight()==3) {
+						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), 
+								end.getPosition(), end.getHeight(), nowmove.builderName(start));
+						if(end.getHeight()==3 && win(nowmove,start,end) ) {
 							nowmove.movement(start, end);
 							game.winGame();
 						}else nowmove.movement(start, end);
@@ -83,13 +111,13 @@ public final class Athena extends Divinity {
 					}
 					
 					else {
-						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 						return false;
 					}
 				}
 			}
 			else {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 				return false;
 			}
 		}

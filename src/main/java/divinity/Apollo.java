@@ -1,11 +1,13 @@
 package divinity;
 
+import divinity.Divinity.Build;
+import divinity.Divinity.Move;
 import game.Game;
 import tower.BuilderAction;
 import tower.Level;
 
 public final class Apollo extends Divinity {
-	final private  int cardID=1; 
+	// final private  int cardID=1; 
 	
 	public Apollo(Game game) {
 		super(game);
@@ -16,13 +18,14 @@ public final class Apollo extends Divinity {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new MoveApollo());
-		
-		tryer(new Build());
-		
-		endRound();
+		if (lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new MoveApollo());
+			tryer(new Build());
+			endRound();
+		}
 	}
 		
 	class MoveApollo extends Move {
@@ -31,6 +34,10 @@ public final class Apollo extends Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 		Level start = (Level)arg0;
 		Level end = (Level)arg1;
+		
+		buildselect[0]= end.getPosition()[0];
+		buildselect[1]=	end.getPosition()[1];
+		
 		BuilderAction nowmove = new BuilderAction(game);
 		
 		if(isNear(start, end) && start.getHeight() == -1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) { 
@@ -40,7 +47,7 @@ public final class Apollo extends Divinity {
 					if(game.getEffectList().isEmpty()==false) {
 						for (ActivePower x : game.getEffectList()) {
 							if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
-								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+								game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 								return false;
 							}
 						}
@@ -58,7 +65,7 @@ public final class Apollo extends Divinity {
 					}
 					else {
 						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
-						if(end.getHeight()==3) {
+						if(end.getHeight()==3 && win(nowmove,start,end)) {
 							nowmove.movement(start, end);
 							game.winGame();
 						}else nowmove.movement(start, end);
@@ -66,15 +73,15 @@ public final class Apollo extends Divinity {
 					}
 				}
 				else {
-					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 					return false;
 					}
 			}else {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 				return false;
 				}
 		}
-		game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+		game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 		return false;
 		}
 	}

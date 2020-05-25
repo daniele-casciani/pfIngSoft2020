@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Game implements Model {
 	private boolean disconect = false;
+	private String discUser = null;
 	private int round=0;
 	private Player currentPlayer;
 	private ArrayList<Player> playerList = new ArrayList<Player>();
@@ -22,19 +23,14 @@ public class Game implements Model {
 		}
 		else {
 			ArrayList<Integer> selectedCards = serverController.selectCard(deck, participants.get(0));
-			int chosenCard;
 			for (int i=1; i<participants.size(); i++) {
-				chosenCard = serverController.choseCard(selectedCards, participants.get(i));
+				final int chosenCard = serverController.choseCard(selectedCards, participants.get(i));
 				playerList.add(new Player(participants.get(i).getUserID(), chosenCard, this));
-				selectedCards.remove(chosenCard-1);
+				selectedCards.removeIf(card-> card==chosenCard);
 			}
 			playerList.add(0,new Player(participants.get(0).getUserID(), selectedCards.get(0), this));
 		}
-		for (Player x : playerList) {
-			currentPlayer=x;
-			x.getDivinity().setup();
-		}
-		currentPlayer= playerList.get(0);
+		
 	}
 	
 	private Player rotation() {
@@ -47,10 +43,16 @@ public class Game implements Model {
 	
 	public void startGame() {
 		boolean endgame = false;
+		
+		for (Player x : playerList) {
+			currentPlayer=x;
+			x.getDivinity().setup();
+		}
+		currentPlayer= playerList.get(0);
 		while (endgame == false) {
 			if (playerList.size()<=1) {
 				if (playerList.size()==1) {
-					serverController.winner(playerList.get(0));
+					winGame();
 					}
 				endgame = true;
 			}
@@ -58,8 +60,10 @@ public class Game implements Model {
 			currentPlayer.getDivinity().round();
 			
 			if(disconect == true) {
-				System.out.println("player: " +getCurrentPlayer().getName()+" has quit ");
-				getController().sendDisconnection(getCurrentPlayer().getName());
+				if(this.discUser != null) {
+					System.out.println("player: " +getCurrentPlayer().getName()+" has quit ");
+					getController().sendDisconnection(this.discUser);
+				}
 				endgame = true;				
 			}
 			else {
@@ -70,18 +74,26 @@ public class Game implements Model {
 	}
 
 	public void loseGame() {
+		
 		serverController.loser(currentPlayer);
+		Player loser = currentPlayer;
 		playerList.remove(currentPlayer);
+		
+		for ( Player x : playerList) {
+			getController().invalidAction(x.getName(), "Player: "+ loser.getName()+" has lost"); // notify the other players
+		}
+		
 		
 	}	
 	
 	public void winGame() {
 		serverController.winner(currentPlayer);
 		playerList.remove(currentPlayer);
-		for (Player x : playerList) {
-			serverController.loser(x);
+			for (Player x : playerList) {
+				serverController.loser(x);		
+			}
 		playerList.clear();
-		}
+		setDisconect();
 	}
 
 	public int getRound() {
@@ -106,5 +118,9 @@ public class Game implements Model {
 	}
 	public boolean getDisconnect() {
 		return this.disconect;
+	}
+	@Override
+	public void setDiscUser(String username) {
+		this.discUser = username;		
 	}
 }

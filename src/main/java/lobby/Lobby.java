@@ -24,12 +24,16 @@ public class Lobby implements ServerController , Runnable {
 	ArrayList<Integer> createDeck(){
 		boolean b;
 		ArrayList<Integer> deck;
-		b = askEffect(userlist.get(0).getUserID(), "usare divinità?");
+		b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità?");
 		if (b) {
 			deck = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,8,9,10));
-			
+			b = askDivinityMode(userlist.get(0).getUserID(), "usare divinità avanzate?");
+			if(b) {
+				return deck;
+			}
 			return deck;	 
 		}
+		
 		else return deck = new ArrayList<Integer>();
 	 }
 	
@@ -56,7 +60,8 @@ public class Lobby implements ServerController , Runnable {
 					state = true;
 				}catch(SocketException e) {
 					System.out.println("S.E. chosecard");
-					game.setDisconect();
+					sendDisconnection(player.getUserID());
+					Thread.currentThread().interrupt();			
 					break;
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -90,8 +95,8 @@ public class Lobby implements ServerController , Runnable {
 					selectedCards = ((SelectCardResponse)(MessageToServer)(Message)input.readObject()).getCard();
 					state = true;
 				}catch(SocketException e) {
-					System.out.println("S.E selectCard");
-					game.setDisconect();
+					sendDisconnection(player.getUserID());
+					Thread.currentThread().interrupt();		
 					break;
 				}
 				
@@ -130,6 +135,7 @@ public class Lobby implements ServerController , Runnable {
 						}catch(SocketException e) {
 							System.out.println("(lobby-chosemove)S.E.");
 							game.setDisconect();
+							game.setDiscUser(player);
 							break;
 						}
 							
@@ -168,6 +174,7 @@ public class Lobby implements ServerController , Runnable {
 							}catch(SocketException e) {
 								System.out.println("(lobby-wherebuild)S.E.");
 								game.setDisconect();
+								game.setDiscUser(player);
 								break;
 							}
 						} catch (IOException e) {
@@ -193,13 +200,15 @@ public class Lobby implements ServerController , Runnable {
 							output.writeObject(new InvalidAction(message));
 							output.flush();
 							break;
-						}catch(SocketException e) {
-							System.out.println("(lobby-invAct)S.E.");
+						}catch (SocketException e) {
+							System.out.println("(lobby-invAct)S.E");
 							game.setDisconect();
+							game.setDiscUser(player);
 							break;
 						}
 					} catch (IOException e) {
 						System.out.println("(lobby-invAct)I.O.E.");
+						break;
 					}
 				}
 			}
@@ -208,28 +217,31 @@ public class Lobby implements ServerController , Runnable {
 	
 	@Override
 	public void loser(Player player) {
-		
+		User y = null;
 		
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			while(true) {			
-				try {
+			if(x.getUserID().equals(player.getName())) {
+				while(true) {			
 					try {
-						output = x.getOutput();
-						output.writeObject(new Loser());
-						output.flush();
-						break;
-					}catch(SocketException e) {
-						System.out.println("(lobby-lose)S.E.");
-						game.setDisconect();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new Loser());
+							output.flush();
+							y = x;
+							break;
+						}catch(SocketException e) {
+							System.out.println("(lobby-lose)S.E.");
+							
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-lose)I.O.E.");
 					}
-				} catch (IOException e) {
-					System.out.println("(lobby-lose)I.O.E.");
 				}
 			}
 		}
+		userlist.remove(y);
 	}
 	
 	@Override
@@ -238,20 +250,21 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for (User x : userlist) {
-			while(true) {
-				try {
+			if(x.getUserID().equals(player.getName())){
+				while(true) {
 					try {
-						output = x.getOutput();
-						output.writeObject(new Winner());
-						output.flush();
-						break;
-					}catch(SocketException e) {
-						System.out.println("(lobby-winner)S.E.");
-						game.setDisconect();
-						break;
+						try {
+							output = x.getOutput();
+							output.writeObject(new Winner());
+							output.flush();
+							break;
+						}catch(SocketException e) {
+							System.out.println("(lobby-winner)S.E.");
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-winner)I.O.E.");
 					}
-				} catch (IOException e) {
-					System.out.println("(lobby-winner)I.O.E.");
 				}
 			}
 		}
@@ -281,8 +294,8 @@ public class Lobby implements ServerController , Runnable {
 									break;
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(player, "Position not valid");};
 						}catch(SocketException e) {
-							System.out.println("(lobby-posbuilder)S.E.");
-							game.setDisconect();
+							sendDisconnection(player);
+							Thread.currentThread().interrupt();		
 							break;
 						}	
 								
@@ -308,13 +321,12 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new BuildUpdate(position,height));
 						output.flush();
 						@SuppressWarnings("unused")
-
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
-
 						break;
 					}catch(SocketException  e) {
 						System.out.println("(lobby-updbuild)S.E.");
 						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -340,13 +352,12 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new MoveUpdate(position,height1, position2, height2, name));
 						output.flush();
 						@SuppressWarnings("unused")
-
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
-
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-updmove)S.E.");
 						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -371,13 +382,11 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new BuilderUpdate(position, name));
 						output.flush();
 						@SuppressWarnings("unused")
-
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());		
-
 						break;
 					}catch(SocketException e) {
-						System.out.println("(lobby-updbuilder)S.E.");
-						game.setDisconect();
+						sendDisconnection(name);
+						Thread.currentThread().interrupt();		
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -416,7 +425,12 @@ public class Lobby implements ServerController , Runnable {
 			createGame();
 			game.startGame();
 			System.out.println("end game");
-		} finally {
+		} catch (Exception e) {
+			System.out.println("(lobbyrun) start error");
+			e.printStackTrace();
+			System.out.println("(lobbyrun) end error");
+		}
+		finally {
 			close();
 			System.out.println("lobby closed");
 		}
@@ -437,13 +451,12 @@ public class Lobby implements ServerController , Runnable {
 						output.writeObject(new SwitchPositionUpdate(position,height1, name1, position2, height2, name2));
 						output.flush();
 						@SuppressWarnings("unused")
-
 						Message message= ((Ack)( MessageSystem)(Message)input.readObject());
-
 						break;
 					}catch(SocketException e) {
 						System.out.println("(lobby-upswitch)S.E.");
 						game.setDisconect();
+						game.setDiscUser(x.getUserID());
 						break;
 					}
 					catch(ClassNotFoundException e) {}
@@ -479,7 +492,9 @@ public class Lobby implements ServerController , Runnable {
 								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
 						}catch(SocketException e) {
 							System.out.println("(lobby-askbool)S.E.");
-							game.setDisconect();
+							game.setDisconect() ;
+							game.setDiscUser(user);
+							sendDisconnection(user);
 							break;
 						}
 					} catch (IOException e) {
@@ -497,7 +512,7 @@ public class Lobby implements ServerController , Runnable {
 		ObjectOutputStream output;
 		
 		for(User x : userlist) {
-			if(!x.getUserID().equals(playerD)){ // playerD is already disconnected
+			if(x.getUserID().equals(playerD) == false){ // playerD is already disconnected
 				try {
 					
 					output = x.getOutput();
@@ -510,5 +525,43 @@ public class Lobby implements ServerController , Runnable {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean askDivinityMode(String user, String text) {
+		ObjectOutputStream output;
+		ObjectInputStream input;
+		
+		boolean response = false;
+		
+		for (User x : userlist) {
+			if(user.equals(x.getUserID())) {
+				while(true) {
+					try {
+						try {
+							
+							output = x.getOutput();
+							input = x.getInput();
+								
+							output.writeObject(new BooleanRequest(text));
+							output.flush();
+								try {
+									response = ((BooleanResponse)(MessageToServer)(Message)input.readObject()).getBool();
+									break;
+								}catch(ClassCastException | ClassNotFoundException ex) {invalidAction(user, "Please retry");};
+						}catch(SocketException e) {
+							System.out.println("(lobby-askDivinity)S.E.");
+							sendDisconnection(user);
+							Thread.currentThread().interrupt();		
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("(lobby-askDivinity)I.O.E.");
+					}
+				}
+			}
+		}
+		return response;
+		
 	}
 }

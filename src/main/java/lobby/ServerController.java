@@ -23,6 +23,7 @@ public interface ServerController {
 	boolean askEffect(String user, String text);
 	
 	public void sendDisconnection(String playerD);
+	boolean askDivinityMode(String user, String text);
 
 	
 	

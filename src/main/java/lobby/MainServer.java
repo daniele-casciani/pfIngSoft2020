@@ -13,7 +13,7 @@ public class MainServer {
 	ArrayList<Thread> lobbyList =new ArrayList<Thread>();
 	ServerSocket serverSocket;
 	List<User> synUserList = Collections.synchronizedList(new ArrayList<User>());
-	Thread t = new LobbyT();
+	Thread lt = new LobbyT();
 	Thread mt = new MainT();
 	Object obj = new Object();
 	
@@ -22,14 +22,16 @@ public class MainServer {
 	}
 	
 	public void start() {
-		t.start();
+		lt.setDaemon(true);
+		lt.setName("lobbyCreator");
+		lt.start();
+		mt.setName("acceptClient");
 		mt.start();
 	}
 	private class LobbyT extends Thread {
 		
 		@Override
 		public void run() {
-			Thread.currentThread().setName("lobbyCreator");
 			System.out.println("thread create lobby started");
 			while(true) {
 				try {
@@ -84,7 +86,6 @@ public class MainServer {
 		
 		@Override
 		public void run() {
-			Thread.currentThread().setName("acceptClient");
 			try {
 				// Create a server socket
 				serverSocket = new ServerSocket(51344);
@@ -94,26 +95,33 @@ public class MainServer {
 					System.out.println("serverSocket listenig");
 					Socket socket = serverSocket.accept();
 					//create a new thread
-					new Thread(()->{
-						Thread.currentThread().setName("userHandler");
+					Thread userT = new Thread(()->{
 						try {//handling new User
 							ObjectInputStream input;
 							ObjectOutputStream output= new ObjectOutputStream(socket.getOutputStream());
 							input = new ObjectInputStream(socket.getInputStream());
-							
-							while (true) {
+							boolean unique = false;
+							while (!unique) {
 								output.writeObject(new UserNameRequest());
 								output.flush();
 								System.out.println("name request send");
 								
 								// Get message from the client
-								try {//creating new user
-									
+								try {//creating new user									
 									String message = ((UserNameResponse)(Message) input.readObject()).getName();
-									synUserList.add(new User(message,socket,input,output));
-									System.out.println("new user: "+message);
-									synchronized(obj) {obj.notify();}
-									break;
+									unique = true;									
+									for(User x : synUserList) {
+										if(x.getUserID().equals(message)) {
+											unique =  false;
+											output.writeObject(new InvalidAction("username già in uso"));
+											output.flush();
+										}
+									}
+									if (unique) {
+										synUserList.add(new User(message,socket,input,output));
+										System.out.println("new user: "+message);
+										synchronized(obj) {obj.notify();}
+									}
 								}catch(ClassCastException | ClassNotFoundException ex) {
 									System.out.println("Invalid name");
 									ex.printStackTrace();}
@@ -128,7 +136,10 @@ public class MainServer {
 							ex.printStackTrace();
 							System.out.println("end connection to client error");
 							}
-					}).start();
+					});
+					userT.setName("userHandler");
+					userT.setDaemon(true);
+					userT.start();
 				}
 			} catch (IOException ex) {
 				System.out.println("start server main thread error");

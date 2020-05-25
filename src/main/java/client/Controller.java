@@ -1,5 +1,6 @@
 package client;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,6 +13,7 @@ import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -22,44 +24,63 @@ import javafx.stage.Stage;
 import utils.*;
 
 public class Controller extends  Application implements ClientController{
+	
+	private String ip;
+	
 	private Stage Pstage;
 	private Scene Pscene;
-	private FXMLLoader ploader;
 	private GameController gameCont ;
-	private StackPane game = null;
-	private Stage Sstage;
-	
-	private Listener listener;
-	private Thread listT;
-	private Socket socket;
-	private ObjectOutputStream output;
-	private String playerName;
-	
 
+	private Stage Sstage;
+	private Thread stageT;
+	
+	private ObjectOutputStream output;
+	private Socket socket;
+	private Thread listT;
+	
+	private String playerName;
+	private Controller cont=this;	
 	
 	@Override
-	public void start(Stage stage) {
-
-		try {
-			socket= new Socket("127.0.0.1", 51344);
-			output =new ObjectOutputStream(socket.getOutputStream());
-			} catch (IOException e) {
-				System.out.println("start server unreachble ");
-				e.printStackTrace();
-				System.out.println("end server unreachble ");
-				return;
-			}
-		listener = new Listener(socket,this);
-		listT= new Thread (listener);
-		listT.start();
+	public void start(Stage stage){
 		
-		Pstage= stage;
 		Thread.currentThread().setName("PrimaryStage");
+		Platform.setImplicitExit(true);
+		
+		newPstage(stage);		
+		newSstage();
+		
+		int tryer=1;
+		while (tryer <=3) {
+			System.out.println("ip request "+tryer);
+			ip = setip();
+			if(newConnection(ip)) {
+				Pstage.show();
+				break;
+			}
+			else tryer++;
+		}
+	}
+	private boolean newConnection(String ip) {
 		try {
-			ploader = new FXMLLoader();
+			socket = new Socket(ip, 51344);
+			output = new ObjectOutputStream(socket.getOutputStream());
+			} catch (IOException e) {
+				System.out.println("server unreachable game closed");
+				return false;
+			}
+		listT= new Thread(new Listener(socket));
+		listT.setDaemon(true);
+		listT.setName("listener");
+		listT.start();
+		return true;
+	}
+	private void newPstage(Stage stage) {
+		Pstage= stage;
+		try {
+			FXMLLoader ploader = new FXMLLoader();
 			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
-			game = (StackPane)ploader.load();
-			Pscene = new Scene(game,1280,720);
+			Pscene = new Scene((StackPane)ploader.load(),1280,720);
 			gameCont = ((GameController) ploader.getController());
 		} catch (IOException e1) {
 			System.out.println("start impossibile caricare game.fxml");
@@ -68,18 +89,127 @@ public class Controller extends  Application implements ClientController{
 		}	
 		Pstage.setResizable(false);
 		Pstage.setScene(Pscene);
-		Pstage.show();
-		System.out.println("Primary stage show");
-			
+		System.out.println("Primary stage created");
+	}	
+	private void newSstage() {
 		Sstage = new Stage();
 		Sstage.initOwner(Pstage);
 		Sstage.initModality(Modality.WINDOW_MODAL);
 		Sstage.setResizable(false);
 		System.out.println("Secondary stage created");
 	}
+	private void reStart() {
+		System.out.println("restarting");
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("errore chiusura socket");
+		}
+		gameCont.initialize();
+		if(!newConnection(ip)) {
+			Pstage.close();
+			System.out.println("reconnection error");
+		}
+	}
+	private String setip() {
+		String user="127.0.0.1";
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
+			AnchorPane an = (AnchorPane) loader.load();
+			Scene scene = new Scene(an,470,470);
+			((LoginController) loader.getController()).setText("ip address");
+			Sstage.setScene(scene);
+			Sstage.showAndWait();
+			
+			user = ((LoginController) loader.getController()).getText();
+			((LoginController) loader.getController()).initialize();
+			if(user.isEmpty()) {
+				user="127.0.0.1";
+			}
+		} catch (IOException e) {
+			System.out.println("start : impossibile aprire finestra login");
+			e.printStackTrace();
+			System.out.println("end : impossibile aprire finestra login");
+		}
+		return user;
+	}
+	
+	public void notify(PlayerDisconnect playerDisconnect) {
+		System.out.println("start disconnect");
+		stageT = new Thread (()->{
+			HBox an = new HBox();
+			an.setAlignment(Pos.CENTER);
+			Label label = new Label();
+			label.setAlignment(Pos.CENTER);
+			label.setFont(new Font(20));
 
-	public  synchronized void notify(InvalidAction message) {
+			label.setText(playerDisconnect.getPlayer()+" disconnected");			
+			Platform.runLater(()->{
+				an.getChildren().add(label);
+				Sstage.setScene(new Scene(an,300,100));
+				Sstage.showAndWait();
+				if(socket.isClosed()) {
+					reStart();
+				}
+			});
+		});
+		stageT.setDaemon(true);
+		stageT.setName("disconnected");
+		stageT.start();
+		}
+	
+	public void notify(Loser loser) {
+			System.out.println("start lose");
+			stageT = new Thread (()->{
+				HBox an = new HBox();
+				an.setAlignment(Pos.CENTER);
+				Label label = new Label();
+				label.setText("you lose");
+				label.setAlignment(Pos.CENTER);
+				label.setFont(new Font(40));				
+				Platform.runLater(()->{
+					an.getChildren().add(label);
+					Sstage.setScene(new Scene(an,300,100));
+					Sstage.showAndWait();
+					try {
+						socket.close();
+					} catch (IOException e) {
+					}
+				});
+			});
+			stageT.setDaemon(true);
+			stageT.setName("loseGame");
+			stageT.start();
+		}
+	public void notify(Winner winner) {
+			System.out.println("start win");
+			stageT = new Thread (()->{
+				HBox an = new HBox();
+				an.setAlignment(Pos.CENTER);
+				Label label = new Label();
+				label.setText("you win");
+				label.setAlignment(Pos.CENTER);
+				label.setFont(new Font(40));				
+				Platform.runLater(()->{
+					an.getChildren().add(label);
+					Sstage.setScene(new Scene(an,300,100));
+					Sstage.showAndWait();
+					try {
+						socket.close();
+					} catch (IOException e) {
+					}
+				});
+			});
+			stageT.setDaemon(true);
+			stageT.setName("winGame");
+			stageT.start();
+		}	
+	
+	public void notify(InvalidAction message) {
+		Platform.runLater(()->{
 		setText(message.getError());
+		});
 	}
 	private void setText(String message) {
 		gameCont.setText(message);
@@ -87,7 +217,7 @@ public class Controller extends  Application implements ClientController{
 
 	public  void update(BuilderUpdate update) {
 		addConstructor(update.getPosition()[0],update.getPosition()[1],update.getName());	
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("new constructor");
 	}
 	private void addConstructor(int x, int y, String name) {
@@ -120,7 +250,7 @@ public class Controller extends  Application implements ClientController{
 		addConstructor(update.getPositions()[0],update.getPositions()[1],update.getName1());
 		addConstructor(update.getPositions()[3],update.getPositions()[4],update.getName2());
 		gameCont.setText("scambio posizioni eseguito");
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("switched");
 	}
 	public void update(MoveUpdate update) {
@@ -128,13 +258,13 @@ public class Controller extends  Application implements ClientController{
 		construction(update.getMovement()[3], update.getMovement()[4], update.getMovement()[5]);
 		addConstructor(update.getMovement()[3], update.getMovement()[4],update.getName());
 		gameCont.setText("spostamento effettuato");
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("move update");
 	}
 	public void update(BuildUpdate update) {
 		construction(update.getPosition()[0],update.getPosition()[1],update.getPosition()[2]);	
 		gameCont.setText("costruzione eseguita");
-		sendMessage(new InvalidAction(""));
+		sendMessage(new Ack());
 		System.out.println("build update "+update.getPosition()[0]+update.getPosition()[1]+update.getPosition()[2]);
 	}
 	private void construction(int x, int y, int z) {
@@ -176,49 +306,7 @@ public class Controller extends  Application implements ClientController{
 			}
 		}
 	}
-	
-public void notify(PlayerDisconnect playerDisconnect) {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			System.out.println(playerDisconnect.getPlayer()+"disconnected");
-			System.out.println("game closed");
-			Thread.currentThread().interrupt();
-		}
-	}
-	
-	public void notify(Loser loser) {
-		System.out.println("start lose");
 		
-		AnchorPane an = new AnchorPane();
-		Label label = new Label();
-		label.setText("you win");
-		label.setAlignment(Pos.CENTER);
-		label.setFont(new Font(40));
-		Sstage.setScene(new Scene(an));
-		Sstage.showAndWait();
-		Thread.currentThread().interrupt();
-		
-		System.out.println("end lose");
-		return;
-	}
-
-	public void notify(Winner winner) {
-		System.out.println("start win");
-		
-		AnchorPane an = new AnchorPane();
-		Label label = new Label();
-		label.setText("you lose");
-		label.setAlignment(Pos.CENTER);
-		label.setFont(new Font(40));
-		Sstage.setScene(new Scene(an));
-		Sstage.showAndWait();
-		Thread.currentThread().interrupt();
-		
-		System.out.println("end win");
-		return;
-	}
-
 	public void execute(UserNameRequest request) {
 		System.out.println("start login");
 		try {
@@ -230,7 +318,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 			Sstage.setScene(scene);
 			Sstage.showAndWait();
 			
-			String user = ((LoginController) loader.getController()).getusername();
+			String user = ((LoginController) loader.getController()).getText();
 			if(user.isEmpty()) {
 				user=("player" + (int)(Math.random()*1000));
 			}
@@ -249,43 +337,48 @@ public void notify(PlayerDisconnect playerDisconnect) {
 	public void execute(PlayerNumberRequest request) {
 		System.out.println("starting player selection");
 		
-		new Thread(()->{
+		stageT = new Thread(()->{
 			Platform.runLater(()->{
 				setText("digita numero giocatori");
 				gameCont.cleanTextInput();
 				gameCont.setListening(true);
 			});
-		int num = 0;
-		while (!(num>1 && num<4 )) {
-			Platform.runLater(()->{gameCont.setText("scegli tra 2 e 3");});
-			String str="";
-			while (!gameCont.isChanged()) {	
-				str= gameCont.getTextInput();
-			}
-			try {
-				if(!str.isEmpty()) {
-					num= Integer.parseInt(str);
+			int num = 0;
+			while (!(num>1 && num<4 )) {
+				Platform.runLater(()->{gameCont.setText("scegli tra 2 e 3");});
+				String str="";
+				while (!gameCont.isChanged()) {	
+					str= gameCont.getTextInput();
 				}
-			}catch(NumberFormatException e) {				
-				Platform.runLater(()->{
-				gameCont.setText("non è un numero");
-				gameCont.setText("reinserire il numero");
-				System.out.println("player number not valid");
-				});
-				num=0;
+				try {
+					if(!str.isEmpty()) {
+						num= Integer.parseInt(str);
+					}
+				}catch(NumberFormatException e) {				
+					Platform.runLater(()->{
+						gameCont.setText("non è un numero");
+						gameCont.setText("reinserire il numero");
+						System.out.println("player number not valid");
+					});
+					num=0;
+				}
+				gameCont.cleanTextInput();
 			}
-			gameCont.cleanTextInput();
-		}
-		sendMessage(new PlayerNumberResponse(num));
-		System.out.println("number of player " + num);
-		Platform.runLater(()->{
-			gameCont.setListening(false);
-			setText("impostato numero giocatori");
-			setText("in attesa di altri giocatori ");
-			gameCont.cleanTextInput();});
-		}).start();
+			sendMessage(new PlayerNumberResponse(num));
+			System.out.println("number of player " + num);
+			Platform.runLater(()->{
+				gameCont.setListening(false);
+				setText("impostato numero giocatori");
+				setText("in attesa di altri giocatori ");
+				gameCont.cleanTextInput();
+			});
+		});
+		stageT.setDaemon(true);
+		stageT.setName("player number");
+		stageT.start();
 	}
 
+	
 	public void execute(BuildRequest request) {
 		setText("scegli dove costruire");
 		catchDrag(request);
@@ -295,8 +388,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		catchDrag(request);
 	}
 	public void catchDrag(MessageToClient message) {
-		new Thread(()->{
-			Thread.currentThread().setName("catchDrag");
+		stageT = new Thread(()->{
 			System.out.println("(controller-drag)start catch drag");
 			int[] start = null;
 			int[] end = null;
@@ -333,7 +425,10 @@ public void notify(PlayerDisconnect playerDisconnect) {
 				gameCont.clearInput();
 			}
 			Thread.currentThread().interrupt();
-		}).start();
+		});
+		stageT.setDaemon(true);
+		stageT.setName("catchDrag");
+		stageT.start();
 	}
 	
 	public void execute(BuilderRequest message) {
@@ -342,8 +437,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		
 	}
 	public void catchPosition() {
-		new Thread(()->{
-			Thread.currentThread().setName("catchPos");
+		stageT =new Thread(()->{
 			synchronized(this){
 				gameCont.clearInput();
 				gameCont.setListening(true);
@@ -368,9 +462,13 @@ public void notify(PlayerDisconnect playerDisconnect) {
 			}
 			Platform.runLater(()->{setText("validazione costruttore");});
 			Thread.currentThread().interrupt();;
-		}).start();
+		});
+		stageT.setDaemon(true);
+		stageT.setName("catchPos");
+		stageT.start();
 	}
 
+	
 	public void execute(SelectCardRequest request) {
 		setText("scegli le carte da usare");
 		ArrayList<Integer> array;
@@ -418,6 +516,7 @@ public void notify(PlayerDisconnect playerDisconnect) {
 
 	}
 
+	
 	public void execute(BooleanRequest request){
 		setText(request.getStr());		
 		System.out.println("starting bool choice");
@@ -434,22 +533,10 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		sendMessage(new BooleanResponse(choice));
 		System.out.println("selected "+choice);
 	} catch (IOException e) {
-		System.out.println("start impossibile richiedere scelta");
+		System.out.println("(controller-bool)start I.O.E");
 		e.printStackTrace();
-		System.out.println("end impossibile richiedere scelta");
+		System.out.println("(controller-bool)end I.O.E");
 	}
-	}
-	
-	public void handle(Message message) {
-		if (message instanceof MessageToClient) {
-			((MessageToClient)message).accept(this);
-		}
-		else if (message instanceof MessageUpdate) {
-			((MessageUpdate)message).accept(this);
-		}
-		else if (message instanceof MessageSystem) {
-			((MessageSystem)message).accept(this);
-		}
 	}
 	
 	public void sendMessage(Message message) {
@@ -461,51 +548,53 @@ public void notify(PlayerDisconnect playerDisconnect) {
 		}
 	}
 
+	
 	public class Listener implements Runnable{
 		ObjectInputStream input;
 		Message message;
 	
-		Listener(Socket socket,Controller controller){
-			try {
-				input=new ObjectInputStream(socket.getInputStream());
-			} catch (IOException e) {
-				System.out.println("start error socket input creation ");
-				e.printStackTrace();
-				System.out.println("end error socket input creation ");
-			}
+		Listener(Socket socket){
+				try {
+					input=new ObjectInputStream(socket.getInputStream());
+				} catch (IOException e) {
+					System.out.println("error creating input socket");
+				}
 		}
 		@Override
 		public void  run() {
-			Thread.currentThread().setName("listener");
 			try {
 			while(true) {
 				synchronized (this){
-				try {
-					message = (Message) input.readObject();
-					Platform.runLater(()->{
-					handle(message);
-					});
-				} catch (ClassNotFoundException e) {
-					System.out.println(" start message cast error ");
-					e.printStackTrace();
-					System.out.println(" end message cast error ");
-				}
-			}}
-			}catch(IOException e) {
-				System.out.println("start socket error ");
-				e.printStackTrace();
-				System.out.println("end socket error ");
-			} finally {
-				try {
-					socket.close();
-					System.out.println("socket closed");
-				} catch (IOException e) {
-					System.out.println("socket close error ");
+					try {
+						message = (Message) input.readObject();
+						if (message instanceof MessageToClient) {
+							Platform.runLater(()->{
+							((MessageToClient)message).accept(cont);
+							//long thread methods, send response
+							});
+						}
+						else if (message instanceof MessageUpdate) {
+							Platform.runLater(()->{
+							((MessageUpdate)message).accept(cont);
+							//must send ack
+							});
+						}
+						else if (message instanceof MessageSystem) {
+							((MessageSystem)message).accept(cont);
+							//fast synchronized methods
+						}		
+					} catch (ClassNotFoundException e) {
+						System.out.println("(listener) message not supported");
+					}
 				}
 			}
+			}catch(EOFException e) {
+			}catch(IOException e) {	
+				System.out.println("(listener)IOException socket error ");
+			}
+			System.out.println("listener closed");
 			Platform.runLater(()->{
-				System.out.println("client closed");
-				Thread.currentThread().interrupt();
+				reStart();
 			});
 		}
 	}

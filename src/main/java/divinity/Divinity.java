@@ -11,19 +11,21 @@ public class Divinity {
 	final private boolean threeplayer = true;
 	final private boolean fourplayer = true;
 	Game game;
+	int[] buildselect = {-1,-1};
 	final private int cardID=0;
 	
 	public void round() {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new Move());
-		
-		tryer(new Build());
-		
-		endRound();
+		if (lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new Move());
+			tryer(new Build());
+			endRound();
+		}
 	}
 	
 	 void tryer(Action action) {
@@ -36,9 +38,11 @@ public class Divinity {
 				if(action.execute(parameters[0],parameters[1]) == true){
 					recived = true;
 				}
-			} catch (IOException | NullPointerException e) {
+			} catch (IOException e) {
 				game.getController().invalidAction(game.getCurrentPlayer().getName(),"socket error");
-				System.out.println("(divinity-tryer)I.O.E. or NULL");
+				System.out.println("(divinity-tryer)I.O.E.");	
+			}catch(NullPointerException e) {
+				System.out.println("(divinity-tryer)NULL");	
 			}
 		 }
 	}
@@ -52,8 +56,24 @@ public class Divinity {
 			Level whereBuild = (Level)end;
 			BuilderAction buildAction = new BuilderAction(game);
 
+			if(!(builderCell.getPosition()[0]==buildselect[0] && builderCell.getPosition()[1]==buildselect[1])){
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "usa lo stesso builder");
+				return false;
+			}
 			
-			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {			
+			
+			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && buildAction.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
+				
+				if(game.getEffectList().isEmpty()==false) {
+					for (ActivePower x : game.getEffectList()) {
+						if (x.build()==true && x.actionLimitation(builderCell, whereBuild) == true) {
+							
+							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
+							return false;
+						}
+					}
+				} 
+				
 				if(whereBuild.getHeight()==3) {
 					buildAction.buildDome(whereBuild);
 					Level newCell = game.getMap().getCell(whereBuild.getPosition()[0], whereBuild.getPosition()[1]);
@@ -67,7 +87,7 @@ public class Divinity {
 				}
 			}
 			else {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Build");
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
 				return false;
 			}
 			return true;
@@ -87,6 +107,10 @@ public class Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
+			
+			buildselect[0]= end.getPosition()[0];
+			buildselect[1]=	end.getPosition()[1];
+			
 			BuilderAction nowmove = new BuilderAction(game);
 			
 			
@@ -100,29 +124,29 @@ public class Divinity {
 							for (ActivePower x : game.getEffectList()) {
 								if (x.move()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {
 									
-									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+									game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 									return false;
 								}
 							}
 						} 
 							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(),nowmove.builderName(start));
 							
-							if(end.getHeight()==3) {
+							if(end.getHeight()==3 && win(nowmove,start,end)) {
 								nowmove.movement(start, end);
 								game.winGame();
 							}else nowmove.movement(start, end);
 							return true;
 					}
 					else {
-						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+						game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 						return false;
 						}
 				}else {
-					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+					game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 					return false;
 				}
 			}
-			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Move");
+			game.getController().invalidAction(game.getCurrentPlayer().getName(), "Mossa non valida");
 			return false;
 		}
 
@@ -134,42 +158,61 @@ public class Divinity {
 		}
 	}
 	
-	void lose() {
+	boolean lose() {
+		BuilderAction action = new BuilderAction(game);
 		
 		for(int i = 0; i<5; i++)
 			for(int j=0; j<5; j++) {
+				
 				Level firstBuilder = game.getMap().getCell(i, j);
-				if(firstBuilder.getHeight() == -1) {
-					BuilderAction action = new BuilderAction(game);
-					if(action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {
-						if(!canBuilderMove(firstBuilder)) {
+
+				
+				if(firstBuilder.getHeight() == -1 && action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {	// i found the first
+					
+						if(canBuilderMove(firstBuilder) == false) { //if hew doesn't have a move i search the second
+							
 							for(int k=i;k<5;k++)
 								for(int l=0;l<5;l++) {
+									
 									Level otherBuilder = game.getMap().getCell(k, l);
+									
 									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
-										if(!canBuilderMove(otherBuilder)) {
-											action.killBuilder(otherBuilder);
-											action.killBuilder(firstBuilder);
-											game.loseGame();
+
+										
+										if(firstBuilder != otherBuilder) {
+											
+											if(canBuilderMove(otherBuilder) == false ) {
+												game.getController().updateBuild(otherBuilder.getPosition(), action.getLUnderB(otherBuilder).getHeight());
+												game.getController().updateBuild(firstBuilder.getPosition(), action.getLUnderB(firstBuilder).getHeight());
+												action.killBuilder(otherBuilder);
+												action.killBuilder(firstBuilder);
+												return true;
+												
+											} else return false; // because there aren't other builder
+											
 										}
-										k=5;l=5;//trovati i due builder esco dalla ricerca
 									}
 								}
 						}
-						i=5;j=5;
+
+						else return false; //because the first builder can move
 					}
-				}
 			}
+		return false;
 	}
 	
 	private boolean canBuilderMove(Level builderCell) {
+		
 		BuilderAction nowmove = new BuilderAction(game);
+		
 		for(int i=0; i<5; i++)
 			for(int j=0; j<5;j++) {
-				if(isNear(builderCell, game.getMap().getCell(i, j))) {
-					if(isNextLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isPreviousLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j)) || isSameLevel(nowmove.getLUnderB(builderCell), game.getMap().getCell(i, j))) {
-						
-						return true;
+				Level cellij = game.getMap().getCell(i, j);
+				
+				if(isNear(builderCell, cellij) && cellij.getHeight() != -1 && cellij.getHeight() != 4) {
+					
+					if(isNextLevel(nowmove.getLUnderB(builderCell), cellij) || isPreviousLevel(nowmove.getLUnderB(builderCell), cellij) || isSameLevel(nowmove.getLUnderB(builderCell), cellij)) {
+						return true; // when is true selected builder has a movement or more
 					}
 					 	
 				}
@@ -179,11 +222,11 @@ public class Divinity {
 	}
 	
 	void endRound() {
-		// nel gioco base non fa nulla
+		//in basic game does nothing
 	}
 	
 	void startRound() {
-		// nel gioco base non fa nulla 
+		//in basic game does nothing 
 	}
 	
 	public void setup(){
@@ -302,6 +345,16 @@ public class Divinity {
 	}
 	public Divinity(Game game) {
 		this.game = game;
+	}
+	boolean win(BuilderAction nowmove, Level start, Level end) {								
+		if(game.getEffectList().isEmpty()==false) {
+			for (ActivePower x : game.getEffectList()) {
+				if (x.win()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {	
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
 

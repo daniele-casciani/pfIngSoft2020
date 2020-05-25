@@ -6,7 +6,7 @@ import tower.Level;
 
 public final class Hephaestus extends Divinity {
 
-	final private  int cardID = 6;
+	//final private  int cardID = 6;
 	
 	public Hephaestus(Game game) {
 		super(game);
@@ -17,13 +17,16 @@ public final class Hephaestus extends Divinity {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new Move());
-		
-		tryer(new BuildHephaestus());
-		
-		endRound();
+		if(lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new Move());
+			
+			tryer(new BuildHephaestus());
+			
+			endRound();
+		}
 	}
 	
 	class BuildHephaestus extends Build {
@@ -35,7 +38,22 @@ public final class Hephaestus extends Divinity {
 			boolean done = false;
 			BuilderAction nowbuild = new BuilderAction(game);
 			
+			if(!(builderCell.getPosition()[0]==buildselect[0] && builderCell.getPosition()[1]==buildselect[1])){
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "usa lo stesso builder");
+				return false;
+			}
+			
 			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
+				
+				if(game.getEffectList().isEmpty()==false) {
+					for (ActivePower x : game.getEffectList()) {
+						if (x.build()==true && x.actionLimitation(builderCell, whereBuild) == true ) {
+							
+							game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
+							return false;
+						}
+					}
+				} 
 				
 				if(whereBuild.getHeight()==3) {
 					nowbuild.buildDome(whereBuild);
@@ -64,7 +82,7 @@ public final class Hephaestus extends Divinity {
 				return done; 
 			}
 			else {
-				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Invalid Build");
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "Costruzione non permessa");
 				return false;
 			}
 		}
