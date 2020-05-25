@@ -51,6 +51,7 @@ public class Zeus extends Divinity{
 					Level newBuildCell = game.getMap().getCell(newCell2.getPosition()[0], newCell2.getPosition()[1]);
 					
 					game.getController().updateBuild( newBuildCell.getPosition(),buildAction.getLUnderB(newBuildCell).getHeight());
+					game.getController().updateNewBuilder(newBuildCell.getPosition(), nameBuilderend);
 					return true;
 				}
 								

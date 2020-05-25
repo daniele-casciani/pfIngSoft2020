@@ -20,6 +20,7 @@ public class Poseidon extends Divinity{
 	@Override
 	public void round() {
 		startRound();
+		
 		if(lose()) {
 			game.loseGame();
 		}else {
@@ -32,9 +33,13 @@ public class Poseidon extends Divinity{
 	@Override
 	public void endRound() {
 		
-		while (getCount() != 0 && game.getController().askEffect(game.getCurrentPlayer().getName(), "Vuoi attivare il potere?")) {
+		while (getCount() != 0 && game.getController().askEffect(game.getCurrentPlayer().getName(), "Vuoi attivare il potere?") == true ) {
 			tryer(new BuildPoseidon());
 		}
+	}
+	@Override 
+	public void startRound() {
+		setCount(3);
 	}
 	
 	class BuildPoseidon extends Build {

@@ -71,7 +71,11 @@ public class Triton extends Divinity{
 							
 							//control for Triton effect
 							if(isPerimeterCell(end) == true) {
-								setPower(true);
+								if(game.getController().askEffect(game.getCurrentPlayer().getName(), "Vuoi riattivare il potere?") == true) {
+									setPower(true);
+								}else {
+									setPower(false);
+								}
 							}else {
 								setPower(false);
 							}
