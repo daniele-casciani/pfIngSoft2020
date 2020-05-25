@@ -356,5 +356,13 @@ public class Divinity {
 		}
 		return true;
 	}
+	
+	boolean isPerimeterCell(Level cell) {
+		int x = cell.getPosition()[0];
+		int y = cell.getPosition()[1];
+		if (x == 0 || x== 4) return true;
+		if (y == 0 || y== 4) return true;
+		return false;
+	}
 }
 
