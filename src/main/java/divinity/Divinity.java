@@ -164,22 +164,26 @@ public class Divinity {
 				if(firstBuilder.getHeight() == -1) {					
 					if(action.builderName(firstBuilder).equals(game.getCurrentPlayer().getName())) {
 						if(canBuilderMove(firstBuilder) == false) {
-							for(int k=i;k<5;k++)
+							for(int k=0;k<5;k++)
 								for(int l=0;l<5;l++) {
 									Level otherBuilder = game.getMap().getCell(k, l);
 									if(otherBuilder.getHeight() == -1 && action.builderName(otherBuilder).equals(game.getCurrentPlayer().getName())) {
-										if(!canBuilderMove(otherBuilder)) {
-											action.killBuilder(otherBuilder);
-											game.getController().updateBuild(otherBuilder.getPosition(),action.getLUnderB(otherBuilder).getHeight());
-											action.killBuilder(firstBuilder);
-											game.getController().updateBuild(firstBuilder.getPosition(),action.getLUnderB(firstBuilder).getHeight());
-											return true;
+										if(firstBuilder.getPosition()[0]!=otherBuilder.getPosition()[0] | firstBuilder.getPosition()[1]!=otherBuilder.getPosition()[1]) {
+											System.out.println("second found");
+											if(!canBuilderMove(otherBuilder)) {
+												//invio a tutti eliminazione
+												game.getController().updateBuild(otherBuilder.getPosition(),action.getLUnderB(otherBuilder).getHeight());
+												action.killBuilder(otherBuilder);
+												game.getController().updateBuild(firstBuilder.getPosition(),action.getLUnderB(firstBuilder).getHeight());
+												action.killBuilder(firstBuilder);
+												return true;	
+											}
+											 else k=5;l=5;
 										}
-										k=5;l=5;
 									}
 								}
 						}
-						i=5;j=5;
+						else i=5;j=5;
 					}
 				}
 			}
