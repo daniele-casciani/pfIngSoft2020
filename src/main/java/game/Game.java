@@ -74,8 +74,15 @@ public class Game implements Model {
 	}
 
 	public void loseGame() {
+		
 		serverController.loser(currentPlayer);
+		Player loser = currentPlayer;
 		playerList.remove(currentPlayer);
+		
+		for ( Player x : playerList) {
+			getController().invalidAction(x.getName(), "Player: "+ loser.getName()+" has lost"); // notify the other players
+		}
+		
 		
 	}	
 	

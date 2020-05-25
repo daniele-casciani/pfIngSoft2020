@@ -180,7 +180,6 @@ public class Divinity {
 										if(firstBuilder != otherBuilder) {
 											
 											if(canBuilderMove(otherBuilder) == false ) {
-												
 												game.getController().updateBuild(otherBuilder.getPosition(), action.getLUnderB(otherBuilder).getHeight());
 												game.getController().updateBuild(firstBuilder.getPosition(), action.getLUnderB(firstBuilder).getHeight());
 												action.killBuilder(otherBuilder);
