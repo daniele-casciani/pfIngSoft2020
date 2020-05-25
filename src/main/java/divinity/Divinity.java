@@ -107,8 +107,10 @@ public class Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
+			
 			buildselect[0]= end.getPosition()[0];
 			buildselect[1]=	end.getPosition()[1];
+			
 			BuilderAction nowmove = new BuilderAction(game);
 			
 			
@@ -344,7 +346,7 @@ public class Divinity {
 	public Divinity(Game game) {
 		this.game = game;
 	}
-	private boolean win(BuilderAction nowmove, Level start, Level end) {								
+	boolean win(BuilderAction nowmove, Level start, Level end) {								
 		if(game.getEffectList().isEmpty()==false) {
 			for (ActivePower x : game.getEffectList()) {
 				if (x.win()==true && x.actionLimitation(nowmove.getLUnderB(start), end) ) {	

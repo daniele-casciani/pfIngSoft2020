@@ -17,14 +17,19 @@ public final class Artemis extends Divinity {
 		
 		startRound();
 		
-		lose();
+		if(lose()) {
+			game.loseGame();
+		}
+			
+		else{	
+			if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) tryer(new Move());
 		
-		if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) tryer(new Move());
-		else super.tryer(new Move());
-		
-		super.tryer(new Build());
-		
-		endRound();
+			else super.tryer(new Move());
+			
+			super.tryer(new Build());
+			
+			endRound();
+		}
 	}
 	
 	@Override

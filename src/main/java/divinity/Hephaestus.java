@@ -17,13 +17,16 @@ public final class Hephaestus extends Divinity {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new Move());
-		
-		tryer(new BuildHephaestus());
-		
-		endRound();
+		if(lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new Move());
+			
+			tryer(new BuildHephaestus());
+			
+			endRound();
+		}
 	}
 	
 	class BuildHephaestus extends Build {
@@ -34,6 +37,11 @@ public final class Hephaestus extends Divinity {
 			Level whereBuild = (Level)end;
 			boolean done = false;
 			BuilderAction nowbuild = new BuilderAction(game);
+			
+			if(!(builderCell.getPosition()[0]==buildselect[0] && builderCell.getPosition()[1]==buildselect[1])){
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "usa lo stesso builder");
+				return false;
+			}
 			
 			if(isPossibleBuild(builderCell, whereBuild) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName())) {
 				

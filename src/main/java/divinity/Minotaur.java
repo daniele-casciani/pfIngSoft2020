@@ -38,6 +38,10 @@ public final class Minotaur extends Divinity {
 		public boolean execute (Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
+			
+			buildselect[0]= end.getPosition()[0];
+			buildselect[1]=	end.getPosition()[1];
+			
 			BuilderAction nowmove = new BuilderAction(game);
 			
 			if(isNear(start, end) && start.getHeight() == -1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) {
@@ -55,7 +59,7 @@ public final class Minotaur extends Divinity {
 							} 
 							
 							game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
-							if(end.getHeight()==3) {
+							if(end.getHeight()==3 && win(nowmove, start, end)) {
 								nowmove.movement(start, end);
 								game.winGame();
 							}else nowmove.movement(start, end);
@@ -83,7 +87,7 @@ public final class Minotaur extends Divinity {
 								nowmove.movement(end, nextCell);
 								game.getController().updateMovement(end.getPosition(), nowmove.getLUnderB(end).getHeight(), nextCell.getPosition(), nextCell.getHeight(), nowmove.builderName(end));
 								Level newend = game.getMap().getCell(end.getPosition()[0], end.getPosition()[1]);
-								if(newend.getHeight() == 3) {
+								if(newend.getHeight() == 3 &&  win(nowmove, start, end)) {
 									nowmove.movement(start, newend);
 									game.winGame();
 								}

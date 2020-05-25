@@ -16,13 +16,16 @@ public final class Atlas extends Divinity {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new Move());
-		
-		tryer(new BuildAtlas());
-		
-		endRound();
+		if(lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new Move());
+			
+			tryer(new BuildAtlas());
+			
+			endRound();
+		}
 	}
 	
 	class BuildAtlas extends Build {
@@ -31,6 +34,11 @@ public final class Atlas extends Divinity {
 			Level builderCell = (Level)start;
 			Level whereBuild = (Level)end;
 			BuilderAction nowbuild = new BuilderAction(game);
+			
+			if(!(builderCell.getPosition()[0]==buildselect[0] && builderCell.getPosition()[1]==buildselect[1])){
+				game.getController().invalidAction(game.getCurrentPlayer().getName(), "usa lo stesso builder");
+				return false;
+			}
 			
 			if(game.getController().askEffect(game.getCurrentPlayer().getName(),"attivate potere?")) {
 				if(isPossibleBuild( builderCell, whereBuild ) && builderCell.getHeight() == -1 && nowbuild.builderName(builderCell).equals(game.getCurrentPlayer().getName()) ) {

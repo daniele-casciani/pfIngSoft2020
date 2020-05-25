@@ -26,13 +26,16 @@ public final class Athena extends Divinity {
 		
 		startRound();
 		
-		lose();
-
-		tryer(new MoveAthena());
-		
-		tryer(new Build());
-		
-		endRound();
+		if(lose()) {
+			game.loseGame();
+		}
+		else {
+			tryer(new MoveAthena());
+			
+			tryer(new Build());
+			
+			endRound();
+		}
 	}
 	
 	@Override
@@ -59,6 +62,10 @@ public final class Athena extends Divinity {
 		public boolean execute(Object arg0, Object arg1) {
 			Level start = (Level)arg0;
 			Level end = (Level)arg1;
+			
+			buildselect[0]= end.getPosition()[0];
+			buildselect[1]=	end.getPosition()[1];
+			
 			BuilderAction nowmove = new BuilderAction(game);
 			
 			if(isNear(start, end) && start.getHeight()==-1 && nowmove.builderName(start).equals(game.getCurrentPlayer().getName())) {
@@ -73,7 +80,7 @@ public final class Athena extends Divinity {
 						}
 					} 
 					game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), end.getPosition(), end.getHeight(), nowmove.builderName(start));
-					if(end.getHeight()==3) {
+					if(end.getHeight()==3 && win(nowmove,start,end)) {
 						nowmove.movement(start, end);
 						game.winGame();
 					}
@@ -96,7 +103,7 @@ public final class Athena extends Divinity {
 						
 						game.getController().updateMovement(start.getPosition(), nowmove.getLUnderB(start).getHeight(), 
 								end.getPosition(), end.getHeight(), nowmove.builderName(start));
-						if(end.getHeight()==3) {
+						if(end.getHeight()==3 && win(nowmove,start,end) ) {
 							nowmove.movement(start, end);
 							game.winGame();
 						}else nowmove.movement(start, end);
