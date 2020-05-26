@@ -28,7 +28,7 @@ import utils.*;
 //for running set path in class : Contoller / GameController / SelectController
 //for running set path of image in fxml : cardSelection / game / log-in
 
-//set path in eclipse = ""
+//set path in eclipse = "" for fxml "@../" for image fxml "image/" for image java
 //set path for packaging jar = "/resources" for fxml "resources/" for image
 
 public class Controller extends  Application implements ClientController{
