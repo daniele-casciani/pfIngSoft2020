@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>pfIngSoft2020</artifactId>
-	<version>2.2.0-snapshot</version>
+	<version>2.1.1-snapshot</version>
 	<name>pfIngSoft2020</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,15 +38,23 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.9</version>
 				<configuration>
+					<excludes>
+             		 	 <exclude>**/lobby/*</exclude>
+             		 	  <exclude>**/divinity/*</exclude>
+             		 	   <exclude>**/tower/*</exclude>
+             		 	   <exclude>**/game/*</exclude>
+          			</excludes>
 					<destFile>target/jacoco.exec</destFile>
 					<dataFile>target/jacoco.exec</dataFile>
-					<excludes>
-             		  <include>**/*.client</include>
-             		  <include>**/*.utils</include>
-           			</excludes>
+					<includes>
+             		  <include>**/client/*</include>
+             		  <include>**/utils/*</include>
+             		  <include>**/fxml/*</include>
+             		  <include>**/image/*</include>
+           			</includes>
            			<archive>
                 <manifest>
-                    <mainClass>**/*.MainClient</mainClass>
+                    <mainClass>client.MainClient</mainClass>
                 </manifest>
             </archive>
 				</configuration>
@@ -91,11 +99,21 @@
 					<destFile>target/jacoco.exec</destFile>
 					<dataFile>target/jacoco.exec</dataFile>
 					<excludes>
-             		 	 <exclude>**/*.client</exclude>
-          			 </excludes>
+             		 	 <exclude>**/client/*</exclude>
+          			</excludes>
+					<resources>
+						<resource>
+							<directory>src/resources</directory>
+							<excludes>
+             		 			 <exclude>**/fxml/*</exclude>
+             		 			 <exclude>**/image/*</exclude>
+             		 			  <exclude>**/client/*</exclude>
+          					 </excludes>		
+						</resource>					
+          			 </resources>
           			  <archive>
                	 <manifest>
-                    <mainClass>**/*.Server</mainClass>
+                    <mainClass>lobby.MainServer</mainClass>
                	 </manifest>
             </archive>
 				</configuration>
