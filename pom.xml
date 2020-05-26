@@ -38,20 +38,8 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.9</version>
 				<configuration>
-					<excludes>
-             		 	 <exclude>**/lobby/*</exclude>
-             		 	  <exclude>**/divinity/*</exclude>
-             		 	   <exclude>**/tower/*</exclude>
-             		 	   <exclude>**/game/*</exclude>
-          			</excludes>
 					<destFile>target/jacoco.exec</destFile>
 					<dataFile>target/jacoco.exec</dataFile>
-					<includes>
-             		  <include>**/client/*</include>
-             		  <include>**/utils/*</include>
-             		  <include>**/fxml/*</include>
-             		  <include>**/image/*</include>
-           			</includes>
            			<archive>
                 <manifest>
                     <mainClass>client.MainClient</mainClass>
