@@ -14,7 +14,7 @@
          <children>
             <ImageView fitHeight="480.0" fitWidth="640.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../image/copertina.jpg" />
+                  <Image url="resources/image/copertina.jpg" />
                </image>
             </ImageView>
             <HBox maxHeight="50.0" maxWidth="200.0" prefHeight="50.0" prefWidth="200.0" spacing="10.0" StackPane.alignment="BOTTOM_CENTER">

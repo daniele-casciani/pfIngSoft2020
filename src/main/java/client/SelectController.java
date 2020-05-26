@@ -19,11 +19,12 @@ public class SelectController {
     private TilePane checkpane;
     @FXML
     private Button okbutton;
+	private String path="resources/";
 
     public void setCard(ArrayList<Integer> cardlist) {
     	card=cardlist;
     	for(Integer x : card) {
-    		ImageView image = new ImageView("image/"+x+".png");
+    		ImageView image = new ImageView(path+"image/"+x+".png");
     		image.setFitHeight(150);
     		image.setFitWidth(200);
     		image.setPreserveRatio(true);

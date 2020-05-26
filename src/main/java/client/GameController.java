@@ -35,6 +35,7 @@ public class GameController {
     private Button okbutton;
     @FXML
     private TilePane cardPane;
+	private String path="resources/";
     
     public void initialize(){
     	changed=false;
@@ -184,7 +185,7 @@ public class GameController {
     	VBox box = new VBox();
     	Label Pname = new Label(name);
     	box.getChildren().add(Pname);
-    	ImageView image = new ImageView("image/"+cardID+".png");
+    	ImageView image = new ImageView(path+"image/"+cardID+".png");
 		image.setFitHeight(150);
 		image.setFitWidth(200);
 		image.setPreserveRatio(true);

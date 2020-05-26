@@ -24,6 +24,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import utils.*;
 
+
+//for running set path in class : Contoller / GameController / SelectController
+//for running set path of image in fxml : cardSelection / game / log-in
+
+//set path in eclipse = ""
+//set path for packaging jar = "/resources" for fxml "resources/" for image
+
 public class Controller extends  Application implements ClientController{
 	
 	private String ip;
@@ -40,7 +47,9 @@ public class Controller extends  Application implements ClientController{
 	private Thread listT;
 	
 	private String playerName;
-	private Controller cont=this;	
+	private Controller cont=this;
+	
+	public String path = "/resources";
 	
 	@Override
 	public void start(Stage stage){
@@ -80,7 +89,7 @@ public class Controller extends  Application implements ClientController{
 		Pstage= stage;
 		try {
 			FXMLLoader ploader = new FXMLLoader();
-			ploader.setLocation(getClass().getResource("/fxml/game.fxml"));
+			ploader.setLocation(getClass().getResource(path+"/fxml/game.fxml"));
 			Pscene = new Scene((StackPane)ploader.load(),1280,720);
 			gameCont = ((GameController) ploader.getController());
 		} catch (IOException e1) {
@@ -107,7 +116,7 @@ public class Controller extends  Application implements ClientController{
 			System.out.println("errore chiusura socket");
 		}
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/fxml/scelta.fxml"));
+		loader.setLocation(getClass().getResource(path+"/fxml/scelta.fxml"));
 		AnchorPane an;
 		try {
 			an = (AnchorPane)loader.load();
@@ -133,7 +142,7 @@ public class Controller extends  Application implements ClientController{
 		String user="127.0.0.1";
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
+			loader.setLocation(getClass().getResource(path+"/fxml/log-in.fxml"));
 			AnchorPane an = (AnchorPane) loader.load();
 			Scene scene = new Scene(an,470,470);
 			((LoginController) loader.getController()).setText("ip address");
@@ -182,7 +191,7 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Loser loser) {
 			System.out.println("start lose");
 			stageT = new Thread (()->{
-				ImageView image = new ImageView("image/loser.jpeg");
+				ImageView image = new ImageView(path+"image/loser.jpeg");
 	    		image.setFitHeight(250);
 	    		image.setFitWidth(350);
 	    		image.setPreserveRatio(true);
@@ -204,7 +213,7 @@ public class Controller extends  Application implements ClientController{
 	public void notify(Winner winner) {
 			System.out.println("start win");
 			stageT = new Thread (()->{
-				ImageView image = new ImageView("image/winner.jpg");
+				ImageView image = new ImageView(path+"image/winner.jpg");
 	    		image.setFitHeight(300);
 	    		image.setFitWidth(300);
 	    		image.setPreserveRatio(true);
@@ -241,7 +250,7 @@ public class Controller extends  Application implements ClientController{
 	private void addConstructor(int x, int y, String name) {
 		ImageView node;
 		if(name.equals(playerName)) {
-			node = new ImageView("/image/MyBuilder.png");
+			node = new ImageView(path+"/image/MyBuilder.png");
 			node.setFitHeight(80);
 			node.setFitWidth(80);
 			node.setOnDragDetected(e->{
@@ -254,7 +263,7 @@ public class Controller extends  Application implements ClientController{
 			});
 		}
 		else {
-			node = new ImageView("/image/EnemyBuilder.png");
+			node = new ImageView(path+"/image/EnemyBuilder.png");
 			node.setFitHeight(80);
 			node.setFitWidth(80);
 			node.setMouseTransparent(true); 
@@ -335,7 +344,7 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("start login");
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/fxml/log-in.fxml"));
+			loader.setLocation(getClass().getResource(path+"/fxml/log-in.fxml"));
 			AnchorPane an;
 			an = (AnchorPane) loader.load();
 			Scene scene = new Scene(an,470,470);
@@ -524,7 +533,7 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("starting divinity selection");
 		
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/fxml/cardSelection.fxml"));
+		loader.setLocation(getClass().getResource(path+"/fxml/cardSelection.fxml"));
 		AnchorPane an = (AnchorPane)loader.load();
 		((SelectController)loader.getController()).setCard(cardlist);
 		Scene scene = new Scene(an,630,470);
@@ -546,7 +555,7 @@ public class Controller extends  Application implements ClientController{
 		System.out.println("starting bool choice");
 		try {
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/fxml/scelta.fxml"));
+		loader.setLocation(getClass().getResource(path+"/fxml/scelta.fxml"));
 		AnchorPane an;
 		an = (AnchorPane)loader.load();
 		Scene scene = new Scene(an,220,100);
